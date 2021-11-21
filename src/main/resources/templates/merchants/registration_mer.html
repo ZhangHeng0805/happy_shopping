@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+
+    <title>商户注册</title>
+
+    <link th:href="@{/static/css/style.css}" rel="stylesheet">
+    <link th:href="@{static/css/style-responsive.css}" rel="stylesheet">
+    <!--file upload-->
+    <link rel="stylesheet" type="text/css" th:href="@{static/css/bootstrap-fileupload.min.css}" />
+
+</head>
+
+<body class="login-body">
+
+<div class="container">
+
+    <form class="form-signin" id="registForm" method="post" th:action="@{/regist_merchants}" enctype="multipart/form-data">
+        <div class="form-signin-heading text-center">
+            <h1 class="sign-title">商户注册</h1>
+            <img th:src="@{/static/images/login-logo.png}" alt=""/>
+        </div>
+        <div class="login-wrap">
+            <div th:replace="common/common_mer :: #com_alert"></div>
+            <p>请在下面输入您的个人详细信息</p>
+            <label for="name" class="line">本人姓名：</label>
+            <input type="text" autofocus maxlength="15" name="name" id="name" placeholder="本人姓名" class="form-control" required>
+            <label for="gender" class="line">性别：</label>
+            <div class="radios" id="gender">
+                <label for="radio-01" class="label_radio col-lg-6 col-sm-6">
+                    <input type="radio" name="gender" checked="" value="男" id="radio-01" > 男性
+                </label>
+                <label for="radio-02" class="label_radio col-lg-6 col-sm-6">
+                    <input type="radio" name="gender" value="女" id="radio-02" > 女性
+                </label>
+            </div>
+            <label for="email" class="line">Email邮箱：</label>
+            <input type="text" id="email" name="email" placeholder="Email邮箱" class="form-control" required>
+            <label for="phonenum" class="line">电话号码：</label>
+            <input type="text" id="phonenum" name="phonenum" placeholder="电话号码" class="form-control" required>
+            <hr>
+            <p> 请在下面输入您的账户的信息</p>
+            <label for="account" class="line">用户名：</label>
+            <input type="text" id="account" name="account" placeholder="用户名" class="form-control" required>
+            <label for="password1" class="line">输入密码：</label>
+            <input type="password" placeholder="请输入密码" id="password1" name="password1" class="form-control" required>
+            <label for="password" class="line">确认密码：</label>
+            <input type="password" placeholder="再次输入密码" id="password" name="password" class="form-control" required>
+            <hr>
+            <p> 请在下面输入您的创建的店铺信息</p>
+            <label for="store_name" class="line">店铺名称：</label>
+            <input type="text" id="store_name" name="store_name" placeholder="店铺名称" class="form-control" required>
+            <label for="address" class="line">地区信息：</label>
+            <input type="text" id="address" name="address" placeholder="所在地区" class="form-control" required>
+
+            <label for="store_image" class="line">商铺图片：</label>
+            <div class="fileupload fileupload-new" data-provides="fileupload">
+                <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                    <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                </div>
+                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                <br>
+                <span class="label label-danger ">注意!</span>
+                <span>请选择商铺的图片(大小2Mb以内)</span>
+                <div class="form-group">
+                   <span class="btn btn-default btn-file">
+                   <span class="fileupload-new"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                   <span class="fileupload-exists"><i class="fa fa-undo"></i> 更改</span>
+                   <input id="store_image" type="file" class="default" name="store_image" required />
+                   </span>
+                    <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                </div>
+            </div>
+
+            <label for="store_introduce" class="line">商铺简介：</label>
+            <textarea class="form-control" oninput="titleInput('store_introduce','t_introduce',150)" name="store_introduce" rows="3" id="store_introduce" placeholder="店铺的介绍" required></textarea>
+            <p id="t_introduce" class="help-block">请输入商铺介绍（字数限制150字）</p>
+            <!--验证码-->
+            <div class="row"style="text-align: center" th:if="${codeId}!=null">
+                <div class="col-lg-6">
+                    <img th:src="@{/static/images/QRcode.jpg}" style="height: 150px">
+                </div>
+                <div class="col-lg-6"style="padding-top: 15px">
+                    <div class="row">
+                        <label>扫码关注微信公众号,回复：<span class="text-danger" th:text="${codeId}"></span>;获取验证码</label>
+                    </div>
+                    <div class="row" style="padding-top: 10px">
+                        <input type="hidden" name="id" th:value="${codeId}">
+                        <input type="text" placeholder="输入验证码" class="form-control" name="code" required>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" name="submit" class="btn btn-lg btn-login btn-block">
+                <i class="fa fa-check"></i>
+            </button>
+
+            <div class="registration">
+                已经注册了。
+                <a th:href="@{/login_merchantsPage}">
+                    去登录
+                </a>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+
+<!-- Placed js at the end of the document so the pages load faster -->
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<script th:src="@{/static/js/jquery-1.10.2.min.js}"></script>
+<script th:src="@{/static/js/bootstrap.min.js}"></script>
+<script th:src="@{/static/js/modernizr.min.js}"></script>
+<!--file upload-->
+<script type="text/javascript" th:src="@{/static/js/bootstrap-fileupload.min.js}"></script>
+<script src="/static/my_js/mer/registration.js"></script>
+<script src="/static/my_js/input.js"></script>
+
+</body>
+</html>

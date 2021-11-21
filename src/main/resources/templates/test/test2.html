@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery的AJAX请求</title>
+   <script src="/static/js/jquery-1.10.2.min.js"></script>
+</head>
+<body>
+<button id="btn1">请求1（Get）</button>
+<button id="btn2">请求2（Post）</button>
+
+<div id="res"></div>
+<script>
+    $("#btn1").click(function () {
+        $.ajax({
+            url:'http://localhost:8081/2',
+            type:'get',
+            data:{
+                id:Date.now(),
+                code:'Get请求'
+            },
+            success:function (data) {
+                console.log(data);
+              $('#res').html(data);
+            },
+            error:function () {
+                alert('Post请求错误');
+            }
+        })
+    });
+    $("#btn2").click(function () {
+        $.ajax({
+            url:'http://localhost:8081/2',
+            type:'post',
+            data:{
+                id:Date.now(),
+                code:'Post请求'
+            },
+            success:function (data) {
+                console.log(data);
+                $('#res').html(data);
+            },
+            error:function () {
+                alert('Post请求错误');
+            }
+        })
+    })
+</script>
+</body>
+</html>

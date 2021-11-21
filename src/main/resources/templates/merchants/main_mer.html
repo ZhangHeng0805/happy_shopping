@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商家管理主页</title>
+    <link th:include="common/common_mer :: #com_css">
+    <!--dashboard calendar-->
+    <link th:href="@{/static/css/clndr.css}" rel="stylesheet">
+</head>
+<body class="sticky-header">
+<section>
+    <!--左部标签栏-->
+    <div th:replace="common/common_mer :: #com_leftmenu"></div>
+    <div class="main-content" >
+        <!--顶部导航栏-->
+        <div th:replace="common/common_mer :: #com_headermenu"></div>
+
+        <div class="page-heading">
+            <div class="row">
+                <div class="col-sm-1" style="height: auto; text-align: center;">
+                    <img style="height: 60px;padding:2px;border-radius: 5px;border: #98fdf4 solid 1.5px" th:src="@{'/fileload/show/'+${session.store.store_image}}" th:alt="${session.store.store_name}" />
+                </div>
+                <div class="col-sm-9">
+                    <div class="row" style="margin: 4px 0px">
+                        <p class="label label-info" th:text="${session.store.store_name}"></p>
+                    </div>
+                    <div class="row" style="margin: 4px 0px">
+                        <p class="label label-success"th:text="${session.store.store_introduce}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="state-info">
+                <section class="panel">
+                    <div class="panel-body" title="所有成交商品的总金额">
+                        <div class="summary">
+                            <span>店铺总销售额</span>
+                            <h3 class="red-txt" >
+                                <label class="fa fa-yen"></label> <label id="count_price">0</label>元
+                            </h3>
+                        </div>
+                        <div id="income" class="chart-bar"></div>
+                    </div>
+                </section>
+                <section class="panel">
+                    <div class="panel-body" title="所有成交商品的总数量">
+                        <div class="summary">
+                            <span>店铺总销售量</span>
+                            <h3 class="green-txt">
+                                <label class="fa fa-legal"></label> <label id="count_num">0</label>件
+                            </h3>
+                        </div>
+                        <div id="expense" class="chart-bar"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!--主体内容-->
+        <div class="wrapper">
+            <!--数据标签和日历-->
+            <div class="row">
+                <!--数据标签-->
+                <div class="col-md-8">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            店铺商品订单数据
+                            <span class="label label-danger" id="un_goodsnum_div"><label class="fa fa-bell"></label> 有未处理的订单商品：<span id="un_goodsnum"></span>件</span>
+                            <span class="tools pull-right">
+                                <button class="btn btn-primary" id="refresh2" onclick="data2()" title="点击刷新数据"><span class="fa fa-refresh"></span> 刷新</button>
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                            </span>
+                        </header>
+                        </header>
+                        <div class="panel-body">
+                            <div class="row state-overview">
+                                <div class="col-md-6 col-xs-12 col-sm-6">
+                                    <div class="panel red">
+                                        <div class="symbol">
+                                            <i class="fa  fa-bell"></i>
+                                        </div>
+                                        <div class="state-value">
+                                            <div class="value" id="state0">1</div>
+                                            <div class="title"><strong>[未处理]</strong>商品数</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xs-12 col-sm-6">
+                                    <div class="panel purple">
+                                        <div class="symbol">
+                                            <i class="fa fa-ban"></i>
+                                        </div>
+                                        <div class="state-value">
+                                            <div class="value"id="state1">2</div>
+                                            <div class="title"><strong>[拒绝发货]商品数</strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xs-12 col-sm-6">
+                                    <div class="panel blue">
+                                        <div class="symbol">
+                                            <i class="fa fa-spinner"></i>
+                                        </div>
+                                        <div class="state-value">
+                                            <div class="value" id="state2">3</div>
+                                            <div class="title"><strong>[待收货]商品数</strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xs-12 col-sm-6">
+                                    <div class="panel purple">
+                                        <div class="symbol">
+                                            <i class="fa fa-times-circle-o"></i>
+                                        </div>
+                                        <div class="state-value">
+                                            <div class="value" id="state4">3</div>
+                                            <div class="title"><strong>[退货]商品数</strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xs-12 col-sm-6">
+                                    <div class="panel green">
+                                        <div class="symbol">
+                                            <i class="fa fa-check-square-o"></i>
+                                        </div>
+                                        <div class="state-value">
+                                            <div class="value" id="state3">4</div>
+                                            <div class="title"><strong>[已收货]商品数</strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <!--日历-->
+                <div class="col-md-4">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            日历时间:
+                            <label id="times" class="label label-default"></label>
+                            <span class="tools pull-right">
+                        <a href="javascript:;" class="fa fa-chevron-down"></a>
+                    </span>
+                        </header>
+                        <div class="panel-body">
+                            <div class="calendar-block ">
+                                <div class="cal1">
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <!--商品类型数量数据柱状图-->
+            <div class="col-sm-12">
+                <section class="panel">
+                    <header class="panel-heading">
+                        店铺商品类型数据图
+                        <span class="label label-info">商品总数：<span id="zhuzhuang-data"></span>件</span>
+                        <span class="tools pull-right">
+                            <button class="btn btn-primary" id="refresh1" onclick="data1()" title="点击刷新数据"><span class="fa fa-refresh"></span> 刷新</button>
+                            <a href="javascript:;" class="fa fa-chevron-down"></a>
+                        </span>
+                    </header>
+                    <div class="panel-body">
+                        <div class="chartJS">
+                            <div id="zhuzhuang-data-js" height="250" width="800"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+        <footer class="sticky-footer">
+            2021 &copy; <a href="https://github.com/ZhangHeng0805" target="_blank"><span class="fa fa-github"></span>星曦向荣</a>
+        </footer>
+    </div>
+</section>
+
+<div th:replace="common/common_mer :: #com_js"></div>
+<!--Calendar-->
+<script th:src="@{/static/js/calendar/clndr.js}"></script>
+<script th:src="@{/static/js/calendar/evnt.calendar.init.js}"></script>
+<script th:src="@{/static/js/calendar/moment-2.2.1.js}"></script>
+<script th:src="@{http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js}"></script>
+<script th:src="@{http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js}"></script>
+
+<script th:src="@{/static/js/dashboard-chart-init.js}"></script>
+<script th:src="@{/static/my_js/mer/main.js}"></script>
+<script>
+    setInterval(function(){
+        var date = new Date();
+        var year = date.getFullYear();    //获取当前年份
+        var mon = date.getMonth()+1;      //获取当前月份   js从0开始取
+        var da = date.getDate();          //获取当前日
+        var day = date.getDay();          //获取当前星期几
+        var h = date.getHours();          //获取小时
+        var m = date.getMinutes();        //获取分钟
+        var s = date.getSeconds();        //获取秒
+        monthText = mon < 10 ? "0" + mon : mon;
+        daText = da < 10 ? "0" + da : da;
+        hoursText = h < 10 ? "0" + h : h;
+        minutesText = m < 10 ? "0" + m : m;
+        secondText = s < 10 ? "0" + s : s;
+        var d = document.getElementById("times");
+        d.innerHTML=year+'年'+monthText+'月'+daText+'日'+' '+hoursText+':'+minutesText+':'+secondText+' 星期' + '日一二三四五六'.charAt(day);
+        //d.value=date.toLocaleString()+' 星期' + '日一二三四五六'.charAt(day);
+    },1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>样式测试</title>
+    <link th:include="common/common_mer :: #com_css">
+</head>
+<body>
+<div class="wrapper">
+    <!--普通柱状图-->
+    <div class="row">
+        <div class="col-sm-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    普通柱状图
+                    <span class="tools pull-right">
+                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                <a href="javascript:;" class="fa fa-times"></a>
+                </span>
+                </header>
+                <div class="panel-body">
+                    <div class="chartJS" >
+                        <canvas id="zhu-chart-js" height="250" width="800" ></canvas>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="row">
+        <!--普通扇形图-->
+        <div class="col-sm-6">
+            <section class="panel">
+                <header class="panel-heading">
+                    普通扇形图
+                    <span class="tools pull-right">
+            <a href="javascript:;" class="fa fa-chevron-down"></a>
+            <a href="javascript:;" class="fa fa-times"></a>
+            </span>
+                </header>
+                <div class="panel-body">
+                    <div class="chartJS" >
+                        <canvas id="shanxing-chart-js" height="250" width="800" ></canvas>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!--普通环形图-->
+        <div class="col-sm-6">
+            <section class="panel">
+                <header class="panel-heading">
+                    普通环形图
+                    <span class="tools pull-right">
+            <a href="javascript:;" class="fa fa-chevron-down"></a>
+            <a href="javascript:;" class="fa fa-times"></a>
+            </span>
+                </header>
+                <div class="panel-body">
+                    <div class="chartJS" >
+                        <canvas id="huanxing-chart-js" height="250" width="800" ></canvas>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="row">
+        <!--Morris数据环形图-->
+        <div class="col-sm-5">
+            <section class="panel">
+                <header class="panel-heading">
+                    数据环形图
+                    <span class="tools pull-right">
+            <a href="javascript:;" class="fa fa-chevron-down"></a>
+            <a href="javascript:;" class="fa fa-times"></a>
+            </span>
+                </header>
+                <div class="panel-body" style="text-align: center">
+                    <div class="col-sm-12">
+                    <div id="huanxing-data-js"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!--Morris数据山峰图-->
+        <div class="col-sm-7">
+            <section class="panel">
+                <header class="panel-heading">
+                    数据山峰图
+                    <span class="tools pull-right">
+            <a href="javascript:;" class="fa fa-chevron-down"></a>
+            <a href="javascript:;" class="fa fa-times"></a>
+            </span>
+                </header>
+                <div class="panel-body" style="text-align: center">
+                    <div id="shanfeng-data-js"></div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!--Morris数据弧线图-->
+    <div class="row">
+        <div class="col-sm-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    Morris数据弧线图
+                    <span class="tools pull-right">
+                        <a href="javascript:;" class="fa fa-chevron-down"></a>
+                        <a href="javascript:alert('刷新');" class="fa fa-refresh"></a>
+                    </span>
+                </header>
+                <div class="panel-body">
+                    <div id="huxian-data-js"></div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!--Morris数据柱状图-->
+    <div class="row">
+        <div class="col-sm-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    Morris数据柱状图
+                    <span class="tools pull-right">
+                        <a class="fa fa-refresh"></a>
+                        <a href="javascript:;" class="fa fa-chevron-down"></a>
+                    </span>
+                </header>
+                <div class="panel-body">
+                    <div id="zhuzhuang-data-js"></div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!--c3数据折线图 不能和Morris一起用-->
+    <!--    <div class="row">
+        <div class="col-sm-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    数据折线图
+                    <span class="tools pull-right">
+                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                <a href="javascript:alert('刷新');" class="fa fa-refresh"></a>
+                </span>
+                </header>
+                <div class="panel-body">
+                    <div id="zhexian-c3-js"></div>
+                </div>
+            </section>
+        </div>
+    </div>-->
+    <!--flot数据折线图-->
+   <!-- <div class="row">
+        <div class="col-sm-12">
+            <section class="panel">
+                <header class="panel-heading">
+                    flot数据折线图
+                    <span class="tools pull-right">
+                        <a href="javascript:;" class="fa fa-chevron-down"></a>
+                        <a href="javascript:;" class="fa fa-refresh"></a>
+                    </span>
+                </header>
+                <div class="panel-body">
+                    <div id="visitors-chart">
+                        <div id="visitors-container"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>-->
+</div>
+
+
+
+<div th:replace="common/common_mer :: #com_js"></div>
+<script src="/static/my_js/test_styleTest.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试原生 AJAX Get请求</title>
+    <style>
+        #res{
+            height: 200px;
+            width: 300px;
+            border: 1px solid blue;
+        }
+    </style>
+</head>
+<body>
+<button>Get请求</button>
+<button>Post请求</button>
+<button>JSON响应</button>
+<div id="res"></div>
+
+<script>
+    var xhr=null;
+    var res=document.getElementById("res");
+    var btn1=document.getElementsByTagName("button")[0];
+    var btn2=document.getElementsByTagName("button")[1];
+    var btn3=document.getElementsByTagName("button")[2];
+    btn1.onclick=function () {
+        xhr=new XMLHttpRequest();
+        xhr.open('GET','http://localhost:8081/1?t='+Date.now());
+        xhr.send();
+        xhr.onreadystatechange=function () {
+            if (xhr.readyState===4){
+                if (xhr.status>=200 &&xhr.status<300){
+                    res.innerText=xhr.response;
+                }
+            }
+        }
+    };
+    btn2.onclick=function () {
+        xhr=new XMLHttpRequest();
+        xhr.open('post','http://localhost:8081/1');
+        xhr.send();
+        xhr.onreadystatechange=function () {
+            if (xhr.readyState===4){
+                if (xhr.status>=200 &&xhr.status<300){
+                    res.innerText=xhr.response;
+                }
+            }
+        }
+    };
+    var flag=false;
+    btn3.onclick=function () {
+        if (flag) xhr.abort();
+        xhr=new XMLHttpRequest();
+        //设置响应体的数据类型
+        flag=true;
+        xhr.responseType='json';
+        xhr.open('put','http://localhost:8081/1');
+        xhr.send();
+        xhr.timeout=2000;
+        xhr.ontimeout=function (ev) {
+            alert("请求超时！")
+        };
+        xhr.onreadystatechange=function () {
+            if (xhr.readyState===4){
+                flag=false;
+                if (xhr.status>=200 &&xhr.status<300){
+                    //手动装换
+                    // var data=JSON.parse(xhr.response);
+                    // console.log(data);
+                    // res.innerText="id="+data.id+";code="+data.code;
+                    //自动转换
+                    console.log(xhr.response);
+                    res.innerText=xhr.response.id;
+                }
+            }
+        }
+    }
+</script>
+</body>
+</html>

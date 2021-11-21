@@ -1,0 +1,61 @@
+spring:
+  application:
+#    应用名称
+    name: happy_shopping
+  datasource:
+#    数据库驱动
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    数据源名称
+    name: defaultDataSource
+  thymeleaf:
+    # THYMELEAF (ThymeleafAutoConfiguration)
+    # 开启模板缓存（默认值： true ）
+    cache: false
+    # 检查模板是否存在，然后再呈现
+    check-template: true
+    # 检查模板位置是否正确（默认值 :true ）
+    check-template-location: true
+    servlet:
+      #Content-Type 的值（默认值： text/html ）
+      content-type: text/html
+    # 开启 MVC Thymeleaf 视图解析（默认值： true ）
+    enabled: true
+    # 模板编码
+    encoding: UTF-8
+    # 要运⽤于模板之上的模板模式。另⻅ StandardTemplate-ModeHandlers( 默认值： HTML5)
+    mode: HTML5
+    # 在构建 URL 时添加到视图名称前的前缀（默认值： classpath:/templates/ ）
+    prefix: classpath:/templates/
+    # 在构建 URL 时添加到视图名称后的后缀（默认值： .html ）
+    suffix: .html
+  servlet:
+    multipart:
+#      最大请求大小（总文件大小）
+      max-request-size: 100MB
+#      最大文件大小（单个文件大小）
+      max-file-size: 10MB
+  output:
+    ansi:
+      enabled: always
+  jpa:
+    hibernate:
+      ddl-auto: update
+    #      控制台显示SQL
+    show-sql: false
+    database: mysql
+  resources:
+    static-locations: classpath:/static/
+  mvc:
+    static-path-pattern: /static/**
+
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+    session:
+      timeout: 30m
+  tomcat:
+    max-http-form-post-size: 100MB
+  error:
+    include-exception: true
