@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -11,6 +11,11 @@
 
     <link th:href="@{/static/css/style.css}" rel="stylesheet">
     <link th:href="@{static/css/style-responsive.css}" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/minimal/minimal.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/minimal/blue.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/square/square.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/square/blue.css" rel="stylesheet">
+    <link href="/static/js/iCheck/skins/flat/blue.css" rel="stylesheet">
     <!--file upload-->
     <link rel="stylesheet" type="text/css" th:href="@{static/css/bootstrap-fileupload.min.css}" />
 
@@ -20,7 +25,7 @@
 
 <div class="container">
 
-    <form class="form-signin" id="registForm" method="post" th:action="@{/regist_merchants}" enctype="multipart/form-data">
+    <form class="form-signin bucket-form" id="registForm" method="post" th:action="@{/regist_merchants}" enctype="multipart/form-data">
         <div class="form-signin-heading text-center">
             <h1 class="sign-title">商户注册</h1>
             <img th:src="@{/static/images/login-logo.png}" alt=""/>
@@ -31,14 +36,21 @@
             <label for="name" class="line">本人姓名：</label>
             <input type="text" autofocus maxlength="15" name="name" id="name" placeholder="本人姓名" class="form-control" required>
             <label for="gender" class="line">性别：</label>
-            <div class="radios" id="gender">
-                <label for="radio-01" class="label_radio col-lg-6 col-sm-6">
-                    <input type="radio" name="gender" checked="" value="男" id="radio-01" > 男性
-                </label>
-                <label for="radio-02" class="label_radio col-lg-6 col-sm-6">
-                    <input type="radio" name="gender" value="女" id="radio-02" > 女性
-                </label>
+            <div class="form-group">
+                <div class="square-blue single-row">
+                    <div class="radios" id="gender">
+                        <label for="radio-01" class="col-lg-6 col-sm-6">
+                            <input type="radio" name="gender" checked="" value="男" id="radio-01" >
+                            <label>男性</label>
+                        </label>
+                        <label for="radio-02" class="col-lg-6 col-sm-6">
+                            <input type="radio" name="gender" value="女" id="radio-02" >
+                            <label>女性</label>
+                        </label>
+                    </div>
+                </div>
             </div>
+
             <label for="email" class="line">Email邮箱：</label>
             <input type="text" id="email" name="email" placeholder="Email邮箱" class="form-control" required>
             <label for="phonenum" class="line">电话号码：</label>
@@ -116,12 +128,16 @@
 
 <!-- Placed js at the end of the document so the pages load faster -->
 <script th:src="@{/static/js/jquery-1.10.2.min.js}"></script>
+<script src="/static/js/jquery-ui-1.9.2.custom.min.js"></script>
+<script src="/static/js/jquery-migrate-1.2.1.min.js"></script>
 <script th:src="@{/static/js/bootstrap.min.js}"></script>
 <script th:src="@{/static/js/modernizr.min.js}"></script>
 <!--file upload-->
+
 <script type="text/javascript" th:src="@{/static/js/bootstrap-fileupload.min.js}"></script>
 <script src="/static/my_js/mer/registration.js"></script>
 <script src="/static/my_js/input.js"></script>
-
+<!--icheck -->
+<script src="/static/js/iCheck/jquery.icheck.js"></script>
 </body>
 </html>

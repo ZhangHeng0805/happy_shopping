@@ -23,7 +23,7 @@ public class goods {
     @Column(name = "[num]")
     private Integer num;
     @Column(name = "[state]")
-    private int state;//[0:未处理；1:拒绝发货；2:待收货；3:已收货；4:退货]
+    private int state;//订单状态[0:未处理；1:拒绝发货；2:待收货；3:已收货；4:退货]
     @Column(name = "list_id")
     private String list_id;
 

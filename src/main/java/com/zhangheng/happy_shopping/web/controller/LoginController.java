@@ -59,7 +59,7 @@ public class LoginController {
         msg.setCode(100);
         msg.setMessage("请登录，注意错误机会只有5次");
         log.info("来自："+ CusAccessObjectUtil.getRequst(request));
-        model.addAttribute("msg",msg);
+//        model.addAttribute("msg",msg);
         return "merchants/login_mer";
     }
 
@@ -188,33 +188,40 @@ public class LoginController {
                     if(codebyId.get().getCode().equals(code.getCode())){
                         //判断上传图片是否为空
                         if (!store_image.isEmpty()) {
-                            FileLoadController fileLoadController = new FileLoadController();
-                            String s = fileLoadController.saveImage(store_image, mer.getStore_name(), "店铺头像");
-                            //判断图片保存是否成功
-                            if (s!=null){
-                                Store store = new Store();
-                                String time = TimeUtil.time(new Date());
-                                store.setStore_image(s);
-                                store.setBoss_name(mer.getName());
-                                store.setStart_time(time);
-                                store.setStore_introduce(mer.getStore_introduce());
-                                store.setStore_name(mer.getStore_name());
-                                Store save = storeRepository.save(store);
-                                //判断商铺信息保存是否成功
-                                if (save!=null) {
-                                    mer.setTime(time);
-                                    mer.setStore_id(save.getStore_id());
-                                    Merchants save1 = merchantsRepository.save(mer);
-                                    log.info("商家注册:"+save1.getPhonenum()+",姓名:"+save1.getName());
-                                    msg.setCode(200);
-                                    msg.setMessage("恭喜:"+save1.getName()+"，注册成功！<a href=\"/login_merchantsPage\">去登录</a>");
-                                }else {
+                            Optional<Merchants> byId = merchantsRepository.findById(mer.getPhonenum());
+                            //判断手机号是否注册
+                            if (!byId.isPresent()) {
+                                FileLoadController fileLoadController = new FileLoadController();
+                                String s = fileLoadController.saveImage(store_image, mer.getStore_name(), "店铺头像");
+                                //判断图片保存是否成功
+                                if (s != null) {
+                                    Store store = new Store();
+                                    String time = TimeUtil.time(new Date());
+                                    store.setStore_image(s);
+                                    store.setBoss_name(mer.getName());
+                                    store.setStart_time(time);
+                                    store.setStore_introduce(mer.getStore_introduce());
+                                    store.setStore_name(mer.getStore_name());
+                                    Store save = storeRepository.save(store);
+                                    //判断商铺信息保存是否成功
+                                    if (save != null) {
+                                        mer.setTime(time);
+                                        mer.setStore_id(save.getStore_id());
+                                        Merchants save1 = merchantsRepository.save(mer);
+                                        log.info("商家注册:" + save1.getPhonenum() + ",姓名:" + save1.getName());
+                                        msg.setCode(200);
+                                        msg.setMessage("恭喜:" + save1.getName() + "，注册成功！<a href=\"/login_merchantsPage\">去登录</a>");
+                                    } else {
+                                        msg.setCode(500);
+                                        msg.setMessage("商铺信息保存失败");
+                                    }
+                                } else {
                                     msg.setCode(500);
-                                    msg.setMessage("商铺信息保存失败");
+                                    msg.setMessage("商铺图片保存失败，请检查文件重试");
                                 }
                             }else {
                                 msg.setCode(500);
-                                msg.setMessage("商铺图片保存失败，请检查文件重试");
+                                msg.setMessage("此手机号已注册,请勿重复注册");
                             }
                         }else {
                             msg.setCode(500);
@@ -244,5 +251,12 @@ public class LoginController {
         }
         model.addAttribute("msg",msg);
         return "merchants/registration_mer";
+    }
+
+    @GetMapping("/exit_mer")
+    private String exit_mer(HttpServletRequest request){
+        request.getSession().removeAttribute("merchants");
+        request.getSession().removeAttribute("store");
+        return "redirect:/login_merchantsPage";
     }
 }

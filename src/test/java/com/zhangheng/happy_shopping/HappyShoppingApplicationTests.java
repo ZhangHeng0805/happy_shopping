@@ -1,7 +1,10 @@
 package com.zhangheng.happy_shopping;
 
+import com.zhangheng.happy_shopping.android.entity.submitgoods.SubmitGoods;
 import com.zhangheng.happy_shopping.android.repository.GoodsRepository;
+import com.zhangheng.happy_shopping.android.repository.SubmitGoodsRepository;
 import com.zhangheng.happy_shopping.bean.VerificationCode;
+import com.zhangheng.happy_shopping.utils.TimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +22,12 @@ class HappyShoppingApplicationTests {
     JdbcTemplate jdbcTemplate;
     @Autowired
     GoodsRepository goodsRepository;
+    @Autowired
+    private SubmitGoodsRepository submitGoodsRepository;
     @Test
     void contextLoads() {
-        test1();
+        a(8);
+        System.out.println(count);
     }
     private void test(){
         String sql="select * from verification_code";
@@ -33,6 +39,28 @@ class HappyShoppingApplicationTests {
     private void test1(){
         Integer f = goodsRepository.countByStore_idAndGoods_type(1, "其他");
         System.out.println(f);
+    }
+    private void test2(){
+        List<SubmitGoods> byTimeLike = submitGoodsRepository.findByTimeLike("2021年11月20日");
+        for (SubmitGoods sb : byTimeLike) {
+            System.out.println(sb.toString());
+        }
+    }
+    private void test3(){
+        String t="2021年11月21日 22:42:58";
+        String s = TimeUtil.fewDaysAgo(t, 2);
+        System.out.println(s.substring(0,11));
+    }
+    int count=0;
+    private int a(int i){
+        count++;
+        if (i==0){
+            return 1;
+        }else if (i==1){
+            return 2;
+        }else {
+            return a(i-1)+a(i-2);
+        }
     }
 
 }

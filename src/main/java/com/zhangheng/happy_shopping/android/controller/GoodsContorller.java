@@ -58,9 +58,9 @@ public class GoodsContorller {
         log.info("查询商品类型："+GoodsType);
         if (GoodsType!=null) {
             if (GoodsType.equals("全部")) {
-                goods = goodsRepository.findAll();
+                goods = goodsRepository.findByState(0);
             } else {
-                goods = goodsRepository.findByGoods_type(GoodsType);
+                goods = goodsRepository.findByGoods_typeAndState(GoodsType,0);
             }
         }
         return goods;
@@ -103,7 +103,14 @@ public class GoodsContorller {
             if (count == submitGoods.getCount_price()) {
                 //修改商品库存
                 for (goods g : goods_list) {
-                    goodsRepository.updateGoods_num(-g.getNum(),g.getGoods_id());
+                    Optional<Goods> byId = goodsRepository.findById(g.getGoods_id());
+                    if (byId.get().getGoods_num()>=g.getNum()) {
+                        goodsRepository.updateGoods_num(-g.getNum(), g.getGoods_id());
+                    }else {
+                        msg.setCode(500);
+                        msg.setMessage("商品：["+g.getGoods_name()+"]的库存不够，请重新选购");
+                        return msg;
+                    }
                 }
                 SubmitGoods submitGoods1 = submitGoodsRepository.saveAndFlush(submitGoods);
                 if (submitGoods1 != null) {

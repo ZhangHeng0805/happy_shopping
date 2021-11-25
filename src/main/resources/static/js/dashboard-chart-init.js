@@ -17,7 +17,6 @@ Morris.Donut({
 
 
 $(function() {
-
     var d1 = [
         [0, 501],
         [1, 620],

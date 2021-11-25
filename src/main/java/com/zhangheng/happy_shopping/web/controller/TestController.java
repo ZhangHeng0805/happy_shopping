@@ -48,4 +48,9 @@ public class TestController {
         System.out.println(verificationCode.toString());
         return "test2的Post请求:"+verificationCode.getId() ;
     }
+
+    @GetMapping("/0")
+    private String testStylePage(){
+        return "test/styleTest";
+    }
 }

@@ -371,6 +371,12 @@ public class CustomerController {
         }
         return iconList;
     }
+
+    /**
+     * 顾客注册
+     * @param json
+     * @return
+     */
     @PostMapping("register")
     public Message zhuce(@Nullable @RequestParam("customerJson") String json){
         Message msg = new Message();

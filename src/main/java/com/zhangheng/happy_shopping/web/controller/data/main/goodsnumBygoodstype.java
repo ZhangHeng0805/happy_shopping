@@ -1,4 +1,4 @@
-package com.zhangheng.happy_shopping.web.controller.data;
+package com.zhangheng.happy_shopping.web.controller.data.main;
 
 import lombok.Data;
 

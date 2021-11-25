@@ -19,12 +19,16 @@ public interface ListGoodsRepository extends JpaRepository<goods, Integer> {
     List<goods> findByStore_id(Integer store_id);
     //根据店铺id和订单状态查询订单
     @Query("select u from goods u where u.store_id = ?1 and u.state=?2")
-    List<goods> findByStore_idAndState(Integer store_id, String state);
+    List<goods> findByStore_idAndState(Integer store_id, Integer state);
     //根据店铺id和商品类型查询商品数
     @Query(value = "select count(*) from goods_list where store_id = ?1 and state = ?2",nativeQuery = true)
     Integer countByStore_idAndState(Integer store_id, Integer state);
 
+    //根据订单号和商品id修改订单状态
     @Modifying
     @Query("update goods sc set sc.state =  ?1 where sc.list_id = ?2 and sc.goods_id=?3")
-    public void updateStateByList_idAndGoods_id(int state, String list_id, Integer goods_id);
+    int updateStateByList_idAndGoods_id(int state, String list_id, Integer goods_id);
+    @Modifying
+    @Query("update goods sc set sc.state =  ?1 where sc.id = ?2")
+    int updateStateBtId(int state, Integer id);
 }

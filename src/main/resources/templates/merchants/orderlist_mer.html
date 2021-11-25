@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商家订单列表</title>
+    <link th:include="common/common_mer :: #com_css">
+    <!--dashboard calendar-->
+    <link th:href="@{/static/css/clndr.css}" rel="stylesheet">
+</head>
+<body class="sticky-header">
+<section>
+    <!--左部标签栏-->
+    <div th:replace="common/common_mer :: #com_leftmenu"></div>
+    <div class="main-content" >
+        <!--顶部导航栏-->
+        <div th:replace="common/common_mer :: #com_headermenu"></div>
+        <div class="top"></div>
+        <!--主体内容-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <section class="panel">
+                        <header class="panel-heading custom-tab dark-tab">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#t1" data-toggle="tab" onclick="data(1,-1)">
+                                        <i class="fa fa-home"></i>
+                                        全部订单
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="#t2" data-toggle="tab" onclick="data(2,0)">
+                                        <i class="fa fa-bell"></i>
+                                        未处理订单
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="#t3" data-toggle="tab" onclick="data(3,2)">
+                                        <i class="fa fa-spinner"></i>
+                                        待收货订单
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="#t4" data-toggle="tab" onclick="data(4,3)">
+                                        <i class="fa fa-check-square-o"></i>
+                                        已收货订单
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="#t5" data-toggle="tab" onclick="data(5,4)">
+                                        <i class="fa fa-times-circle-o"></i>
+                                        退货订单
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="#t6" data-toggle="tab" onclick="data(6,1)">
+                                        <i class="fa fa-ban"></i>
+                                        拒绝发货订单
+                                    </a>
+                                </li>
+                            </ul>
+                        </header>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="t1">
+                                    全部订单：<span class="badge badge-info" id="t1_title">0</span>件
+                                    <div class="adv-table editable-table goods_tbody_t1">
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="t2">
+                                    未处理订单：<span class="badge badge-info" id="t2_title">0</span>件
+                                    <div class="adv-table editable-table goods_tbody_t2">
+                                    </div>
+                                </div>
+                                <div class="tab-pane " id="t3">
+                                    待收货订单：<span class="badge badge-info" id="t3_title">0</span>件
+                                    <div class="adv-table editable-table goods_tbody_t3">
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="t4">
+                                    已收货订单：<span class="badge badge-info" id="t4_title">0</span>件
+                                    <div class="adv-table editable-table goods_tbody_t4">
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="t5">
+                                    退货订单：<span class="badge badge-info" id="t5_title">0</span>件
+                                    <div class="adv-table editable-table goods_tbody_t5">
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="t6">
+                                    拒绝发货订单：<span class="badge badge-info" id="t6_title">0</span>件
+                                    <div class="adv-table editable-table goods_tbody_t6">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </div>
+        <div class="bottom"></div>
+        <div th:replace="common/common_mer :: #com_footer"></div>
+    </div>
+</section>
+
+<div th:replace="common/common_mer :: #com_js"></div>
+
+
+<script th:src="@{/static/my_js/mer/orderlist.js}"></script>
+<!--表格-->
+<script type="text/javascript" src="/static/js/data-tables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/static/js/data-tables/DT_bootstrap.js"></script>
+<script src="/static/js/editable-table.js"></script>
+<script>
+    jQuery(document).ready(function() {
+        data(1,-1);
+    });
+</script>
+</body>
+</html>

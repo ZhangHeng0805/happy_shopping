@@ -8,7 +8,7 @@ import java.util.Date;
 public class TimeUtil {
     //格式化时间
     public static String time(Date date){
-        String strDateFormat = "yyyy-MM-dd HH:mm:ss";
+        String strDateFormat = "yyyy年MM月dd日 HH:mm:ss";
         SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
         return sdf.format(date);
     }
@@ -18,9 +18,9 @@ public class TimeUtil {
         SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
         return sdf.format(data1);
     }
-    //计算两个时间之间的时间差（分钟差）[yyyy-MM-dd HH:mm:ss]
+    //计算两个时间之间的时间差（分钟差）[yyyy年MM月dd日 HH:mm:ss]
     public static int minutesDifference(String time1,String time2){
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
         Date fromDate = null;
         Date toDate =null;
         int minutes=-1;
@@ -38,9 +38,9 @@ public class TimeUtil {
         }
         return minutes;
     }
-    //计算两个时间之间的时间差（分钟差）[yyyy-MM-dd HH:mm]
+    //计算两个时间之间的时间差（分钟差）[yyyy年MM月dd日 HH:mm]
     public static int minutesDif(String time1,String time2){
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
         Date fromDate = null;
         Date toDate =null;
         int minutes=-1;
@@ -58,9 +58,9 @@ public class TimeUtil {
         }
         return minutes;
     }
-    //计算两个时间之间的时间差（小时差）[yyyy-MM-dd HH:mm]
+    //计算两个时间之间的时间差（小时差）[yyyy年MM月dd日 HH:mm]
     public static int hoursDifference(String time1,String time2){
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
         Date fromDate = null;
         Date toDate =null;
         int hours=-1;
@@ -78,9 +78,9 @@ public class TimeUtil {
         }
         return hours;
     }
-    //计算两个时间之间的时间差（天数差）[yyyy-MM-dd HH:mm]
+    //计算两个时间之间的时间差（天数差）[yyyy年MM月dd日 HH:mm]
     public static int daysDifference(String time1,String time2){
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
         Date fromDate = null;
         Date toDate =null;
         int days=-1;
@@ -97,5 +97,24 @@ public class TimeUtil {
             days=Math.abs(days);
         }
         return days;
+    }
+    //计算几天之前的时间
+    public static String fewDaysAgo(String time,int i){
+        String day=null;
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
+        Date fromDate = null;
+        long days=-1;
+        try {
+            fromDate = simpleFormat.parse(time);
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+        if (fromDate!=null){
+            long data=fromDate.getTime();
+            days=data-(1000*60*60*24*i);
+            Date date = new Date(days);
+            day = time(date);
+        }
+        return day;
     }
 }

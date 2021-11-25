@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>商家管理主页</title>
-    <link th:include="common/common_mer :: #com_css">
+
     <!--dashboard calendar-->
     <link th:href="@{/static/css/clndr.css}" rel="stylesheet">
+    <link th:include="common/common_mer :: #com_css">
 </head>
 <body class="sticky-header">
 <section>
@@ -14,65 +15,70 @@
     <div class="main-content" >
         <!--顶部导航栏-->
         <div th:replace="common/common_mer :: #com_headermenu"></div>
-
+        <div class="top"></div>
         <div class="page-heading">
             <div class="row">
-                <div class="col-sm-1" style="height: auto; text-align: center;">
-                    <img style="height: 60px;padding:2px;border-radius: 5px;border: #98fdf4 solid 1.5px" th:src="@{'/fileload/show/'+${session.store.store_image}}" th:alt="${session.store.store_name}" />
+                <div class="col-sm-1 text-center">
+                    <img style="height: 65px;padding:2px;border-radius: 5px;border: #98fdf4 solid 1.5px" th:src="@{'/fileload/show/'+${session.store.store_image}}" th:alt="${session.store.store_name}" />
                 </div>
                 <div class="col-sm-9">
-                    <div class="row" style="margin: 4px 0px">
-                        <p class="label label-info" th:text="${session.store.store_name}"></p>
+                    <div class="row" style="margin: 5px" >
+                        <label class="label label-info" style="font-size: 14px;" th:text="${session.store.store_name}"></label>
                     </div>
-                    <div class="row" style="margin: 4px 0px">
-                        <p class="label label-success"th:text="${session.store.store_introduce}"></p>
+                    <div class="row" style="margin: 5px">
+                        <label class="label label-success" style="font-size: 14px;" th:text="${session.store.store_introduce}"></label>
                     </div>
                 </div>
             </div>
             <div class="state-info">
-                <section class="panel">
-                    <div class="panel-body" title="所有成交商品的总金额">
-                        <div class="summary">
-                            <span>店铺总销售额</span>
-                            <h3 class="red-txt" >
-                                <label class="fa fa-yen"></label> <label id="count_price">0</label>元
-                            </h3>
-                        </div>
-                        <div id="income" class="chart-bar"></div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <section class="panel">
+                            <div class="panel-body" title="所有成交商品的总金额">
+                                <div class="summary">
+                                    <span>店铺总销售额</span>
+                                    <h3 class="red-txt" >
+                                        <label class="fa fa-yen"></label> <label id="count_price">0</label>元
+                                    </h3>
+                                </div>
+                                <div id="income" class="chart-bar"></div>
+                            </div>
+                        </section>
+                        <section class="panel">
+                            <div class="panel-body" title="所有成交商品的总数量">
+                                <div class="summary">
+                                    <span>店铺总销售量</span>
+                                    <h3 class="green-txt">
+                                        <label class="fa fa-legal"></label> <label id="count_num">0</label>件
+                                    </h3>
+                                </div>
+                                <div id="expense" class="chart-bar"></div>
+                            </div>
+                        </section>
                     </div>
-                </section>
-                <section class="panel">
-                    <div class="panel-body" title="所有成交商品的总数量">
-                        <div class="summary">
-                            <span>店铺总销售量</span>
-                            <h3 class="green-txt">
-                                <label class="fa fa-legal"></label> <label id="count_num">0</label>件
-                            </h3>
-                        </div>
-                        <div id="expense" class="chart-bar"></div>
-                    </div>
-                </section>
+                </div>
             </div>
         </div>
         <!--主体内容-->
         <div class="wrapper">
             <!--数据标签和日历-->
             <div class="row">
-                <!--数据标签-->
+                <!--订单数据标签-->
                 <div class="col-md-8">
                     <section class="panel">
                         <header class="panel-heading">
-                            店铺商品订单数据
-                            <span class="label label-danger" id="un_goodsnum_div"><label class="fa fa-bell"></label> 有未处理的订单商品：<span id="un_goodsnum"></span>件</span>
+                            店铺订单数据:
+                            <span class="label label-danger un_goodsnum_div" id="un_goodsnum_div"><label class="fa fa-bell"></label>未处理:<span class="badge badge-warning un_goodsnum"></span>件</span>
+                            <span class="label label-success" id="tit_goodsnum_div"><label class="fa fa-bell"></label>暂无订单</span>
                             <span class="tools pull-right">
-                                <button class="btn btn-primary" id="refresh2" onclick="data2()" title="点击刷新数据"><span class="fa fa-refresh"></span> 刷新</button>
+                                <button class="btn btn-primary" id="refresh2" onclick="data2()" title="点击刷新数据">刷新</button>
                                 <a href="javascript:;" class="fa fa-chevron-down"></a>
                             </span>
                         </header>
                         </header>
                         <div class="panel-body">
                             <div class="row state-overview">
-                                <div class="col-md-6 col-xs-12 col-sm-6">
+                                <div class="col-md-6 col-xs-12 col-sm-6 un_goodsnum_div" >
                                     <div class="panel red">
                                         <div class="symbol">
                                             <i class="fa  fa-bell"></i>
@@ -152,28 +158,68 @@
                 </div>
             </div>
             <!--商品类型数量数据柱状图-->
-            <div class="col-sm-12">
-                <section class="panel">
-                    <header class="panel-heading">
-                        店铺商品类型数据图
-                        <span class="label label-info">商品总数：<span id="zhuzhuang-data"></span>件</span>
-                        <span class="tools pull-right">
-                            <button class="btn btn-primary" id="refresh1" onclick="data1()" title="点击刷新数据"><span class="fa fa-refresh"></span> 刷新</button>
+            <div class="row">
+                <div class="col-md-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            店铺商品类型图:
+                            <span>总数：<span id="zhuzhuang-data" class="badge badge-success"></span>件</span>
+                            <span class="tools pull-right">
+                            <button class="btn btn-primary" id="refresh1" onclick="data1()" title="点击刷新数据">刷新</button>
                             <a href="javascript:;" class="fa fa-chevron-down"></a>
                         </span>
-                    </header>
-                    <div class="panel-body">
-                        <div class="chartJS">
-                            <div id="zhuzhuang-data-js" height="250" width="800"></div>
+                        </header>
+                        <div class="panel-body">
+                            <div class="chartJS">
+                                <div id="zhuzhuang-data-js" height="250" width="800"></div>
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </div>
-
+            <!--近7天的订单弧线图-->
+            <div class="row">
+                <div class="col-md-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            近7天的订单详情:今日订单
+                            <label class="badge badge-success" id="count_order">0</label>件
+                            <span class="tools pull-right">
+                            <button class="btn btn-primary" id="refresh3" onclick="data4()" title="点击刷新数据">刷新</button>
+                            <a href="javascript:;" class="fa fa-chevron-down"></a>
+                        </span>
+                        </header>
+                        <div class="panel-body">
+                            <div class="chartJS">
+                                <div id="huxian-data-js" height="250" width="800"></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <!--未处理的商品表格-->
+            <div class="row">
+                <div class="col-md-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            未处理的订单:<span class="badge badge-important" id="un_goodsnum"></span>件
+                            <span class="tools pull-right">
+                            <button class="btn btn-primary" onclick="data5()" title="点击刷新数据">刷新</button>
+                            <a href="javascript:;" class="fa fa-chevron-down"></a>
+                        </span>
+                        </header>
+                        <div class="panel-body">
+                            <div class="adv-table editable-table">
+                                <section id="no-more-tables" class="goods_tbody">
+                                </section>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="bottom"></div>
         </div>
-        <footer class="sticky-footer">
-            2021 &copy; <a href="https://github.com/ZhangHeng0805" target="_blank"><span class="fa fa-github"></span>星曦向荣</a>
-        </footer>
+        <div th:replace="common/common_mer :: #com_footer"></div>
     </div>
 </section>
 
@@ -184,10 +230,19 @@
 <script th:src="@{/static/js/calendar/moment-2.2.1.js}"></script>
 <script th:src="@{http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js}"></script>
 <script th:src="@{http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js}"></script>
+<!--Sparkline Chart-->
+<script th:src="@{/static/js/sparkline/jquery.sparkline.js}"></script>
+<script th:src="@{/static/js/sparkline/sparkline-init.js}"></script>
 
-<script th:src="@{/static/js/dashboard-chart-init.js}"></script>
 <script th:src="@{/static/my_js/mer/main.js}"></script>
+<!--表格-->
+<script type="text/javascript" src="/static/js/data-tables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/static/js/data-tables/DT_bootstrap.js"></script>
+<script src="/static/js/editable-table.js"></script>
 <script>
+    jQuery(document).ready(function() {
+        data5();
+    });
     setInterval(function(){
         var date = new Date();
         var year = date.getFullYear();    //获取当前年份

@@ -19,6 +19,7 @@
         <link th:href="@{/static/css/style.css}"rel="stylesheet">
         <link th:href="@{/static/css/style-responsive.css}" rel="stylesheet">
         <link th:href="@{/static/css/bootstrap-reset.css}" rel="stylesheet">
+
         <!--pickers css-->
         <link rel="stylesheet" type="text/css" href="/static/js/bootstrap-datepicker/css/datepicker-custom.css" />
         <link rel="stylesheet" type="text/css" href="/static/js/bootstrap-timepicker/css/timepicker.css" />
@@ -69,14 +70,23 @@
             <li th:class="${active}=='0'?'active':''"class=""><a href="/main"><i class="fa fa-home"></i> <span>主页详情</span></a></li>
             <hr>
             <!--订单列表-->
-            <li th:class="${active}=='1'?'active':''"class=""><a th:href="@{/basic_table}"><i class="fa  fa-calendar-o"></i> <span>订单列表</span></a></li>
+            <li th:class="${active}=='1'?'active':''"class=""><a th:href="@{/OderListPage}"><i class="fa  fa-calendar-o"></i> <span>订单列表</span></a></li>
             <!--添加商品-->
             <li th:class="${active}=='3'?'active':''"><a th:href="@{/responsive_table}"><i class="fa fa-plus-square-o"></i> <span>添加商品</span></a></li>
             <!--商品信息-->
             <li th:class="${active}=='4'?'active':''"><a th:href="@{/goodsfromstore_table}"><i class="fa fa-th-list"></i><span>商品信息</span></a></li>
             <hr>
             <!--退出登录-->
-            <li><a th:href="@{/exit}"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
+            <li><a th:href="@{/exit_mer}" onclick="exit()"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
+            <script>
+                function exit() {
+                    if (window.history && window.history.pushState()) {
+                        $(window).on('popstate', function () {
+                            window.history.forward(1);
+                        });
+                    }
+                }
+            </script>
         </ul>
         <!--sidebar nav end-->
     </div>
@@ -101,7 +111,7 @@
                 <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
                     <li><a th:href="@{/modify_account}"><i class="fa fa-cog"></i>  账户设置</a></li>
                     <li><a data-toggle="modal" href="#myModal"><i class="fa fa-unlock-alt"></i>  修改密码</a></li>
-                    <li><a th:href="@{/exit}"><i class="fa fa-sign-out"></i> 退出登录</a></li>
+                    <li><a th:href="@{/exit_mer}" onclick="exit()"><i class="fa fa-sign-out"></i> 退出登录</a></li>
                 </ul>
             </li>
 
@@ -156,7 +166,14 @@
     <!--notification menu end -->
 </div>
 <!-- header section end-->
-
+<!--底部页脚-->
+<footer class="sticky-footer" id="com_footer">
+    2021 &copy; <a href="https://github.com/ZhangHeng0805" target="_blank"><span class="fa fa-github"></span>星曦向荣</a>
+    <span class="tools pull-right">
+        <span class="btn btn-default up_down"><label class="fa  fa-angle-double-down"></label></span>
+        <span class="btn btn-default up_top"><label class="fa  fa-angle-double-up"></label></span>
+    </span>
+</footer>
 <!--消息提示-->
 <div id="com_alert" th:if="${msg}!=null" th:switch="${msg.code}">
     <div th:case="200" class="alert alert-success fade in" >
@@ -196,21 +213,17 @@
     <!--common scripts for all pages-->
     <script th:src="@{/static/js/scripts.js}"></script>
 
-    <!--表格-->
-    <script type="text/javascript" src="/static/js/data-tables/jquery.dataTables.js"></script>
-    <script type="text/javascript" src="/static/js/data-tables/DT_bootstrap.js"></script>
-    <script src="/static/js/editable-table.js"></script>
 
     <!--文件上传-->
     <script type="text/javascript" th:src="@{/static/js/bootstrap-fileupload.min.js}"></script>
-    <!--pickers plugins-->
+    <!--选择器 plugins-->
     <script type="text/javascript" src="/static/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-daterangepicker/moment.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
     <!--pickers initialization-->
-    <script src="/static/js/pickers-init.js"></script>
+<!--    <script src="/static/js/pickers-init.js"></script>-->
     <!--Chart JS-->
     <script src="/static/js/chart-js/Chart.js"></script>
     <!--Morris Chart-->
@@ -229,6 +242,18 @@
 <!--    <script src="/static/js/flot-chart/jquery.flot.stack.js"></script>-->
 <!--    <script src="/static/js/flot-chart/jquery.flot.time.js"></script>-->
 <!--    <script src="/static/js/flot.chart.init.js"></script>-->
+    <script>
+        $(".up_down").click(function () {
+            $("html,body").animate({
+                scrollTop:$(".bottom").offset().top
+            },800);
+        });
+        $(".up_top").click(function () {
+            $("html,body").animate({
+                scrollTop:$(".top").offset().top
+            },800);
+        });
+    </script>
 
 </div>
 </body>
