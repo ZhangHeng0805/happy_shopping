@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>商家管理主页</title>
+    <title>乐在购物商家后台——管理主页</title>
 
     <!--dashboard calendar-->
     <link th:href="@{/static/css/clndr.css}" rel="stylesheet">
@@ -72,11 +72,11 @@
                             <span class="label label-success" id="tit_goodsnum_div"><label class="fa fa-bell"></label>暂无订单</span>
                             <span class="tools pull-right">
                                 <button class="btn btn-primary" id="refresh2" onclick="data2()" title="点击刷新数据">刷新</button>
-                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                                <a href="javascript:;" class="fa fa-chevron-up"></a>
                             </span>
                         </header>
                         </header>
-                        <div class="panel-body">
+                        <div style="display: none;" class="panel-body">
                             <div class="row state-overview">
                                 <div class="col-md-6 col-xs-12 col-sm-6 un_goodsnum_div" >
                                     <div class="panel red">
@@ -133,7 +133,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </section>
@@ -145,10 +144,10 @@
                             日历时间:
                             <label id="times" class="label label-default"></label>
                             <span class="tools pull-right">
-                        <a href="javascript:;" class="fa fa-chevron-down"></a>
+                        <a href="javascript:;" class="fa fa-chevron-up"></a>
                     </span>
                         </header>
-                        <div class="panel-body">
+                        <div style="display: none;" class="panel-body">
                             <div class="calendar-block ">
                                 <div class="cal1">
                                 </div>
@@ -217,8 +216,8 @@
                     </section>
                 </div>
             </div>
-            <div class="bottom"></div>
         </div>
+        <div class="bottom"></div>
         <div th:replace="common/common_mer :: #com_footer"></div>
     </div>
 </section>

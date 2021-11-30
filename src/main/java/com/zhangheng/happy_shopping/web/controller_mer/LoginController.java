@@ -1,4 +1,4 @@
-package com.zhangheng.happy_shopping.web.controller;
+package com.zhangheng.happy_shopping.web.controller_mer;
 
 import com.zhangheng.happy_shopping.android.entity.Merchants;
 import com.zhangheng.happy_shopping.android.entity.Store;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -95,18 +94,23 @@ public class LoginController {
                         if (byId.get().getPassword().equals(merchants.getPassword())) {
                             //判断日志操作
                             if (requestAndType.isPresent()) {
-                                requestAndType.get().setCount(0);
-                                requestAndType.get().setTel(byId.get().getPhonenum());
-                                requestAndType.get().setTime(TimeUtil.time(new Date()));
-                                requestAndType.get().setInfo("商家登录成功");
-                                logRepository.saveAndFlush(requestAndType.get());
+                                if (byId.get().getState().equals(0)) {
+                                    requestAndType.get().setCount(0);
+                                    requestAndType.get().setTel(byId.get().getPhonenum());
+                                    requestAndType.get().setTime(TimeUtil.time(new Date()));
+                                    requestAndType.get().setInfo("商家登录成功");
+                                    logRepository.saveAndFlush(requestAndType.get());
 
-                                request.getSession().setAttribute("merchants",byId.get());
-                                Optional<Store> storeOptional = storeRepository.findById(byId.get().getStore_id());
-                                request.getSession().setAttribute("store",storeOptional.get());
+                                    request.getSession().setAttribute("merchants", byId.get());
+                                    Optional<Store> storeOptional = storeRepository.findById(byId.get().getStore_id());
+                                    request.getSession().setAttribute("store", storeOptional.get());
 
-                                log.info("商家登录:"+byId.get().getPhonenum()+"姓名:"+byId.get().getName());
-                                return "redirect:/main";
+                                    log.info("商家登录:" + byId.get().getPhonenum() + "姓名:" + byId.get().getName());
+                                    return "redirect:/main";
+                                }else {
+                                    msg.setCode(404);
+                                    msg.setMessage("对不起，你的账号"+Merchants.checkState(byId.get().getState())+",暂时无法登录，<a href='http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=wriqo6ylqqespezy_vL3grOz7KGtrw'>申述反馈</a>");
+                                }
                             }else {
                                 msg.setCode(500);
                                 msg.setMessage("操作日志错误");
@@ -192,7 +196,7 @@ public class LoginController {
                             //判断手机号是否注册
                             if (!byId.isPresent()) {
                                 FileLoadController fileLoadController = new FileLoadController();
-                                String s = fileLoadController.saveImage(store_image, mer.getStore_name(), "店铺头像");
+                                String s = fileLoadController.saveImage(store_image, mer.getStore_name(), "Store_Images");
                                 //判断图片保存是否成功
                                 if (s != null) {
                                     Store store = new Store();
@@ -202,19 +206,28 @@ public class LoginController {
                                     store.setStart_time(time);
                                     store.setStore_introduce(mer.getStore_introduce());
                                     store.setStore_name(mer.getStore_name());
-                                    Store save = storeRepository.save(store);
-                                    //判断商铺信息保存是否成功
-                                    if (save != null) {
-                                        mer.setTime(time);
-                                        mer.setStore_id(save.getStore_id());
-                                        Merchants save1 = merchantsRepository.save(mer);
-                                        log.info("商家注册:" + save1.getPhonenum() + ",姓名:" + save1.getName());
-                                        msg.setCode(200);
-                                        msg.setMessage("恭喜:" + save1.getName() + "，注册成功！<a href=\"/login_merchantsPage\">去登录</a>");
-                                    } else {
+                                    try {
+                                        Store save = storeRepository.save(store);
+                                        //判断商铺信息保存是否成功
+                                        if (save != null) {
+                                            mer.setTime(time);
+                                            mer.setStore_id(save.getStore_id());
+                                            mer.setState(0);//账号正常
+                                            Merchants save1 = merchantsRepository.save(mer);
+                                            log.info("商家注册:" + save1.getPhonenum() + ",姓名:" + save1.getName());
+                                            msg.setCode(200);
+                                            msg.setMessage("恭喜:" + save1.getName() + "，注册成功！<a href=\"/login_merchantsPage\">去登录</a>");
+                                        } else {
+                                            msg.setCode(500);
+                                            msg.setMessage("商铺信息保存失败");
+                                            fileLoadController.deleteImg(s);
+                                        }
+                                    }catch (Exception e){
+                                        msg.setMessage("错误："+e.getMessage());
                                         msg.setCode(500);
-                                        msg.setMessage("商铺信息保存失败");
+                                        fileLoadController.deleteImg(s);
                                     }
+
                                 } else {
                                     msg.setCode(500);
                                     msg.setMessage("商铺图片保存失败，请检查文件重试");
@@ -235,7 +248,7 @@ public class LoginController {
                     msg.setCode(500);
                     msg.setMessage("验证码为空");
                 }
-                System.out.println(mer.toString());
+//                System.out.println(mer.toString());
             } else {
                 msg.setCode(404);
                 msg.setMessage("注册内容为空");

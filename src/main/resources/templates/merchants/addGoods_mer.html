@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>乐在购物商家后台——添加商品</title>
+    <link th:include="common/common_mer :: #com_css">
+</head>
+<body class="sticky-header">
+<section>
+    <!--左部标签栏-->
+    <div th:replace="common/common_mer :: #com_leftmenu"></div>
+    <div class="main-content" >
+        <!--顶部导航栏-->
+        <div th:replace="common/common_mer :: #com_headermenu"></div>
+        <div class="top"></div>
+        <!--主体内容-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            商品添加
+                            <span class="tools pull-right">
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                            </span>
+                        </div>
+                        <div class="panel-body">
+                            <div th:replace="common/common_mer :: #com_alert"></div>
+                            <form role="form" method="post" action="/addGoods" id="GoodsForm" enctype="multipart/form-data">
+                                <!--商品名称-->
+                                <div class="col-md-10 form-group">
+                                    <label for="goods_name" class="control-label"><strong>商品名称:</strong></label>
+                                    <input id="goods_name" name="goods_name" type="text" placeholder="请输入商品名称" oninput="titleInput('goods_name','t_goods_name',15)" class="form-control" autofocus required>
+                                    <p id="t_goods_name" class="help-block">请输入商品的名陈（字数限制15字）</p>
+                                </div>
+                                <!--商品类型-->
+                                <div class="col-md-10 form-group">
+                                    <label for="goods_name" class="control-label"><strong>商品类型:</strong></label>
+                                    <select id="goods_type" name="goods_type" class="form-control" required>
+                                    </select>
+                                    <p id="t_goods_type" class="help-block">请选择商品的类型</p>
+                                </div>
+                                <!--商品简介-->
+                                <div class="col-md-10 form-group">
+                                    <label for="goods_introduction" class="control-label"><strong>商品简介:</strong></label>
+                                    <textarea id="goods_introduction" name="goods_introduction" rows="2" maxlength="50" type="text" placeholder="请输入商品简介（商品规格大小...）" oninput="titleInput('goods_introduction','t_goods_introduction',50)" class="form-control" required></textarea>
+                                    <p id="t_goods_introduction" class="help-block">请输入商品的简介（字数限制50字）</p>
+                                </div>
+                                <!--商品图片-->
+                                <div class="col-md-10 form-group">
+                                    <label for="goods_image" class="control-label"><strong>商品图片：</strong></label>
+                                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                                        <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+                                        </div>
+                                        <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                        <br>
+                                        <span class="label label-warning ">注意!</span>
+                                        <span>请选择商品的图片(大小1Mb以内)</span>
+                                        <div class="form-group">
+                                           <span class="btn btn-default btn-file">
+                                           <span class="fileupload-new"><i class="fa fa-picture-o"></i> 选择图片</span>
+                                           <span class="fileupload-exists"><i class="fa fa-undo"></i> 更改</span>
+                                           <input id="goods_image" type="file" class="default" name="image" required />
+                                           </span>
+                                            <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--商品价格-->
+                                <div class="col-md-10 form-group">
+                                    <label for="goods_price" class="control-label"><strong>商品价格：</strong></label>
+                                    <div class="iconic-input">
+                                        <i class="fa fa-cny"></i>
+                                        <input id="goods_price"name="goods_price" type="number"min="0.01" step="0.01" max="999999" placeholder="请输入商品价格" class="form-control" required>
+                                        <p id="t_goods_price" class="help-block">价格范围：0.01~999999元</p>
+                                    </div>
+                                </div>
+                                <!--商品库存-->
+                                <div class="col-md-10 form-group">
+                                    <label for="goods_num" class="control-label"><strong>商品库存：</strong></label>
+                                    <div class="iconic-input">
+                                        <i class="fa fa-plus-square"></i>
+                                        <input id="goods_num" name="goods_num" type="number" min="0" step="1" max="99999999" placeholder="请输入商品库存" class="form-control" required>
+                                        <p id="t_goods_num" class="help-block">库存范围：0~99999999件</p>
+                                    </div>
+                                </div>
+                                <!--表单提交-->
+                                <div class="col-md-10 form-group text-center">
+                                    <button class="btn btn-success btn-lg" type="submit"><i class="fa  fa-check-square-o"></i> 添加商品</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom"></div>
+        <div th:replace="common/common_mer :: #com_footer"></div>
+    </div>
+</section>
+
+<div th:replace="common/common_mer :: #com_js"></div>
+
+
+<!--<script th:src="@{/static/my_js/mer/orderlist.js}"></script>-->
+<!--表格-->
+<script type="text/javascript" src="/static/js/data-tables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/static/js/data-tables/DT_bootstrap.js"></script>
+<script src="/static/js/editable-table.js"></script>
+
+<script src="/static/my_js/input.js"></script>
+<script src="/static/my_js/mer/addGoods.js"></script>
+<script>
+    jQuery(document).ready(function() {
+        data1();
+    });
+</script>
+</body>
+</html>

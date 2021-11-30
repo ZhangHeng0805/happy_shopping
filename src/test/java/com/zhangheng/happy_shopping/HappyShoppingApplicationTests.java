@@ -26,8 +26,7 @@ class HappyShoppingApplicationTests {
     private SubmitGoodsRepository submitGoodsRepository;
     @Test
     void contextLoads() {
-        a(8);
-        System.out.println(count);
+        test4();
     }
     private void test(){
         String sql="select * from verification_code";
@@ -63,4 +62,10 @@ class HappyShoppingApplicationTests {
         }
     }
 
+    private void test4(){
+        String s="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAEBAQEBAQEBAQEBA";
+        String[] split = s.split(",");
+        String type=split[0].split("/")[1].split(";")[0];
+        System.out.println(type);
+    }
 }

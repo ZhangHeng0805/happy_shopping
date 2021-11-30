@@ -1,16 +1,26 @@
-package com.zhangheng.happy_shopping.web.controller;
+package com.zhangheng.happy_shopping.web.controller_mer;
 
 import com.zhangheng.happy_shopping.bean.VerificationCode;
+import com.zhangheng.happy_shopping.controller.FileLoadController;
+import com.zhangheng.happy_shopping.utils.FiletypeUtil;
+import com.zhangheng.happy_shopping.utils.Message;
+import com.zhangheng.happy_shopping.utils.TimeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Date;
 
 @Controller
 public class TestController {
 
 
+    private Logger log= LoggerFactory.getLogger(getClass());
     @GetMapping("/")
     private String testPage(){
         return "redirect:/login_merchantsPage" ;
@@ -52,5 +62,25 @@ public class TestController {
     @GetMapping("/0")
     private String testStylePage(){
         return "test/styleTest";
+    }
+    @GetMapping("/3")
+    private String iamge_cutPage(){
+        return "test/test3";
+    }
+
+    @ResponseBody
+    @PostMapping("/3")
+    private Message image_upload(String img){
+        Message msg = new Message();
+        String s = FiletypeUtil.base64ToImg(img, TimeUtil.timeTip(new Date()).substring(5, 12) , "测试图片");
+        log.info("图片："+s);
+        if (s!=null){
+            msg.setCode(200);
+            msg.setMessage("图片上传成功！"+s);
+        }else {
+            msg.setCode(500);
+            msg.setMessage("图片上传失败！");
+        }
+        return msg;
     }
 }

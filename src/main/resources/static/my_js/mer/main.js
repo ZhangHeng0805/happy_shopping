@@ -80,6 +80,7 @@ function data4() {
         method:'get',
         dataType:'json',
         success:function (data) {
+            // console.log(data);
             document.getElementById("huxian-data-js").innerHTML='';
             Morris.Line({
                 element: 'huxian-data-js',
@@ -90,7 +91,7 @@ function data4() {
                 lineColors:['#f4be00','#e300eb','#07ade1','#0aeb00','#ff0003'],
                 parseTime: false
             });
-            var datum = data[data.length-1];
+            var datum = data[data.length-1];//最新一天数据
             var count=datum.sta0+datum.sta1+datum.sta2+datum.sta3+datum.sta4;
             $("#count_order").html(count);
         },

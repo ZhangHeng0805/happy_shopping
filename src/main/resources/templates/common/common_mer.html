@@ -60,7 +60,7 @@
             </div>
             <h5 class="left-nav-title">账户信息</h5>
             <ul class="nav nav-pills nav-stacked custom-nav">
-                <li><a th:href="@{/modify_account}"><i class="fa fa-cog"></i> <span>账户设置</span></a></li>
+                <li><a th:href="@{/modify_accountPage}"><i class="fa fa-cog"></i> <span>账户设置</span></a></li>
             </ul>
         </div>
         <!--左菜单-->
@@ -72,9 +72,9 @@
             <!--订单列表-->
             <li th:class="${active}=='1'?'active':''"class=""><a th:href="@{/OderListPage}"><i class="fa  fa-calendar-o"></i> <span>订单列表</span></a></li>
             <!--添加商品-->
-            <li th:class="${active}=='3'?'active':''"><a th:href="@{/responsive_table}"><i class="fa fa-plus-square-o"></i> <span>添加商品</span></a></li>
+            <li th:class="${active}=='2'?'active':''"><a th:href="@{/addGoodsPage}"><i class="fa fa-plus-square-o"></i> <span>添加商品</span></a></li>
             <!--商品信息-->
-            <li th:class="${active}=='4'?'active':''"><a th:href="@{/goodsfromstore_table}"><i class="fa fa-th-list"></i><span>商品信息</span></a></li>
+            <li th:class="${active}=='3'?'active':''"><a th:href="@{/myGoodsListpage}"><i class="fa fa-th-list"></i><span>商品信息</span></a></li>
             <hr>
             <!--退出登录-->
             <li><a th:href="@{/exit_mer}" onclick="exit()"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
@@ -95,6 +95,7 @@
 
 <!-- 顶部导航栏-->
 <div id="com_headermenu" class="header-section">
+
     <!--toggle button start-->
     <a class="toggle-btn"><i class="fa fa-bars"></i></a>
     <!--toggle button end-->
@@ -109,16 +110,60 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                    <li><a th:href="@{/modify_account}"><i class="fa fa-cog"></i>  账户设置</a></li>
-                    <li><a data-toggle="modal" href="#myModal"><i class="fa fa-unlock-alt"></i>  修改密码</a></li>
+                    <li><a th:href="@{/modify_accountPage}"><i class="fa fa-cog"></i>  账户设置</a></li>
+                    <li><a data-toggle="modal" data-target="#updatePassWord"><i class="fa fa-unlock-alt"></i>  修改密码</a></li>
                     <li><a th:href="@{/exit_mer}" onclick="exit()"><i class="fa fa-sign-out"></i> 退出登录</a></li>
                 </ul>
             </li>
 
         </ul>
     </div>
-    <!-- Modal -->
-    <div aria-hidden="true" role="dialog" tabindex="-1" id="myModal" class="modal fade" style="display: none;">
+    <!--notification menu end -->
+</div>
+<!-- header section end-->
+<!--底部页脚-->
+<footer class="sticky-footer" id="com_footer">
+
+    2021 &copy; <a href="https://github.com/ZhangHeng0805" target="_blank"><span class="fa fa-github"></span>星曦向荣</a>
+    - @ <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=wriqo6ylqqespezy_vL3grOz7KGtrw"><i class="fa fa-envelope-o"></i>联系反馈</a>
+    <span class="tools pull-right">
+        <span class="btn btn-default up_down"><label class="fa  fa-angle-double-down"></label></span>
+        <span class="btn btn-default up_top"><label class="fa  fa-angle-double-up"></label></span>
+    </span>
+</footer>
+
+<!--消息提示-->
+<div id="com_alert" th:if="${msg}!=null" th:switch="${msg.code}">
+    <div th:case="200" class="alert alert-success fade in" >
+        <button type="button" class="close close-sm" data-dismiss="alert">
+            <i class="fa fa-times"></i>
+        </button>
+        <label style="color: green" th:utext="${msg.message}"></label>
+    </div>
+    <div th:case="100" class="alert alert-info fade in" >
+        <button type="button" class="close close-sm" data-dismiss="alert">
+            <i class="fa fa-times"></i>
+        </button>
+        <label th:utext="${msg.message}"></label>
+    </div>
+    <div th:case="500" class="alert alert-danger fade in" >
+        <button type="button" class="close close-sm" data-dismiss="alert">
+            <i class="fa fa-times"></i>
+        </button>
+        <label style="color: red" th:utext="${msg.message}"></label>
+    </div>
+    <div th:case="404" class="alert alert-warning fade in" >
+        <button type="button" class="close close-sm" data-dismiss="alert">
+            <i class="fa fa-times"></i>
+        </button>
+        <label style="color: orange" th:utext="${msg.message}"></label>
+    </div>
+</div>
+
+<!--公共js-->
+<div id="com_js">
+    <!-- 修改密码Modal -->
+    <div class="modal fade" id="updatePassWord" role="dialog" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" >
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -163,47 +208,7 @@
         </div>
     </div>
     <!-- modal -->
-    <!--notification menu end -->
-</div>
-<!-- header section end-->
-<!--底部页脚-->
-<footer class="sticky-footer" id="com_footer">
-    2021 &copy; <a href="https://github.com/ZhangHeng0805" target="_blank"><span class="fa fa-github"></span>星曦向荣</a>
-    <span class="tools pull-right">
-        <span class="btn btn-default up_down"><label class="fa  fa-angle-double-down"></label></span>
-        <span class="btn btn-default up_top"><label class="fa  fa-angle-double-up"></label></span>
-    </span>
-</footer>
-<!--消息提示-->
-<div id="com_alert" th:if="${msg}!=null" th:switch="${msg.code}">
-    <div th:case="200" class="alert alert-success fade in" >
-        <button type="button" class="close close-sm" data-dismiss="alert">
-            <i class="fa fa-times"></i>
-        </button>
-        <label style="color: green" th:utext="${msg.message}"></label>
-    </div>
-    <div th:case="100" class="alert alert-info fade in" >
-        <button type="button" class="close close-sm" data-dismiss="alert">
-            <i class="fa fa-times"></i>
-        </button>
-        <label th:utext="${msg.message}"></label>
-    </div>
-    <div th:case="500" class="alert alert-danger fade in" >
-        <button type="button" class="close close-sm" data-dismiss="alert">
-            <i class="fa fa-times"></i>
-        </button>
-        <label style="color: red" th:text="${msg.message}"></label>
-    </div>
-    <div th:case="404" class="alert alert-warning fade in" >
-        <button type="button" class="close close-sm" data-dismiss="alert">
-            <i class="fa fa-times"></i>
-        </button>
-        <label style="color: orange" th:text="${msg.message}"></label>
-    </div>
-</div>
 
-<!--公共js-->
-<div id="com_js">
     <script th:src="@{/static/js/jquery-1.10.2.min.js}"></script>
     <script th:src="@{/static/js/jquery-ui-1.9.2.custom.min.js}"></script>
     <script th:src="@{/static/js/jquery-migrate-1.2.1.min.js}"></script>

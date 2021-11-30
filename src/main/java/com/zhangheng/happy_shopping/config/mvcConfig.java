@@ -14,6 +14,9 @@ public class mvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new MerLoginInterceptor())
                 .addPathPatterns("/main","/findGoodsNumByType","/findGoodsNumByOrderState",
                         "/count_price","/findGoodnumBytimeAndtype","/un_goodsOrder","/Ok_Order","/No_Order"
-                ,"/OderListPage","/OrderGoodsByState");
+                ,"/OderListPage","/OrderGoodsByState"
+                        ,"/addGoodsPage","/addGoods"
+                ,"/myGoodsListpage","/findGoodsByType"
+                ,"/modify_accountPage");
     }
 }

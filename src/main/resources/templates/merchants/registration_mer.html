@@ -7,7 +7,7 @@
     <meta name="author" content="ThemeBucket">
     <link rel="shortcut icon" href="#" type="image/png">
 
-    <title>商户注册</title>
+    <title>乐在购物网_商户注册</title>
 
     <link th:href="@{/static/css/style.css}" rel="stylesheet">
     <link th:href="@{static/css/style-responsive.css}" rel="stylesheet">
@@ -81,17 +81,18 @@
                 <span>请选择商铺的图片(大小2Mb以内)</span>
                 <div class="form-group">
                    <span class="btn btn-default btn-file">
-                   <span class="fileupload-new"><i class="fa fa-paper-clip"></i> 选择图片</span>
+                   <span class="fileupload-new"><i class="fa fa-picture-o"></i> 选择图片</span>
                    <span class="fileupload-exists"><i class="fa fa-undo"></i> 更改</span>
                    <input id="store_image" type="file" class="default" name="store_image" required />
                    </span>
                     <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
                 </div>
             </div>
-
-            <label for="store_introduce" class="line">商铺简介：</label>
-            <textarea class="form-control" oninput="titleInput('store_introduce','t_introduce',150)" name="store_introduce" rows="3" id="store_introduce" placeholder="店铺的介绍" required></textarea>
-            <p id="t_introduce" class="help-block">请输入商铺介绍（字数限制150字）</p>
+            <div>
+                <label for="store_introduce" class="line">商铺简介：</label>
+                <textarea class="form-control" oninput="titleInput('store_introduce','t_introduce',150)" name="store_introduce" rows="3" id="store_introduce" placeholder="店铺的介绍" required></textarea>
+                <p id="t_introduce" class="help-block">请输入商铺介绍（字数限制150字）</p>
+            </div>
             <!--验证码-->
             <div class="row"style="text-align: center" th:if="${codeId}!=null">
                 <div class="col-lg-6">

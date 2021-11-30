@@ -1,11 +1,11 @@
-package com.zhangheng.happy_shopping.web.controller;
+package com.zhangheng.happy_shopping.web.controller_mer;
 
 import com.zhangheng.happy_shopping.android.entity.Merchants;
 import com.zhangheng.happy_shopping.android.entity.submitgoods.goods;
 import com.zhangheng.happy_shopping.android.repository.ListGoodsRepository;
 import com.zhangheng.happy_shopping.android.repository.SubmitGoodsRepository;
 import com.zhangheng.happy_shopping.utils.Message;
-import com.zhangheng.happy_shopping.web.controller.data.main.listgoodsByState;
+import com.zhangheng.happy_shopping.web.controller_mer.data.main.listgoodsByState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,7 +95,7 @@ public class OderListController {
     @ResponseBody
     @GetMapping("/OrderGoodsByState")
     private List<listgoodsByState> OrderGoodsByState(@RequestParam("method")Integer method, HttpServletRequest request){
-        log.info("查询本店"+method+"的订单商品");
+//        log.info("查询本店"+method+"的订单商品");
         List<listgoodsByState> list = new ArrayList<>();
         Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
         if (method>=0){//根据点单类型查询本店订单商品

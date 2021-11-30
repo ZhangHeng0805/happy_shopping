@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>图片裁剪</title>
+    <link th:include="common/common_mer :: #com_css">
+    <link rel="stylesheet" type="text/css" href="/static/plug-in/image-cut/css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="/static/plug-in/image-cut/css/default.css">
+    <style>
+        #clipArea {
+            margin: 20px;
+            height: 300px;
+        }
+        #file,
+        #clipBtn {
+            margin: 20px;
+        }
+        #view {
+            margin: 0 auto;
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+<div class="col-md-8">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h2>选择图片裁剪</h2>
+        </div>
+        <div class="panel-body">
+            <div class="row fileupload-new thumbnail" style="width: 200px; height: 200px;">
+                <img id="show" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
+            </div>
+            <!-- 按钮触发模态框 -->
+            <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                选择图片
+            </button>
+            <button class="btn btn-search btn-lg" id="submit">提交图片</button>
+        </div>
+    </div>
+</div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    选择图片裁剪
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="clipArea"></div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-md-9">
+                        <input type="file" id="file">
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-search btn-lg" id="clipBtn">截取</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="view"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+    <div th:replace="common/common_mer :: #com_js"></div>
+    <script src="/static/plug-in/image-cut/js/jquery-2.1.1.min.js"></script>
+    <script src="/static/plug-in/image-cut/js/hammer.js"></script>
+    <script src="/static/plug-in/image-cut/js/iscroll-zoom.js"></script>
+    <script src="/static/plug-in/image-cut/js/jquery.photoClip.min.js"></script>
+    <script>
+        var imgdata=null;
+        var oldimag=null;
+        $("#clipArea").photoClip({
+            width: 200,
+            height: 200,
+            file: "#file",
+            view: "#view",
+            ok: "#clipBtn",
+            outputType: "png",
+            strictSize: true,
+            loadStart: function(file) {
+                console.log("照片读取中");
+            },
+            loadComplete: function(src) {
+                console.log("照片读取完成!");
+            },
+            loadError: function(event) {
+                console.log("错误："+event);
+            },
+            clipFinish: function(dataURL) {
+                // console.log(dataURL);
+                imgdata=dataURL;
+            }
+        });
+        function up(file) {
+            // console.log(file);
+            $.ajax({
+                url:'/3',
+                method:'post',
+                dataType:'json',
+                data:{
+                    img:file
+                },
+                success:function (d) {
+                    alert(d.message);
+                }
+            })
+        }
+        // $("#ok").click(function () {
+        //     if (imgdata!=null){
+        //
+        //         $("#myModal").modal('hide');
+        //         return true ;
+        //     }
+        //     return false;
+        // });
+
+        $('#myModal').on('hide.bs.modal', function () {
+            if (imgdata!=null) {
+                $("#show").attr("src", imgdata);
+            }else {
+                alert("请点击截取按钮裁剪图片")
+            }
+        });
+
+        $("#submit").click(function () {
+           if (imgdata!=null){
+               if (imgdata!=oldimag){
+                   up(imgdata);
+                   oldimag=imgdata;
+               }else {
+                   alert("请不要重复上传！")
+               }
+           }  else {
+               alert("请先选择图片！")
+           }
+        });
+
+
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+            while(n--){
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, {type:mime});
+        }
+    </script>
+</body>
+</html>

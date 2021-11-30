@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="ThemeBucket">
+  <link rel="shortcut icon" href="#" type="image/png">
+    <script src="/static/img/js/addGoods.js"></script>
+    <!--file upload-->
+    <link rel="stylesheet" type="text/css" th:href="@{static/css/bootstrap-fileupload.min.css}" />
+  <title>乐在购物商家后台——账户设置</title>
+
+    <link th:include="common/common_mer :: #com_css">
+
+</head>
+
+<body class="sticky-header">
+
+<section>
+    <!--左部标签栏-->
+    <div th:replace="common/common_mer :: #com_leftmenu"></div>
+    
+    <!-- main content start-->
+    <div class="main-content" >
+        <!--顶部导航栏-->
+        <div th:replace="common/common_mer :: #com_headermenu"></div>
+        <div class="top"></div>
+        <!--主体内容 start-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            修改账户信息
+                            <span class="tools pull-right">
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                             </span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="adv-table">
+                                <form class="form-horizontal"  th:action="@{/}" role="form" name="addGoodsFrom" method="post" enctype="multipart/form-data">
+                                    <h3>个人信息</h3>
+                                    <!--提示信息-->
+                                    <div th:replace="common/common_mer :: #com_alert"></div>
+                                    <!--商户姓名-->
+                                    <div class="form-group">
+                                        <label for="name" class="col-lg-2 col-sm-2 control-label"><strong>商户姓名</strong></label>
+                                        <div class="col-lg-10">
+                                            <input type="text" th:value="${session.store.boss_name}" maxlength="15" oninput="titleInput('name','t_name',15)" name="name" class="form-control" id="name" placeholder="商户姓名" required>
+                                            <p th:id="t_name" class="help-block">（字数限制1~15字）</p>
+                                        </div>
+                                    </div>
+                                    <!--性别-->
+                                    <div class="form-group">
+                                        <label for="gender" class="col-lg-2 col-sm-2 control-label"><strong>性别</strong></label>
+                                        <div class="col-lg-10">
+                                            <input type="hidden" id="sex" th:value="${session.merchants.gender}">
+                                            <select class="form-control" id="gender" name="gender" required>
+                                                <option value="男">男</option>
+                                                <option value="女">女</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!--邮箱-->
+                                    <div class="form-group">
+                                        <label for="email" class="col-lg-2 col-sm-2 control-label"><strong>邮箱</strong></label>
+                                        <div class="col-lg-10">
+                                            <input type="email" th:value="${session.merchants.email}" name="email" class="form-control" id="email" placeholder="邮箱" required>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    <h3>店铺信息</h3>
+                                    <!--店铺名称-->
+                                    <div class="form-group">
+                                        <label for="store_name"class="col-lg-2 col-sm-2 control-label"><strong>店铺名称</strong></label>
+                                        <div class="col-lg-10">
+                                            <input type="text" th:value="${session.store.store_name}" oninput="titleInput('store_name','t_store_name',20)" name="store_name" class="form-control" id="store_name" placeholder="店铺名称" required>
+                                            <p id="t_store_name" class="help-block">（字数限制1~20字）</p>
+                                        </div>
+                                    </div>
+                                    <!--店铺介绍-->
+                                    <div class="form-group">
+                                        <label for="store_introduce" class="col-lg-2 col-sm-2 control-label"><strong>店铺介绍</strong></label>
+                                        <div class="col-lg-10">
+                                            <textarea class="form-control" name="store_introduce" maxlength="150" oninput="titleInput('store_introduce','t_store_introduce',150)" rows="3" id="store_introduce" th:text="${session.store.store_introduce}" required></textarea>
+                                            <p id="t_store_introduce" class="help-block">（字数限制1~150字）</p>
+                                        </div>
+                                    </div>
+                                    <!--店铺地址-->
+                                    <div class="form-group">
+                                        <label for="address" class="col-lg-2 col-sm-2 control-label"><strong>店铺地址</strong></label>
+                                        <div class="col-lg-10">
+                                            <input type="text" th:value="${session.merchants.address}" oninput="titleInput('address','t_address',30)" name="address" class="form-control" id="address" placeholder="店铺地址" required>
+                                            <p id="t_address" class="help-block">（字数限制2~30字）</p>
+                                        </div>
+                                    </div>
+                                    <!--店铺图片-->
+                                    <div class="form-group">
+                                        <label for="store_image" class="col-lg-2 col-sm-2 control-label"><strong>店铺图片</strong></label>
+                                        <div class="col-lg-10">
+                                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                                                    <img th:src="@{'/fileload/show/'+${session.store.store_image}}" alt="" />
+                                                </div>
+                                                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                                <br>
+                                                <span class="label label-danger ">注意!</span>
+                                                <span>请选择商铺的图片(大小2Mb以内)</span>
+                                                <div class="form-group">
+                                                   <span class="btn btn-default btn-file">
+                                                   <span class="fileupload-new"><i class="fa fa-picture-o"></i> 选择图片</span>
+                                                   <span class="fileupload-exists"><i class="fa fa-undo"></i> 更改</span>
+                                                   <input id="store_image" type="file" class="default" name="image" required />
+                                                   </span>
+                                                    <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--店铺注册时间-->
+                                    <div class="form-group">
+                                        <label class="col-lg-2 col-sm-2 control-label"><strong>注册时间</strong></label>
+                                        <div class="col-lg-10">
+                <!--                            <input type="text" th:value="${session.store.getStart_time()}" name="time" class="form-control"  placeholder="注册时间" disabled>-->
+                                            <p class="help-block">[[${session.store.getStart_time()}]]</p>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    <h3>账户信息</h3>
+                                    <!--用户名-->
+                                    <div class="form-group">
+                                        <label for="account" class="col-lg-2 col-sm-2 control-label"><strong>用户名</strong></label>
+                                        <div class="col-lg-10">
+                                            <input type="text" th:value="${session.merchants.account}" oninput="titleInput('account','t_account',20)" name="account" class="form-control" id="account" placeholder="用户名（昵称）" required>
+                                            <p id="t_account" class="help-block">（字数限制1~18字）</p>
+                                        </div>
+                                    </div>
+                                    <!--密码-->
+                                    <div class="form-group">
+                                        <label for="password" class="col-lg-2 col-sm-2 control-label"><strong>密码（必填）</strong></label>
+                                        <div class="col-lg-10">
+                                            <input type="password" name="password" class="form-control" oninput="titleInput('password','t_password',18)" id="password" placeholder="请输入密码" required>
+                                            <p class="help-block">（字数限制6~18字）</p>
+                                        </div>
+                                    </div>
+                                    <!--提交-->
+                                    <div class="form-group">
+                                        <div class="col-lg-offset-2 col-lg-10">
+                                            <button type="submit" class="btn btn-success btn-lg">提交修改</button>
+                                            <label class="help-block">（修改信息需要填写密码验证，修改成功后需要重新登录）</label>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--主体内容 end-->
+        <div class="bottom"></div>
+        <div th:replace="common/common_mer :: #com_footer"></div>
+
+    </div>
+    <!-- main content end-->
+</section>
+
+<div th:replace="common/common_mer :: #com_js"></div>
+<script src="/static/my_js/input.js"></script>
+<script type="text/javascript" th:src="@{/static/js/bootstrap-fileupload.min.js}"></script>
+<script>
+    function set_select_checked(selectId, checkValue){
+        var select = document.getElementById(selectId);
+        for (var i = 0; i < select.options.length; i++){
+            if (select.options[i].value == checkValue){
+                select.options[i].selected = true;
+                break;
+            }
+        }
+    }
+    var val=$("#sex").val();
+    set_select_checked('gender',val)
+</script>
+</body>
+</html>

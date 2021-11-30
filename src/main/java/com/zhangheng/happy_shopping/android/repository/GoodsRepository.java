@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Repository
@@ -15,7 +16,7 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
 
     //根据商品名和介绍查询商品
     @Query(value = "select * from Goods where goods_name = ?1 and goods_introduction = ?2",nativeQuery = true)
-    List<Goods> findByGoods_nameAndGoods_introduction(String goods_name, String goods_introduction);
+    Optional<Goods> findByGoods_nameAndGoods_introduction(String goods_name, String goods_introduction);
     //根据店铺id和商品类型查询商品数
     @Query(value = "select count(*) from Goods where store_id = ?1 and goods_type = ?2",nativeQuery = true)
     Integer countByStore_idAndGoods_type(Integer store_id, String goods_type);
@@ -33,6 +34,9 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
     //根据店铺id查询商品
     @Query(value = "select * from Goods where store_id = ?1",nativeQuery = true)
     List<Goods> findByStore_id(Integer store_id);
+    //根据店铺id和商品状态查询商品
+    @Query(value = "select * from Goods where store_id = ?1 and goods_type = ?2",nativeQuery = true)
+    List<Goods> findByStore_idAndGoods_type(Integer store_id,String type);
 
     //根据商品类型查询商品
     @Query("select u from Goods u where u.goods_type = ?1")

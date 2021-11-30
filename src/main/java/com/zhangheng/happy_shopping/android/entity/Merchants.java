@@ -34,7 +34,24 @@ public class Merchants {
     private Integer store_id;
     @Column
     private String time;//注册时间
+    @Column
+    private Integer state;//账号状态[0:正常,1:违规封禁。2:账号异常]
 
+    public static String checkState(int state){
+        String s=null;
+        switch (state){
+            case 0:
+                s="账号正常";
+                break;
+            case 1:
+                s="违规封禁";
+                break;
+            case 2:
+                s="账号异常";
+                break;
+        }
+        return s;
+    }
 
     public String getPhonenum() {
         return phonenum;
@@ -124,4 +141,11 @@ public class Merchants {
         this.time = time;
     }
 
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
 }

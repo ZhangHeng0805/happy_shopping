@@ -1,4 +1,4 @@
-package com.zhangheng.happy_shopping.web.controller;
+package com.zhangheng.happy_shopping.web.controller_mer;
 
 import com.zhangheng.happy_shopping.android.entity.Merchants;
 import com.zhangheng.happy_shopping.android.entity.submitgoods.SubmitGoods;
@@ -9,10 +9,10 @@ import com.zhangheng.happy_shopping.android.repository.StoreRepository;
 import com.zhangheng.happy_shopping.android.repository.SubmitGoodsRepository;
 import com.zhangheng.happy_shopping.utils.Message;
 import com.zhangheng.happy_shopping.utils.TimeUtil;
-import com.zhangheng.happy_shopping.web.controller.data.main.goodsnumBygoodstype;
-import com.zhangheng.happy_shopping.web.controller.data.main.goodsnumByoderstate;
-import com.zhangheng.happy_shopping.web.controller.data.main.goodsnumBytimeAndtype;
-import com.zhangheng.happy_shopping.web.controller.data.main.listgoodsByState;
+import com.zhangheng.happy_shopping.web.controller_mer.data.main.goodsnumBygoodstype;
+import com.zhangheng.happy_shopping.web.controller_mer.data.main.goodsnumByoderstate;
+import com.zhangheng.happy_shopping.web.controller_mer.data.main.goodsnumBytimeAndtype;
+import com.zhangheng.happy_shopping.web.controller_mer.data.main.listgoodsByState;
 import com.zhangheng.happy_shopping.web.entity.goods_type;
 import com.zhangheng.happy_shopping.web.repository.GoodsTypeRepository;
 import org.slf4j.Logger;
@@ -66,7 +66,7 @@ public class MainController {
     @ResponseBody
     @PostMapping("/findGoodsNumByType")
     private List<goodsnumBygoodstype> findGoodsNumByType(HttpServletRequest request){
-        log.info("根据商品类型查询本店商品数量");
+//        log.info("根据商品类型查询本店商品数量");
         Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
         ArrayList<goodsnumBygoodstype> list = new ArrayList<>();
         List<goods_type> all = goodsTypeRepository.findAll();
@@ -90,7 +90,7 @@ public class MainController {
     @ResponseBody
     @PostMapping("/findGoodsNumByOrderState")
     private List<goodsnumByoderstate> findGoodsNumByOrderState(HttpServletRequest request){
-        log.info("根据订单状态查询本店商品数量");
+//        log.info("根据订单状态查询本店商品数量");
         Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
         ArrayList<goodsnumByoderstate> list = new ArrayList<>();
         for (int i=0;i<=4;i++) {
@@ -111,7 +111,7 @@ public class MainController {
     @ResponseBody
     @GetMapping("/count_price")
     private Double count_price(HttpServletRequest request){
-        log.info("查询本店营业额");
+//        log.info("查询本店营业额");
         Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
         //根据店铺id查询订单商品
         List<goods> byStore_id = listGoodsRepository.findByStore_idAndState(merchants.getStore_id(),3);
@@ -133,7 +133,7 @@ public class MainController {
     @ResponseBody
     @GetMapping("/findGoodnumBytimeAndtype")
     private List<goodsnumBytimeAndtype> findGoodnumBytimeAndtype(HttpServletRequest request){
-        log.info("根据时间和订单类型查询本店营业额");
+//        log.info("根据时间和订单类型查询本店营业额");
         Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
         ArrayList<goodsnumBytimeAndtype> list = new ArrayList<>();
         //查询近7天的数据
@@ -142,24 +142,33 @@ public class MainController {
             List<SubmitGoods> timeLike = submitGoodsRepository.findByTimeLike(time);
             goodsnumBytimeAndtype bytimeAndtype = new goodsnumBytimeAndtype();
             bytimeAndtype.setTime(time.substring(8));
+//            double count_price=0;//计算当天总收益
+            //遍历当天的订单
             for (SubmitGoods submitGoods : timeLike) {
                 List<goods> goods_list = submitGoods.getGoods_list();
+                //遍历订单中的商品
                 for (goods g : goods_list) {
+                    //判断订单商品是否属于本店
                     if (g.getStore_id().equals(merchants.getStore_id())){
+
                         switch (g.getState()){
                             case 0://待处理
+//                                count_price+=g.getGoods_price()*g.getNum();
                                 int i0 = bytimeAndtype.getSta0() + 1;
                                 bytimeAndtype.setSta0(i0);
                                 break;
                             case 1://拒绝发货
+//                                count_price+=g.getGoods_price()*g.getNum();
                                 int i1 = bytimeAndtype.getSta1()+1;
                                 bytimeAndtype.setSta1(i1);
                                 break;
                             case 2://待收货
+//                                count_price+=g.getGoods_price()*g.getNum();
                                 int i2 = bytimeAndtype.getSta2() + 1;
                                 bytimeAndtype.setSta2(i2);
                                 break;
                             case 3://已收货
+//                                count_price+=g.getGoods_price()*g.getNum();
                                 int i3 = bytimeAndtype.getSta3() + 1;
                                 bytimeAndtype.setSta3(i3);
                                 break;
@@ -171,6 +180,7 @@ public class MainController {
                     }
                 }
             }
+//            bytimeAndtype.setCont_price(Message.twoDecimalPlaces(count_price));
             list.add(bytimeAndtype);
         }
         return list;
@@ -224,7 +234,7 @@ public class MainController {
     @ResponseBody
     @PostMapping("/un_goodsOrder")
     private List<listgoodsByState> un_goodsOrder(HttpServletRequest request){
-        log.info("查询本店未处理的订单商品");
+//        log.info("查询本店未处理的订单商品");
         Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
         List<listgoodsByState> list = findlistgoodsByState(merchants.getStore_id(), 0);
         return list;
