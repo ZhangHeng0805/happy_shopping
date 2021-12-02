@@ -13,11 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
 
@@ -59,43 +61,101 @@ public class FileLoadController {
                     try {
                         FileUtils.copyToFile(img.getInputStream(), outFile);
                         path = name;
-                        return path;
                     } catch (IOException e) {
                         log.error(e.getMessage());
-                        return path;
                     }
-
                 } else {
                     log.error("上传文件类型错误");
-                    return path;
+
                 }
             }else {
                 log.error("上传图片大小超过2Mb");
-                return path;
+
             }
         }else {
-            return path;
+            log.error("保存图片为空");
+
         }
+        return path;
     }
 
+    /**
+     * 保存base64的图片
+     * @param base64 base64字符
+     * @param fileName 文件名
+     * @param savePath 保存路径文件夹
+     * @return 返回保存路径，如果返回为null则保存失败
+     */
+    public String base64ToImg(String base64, String fileName, String savePath) {
+        File file = null;
+        String path=null;
+        //创建文件目录
+        String filePath = baseDir+savePath;
+        File dir = new File(filePath);
+        if (!dir.exists() && !dir.isDirectory()) {
+            dir.mkdirs();
+        }
+        BufferedOutputStream bos = null;
+        java.io.FileOutputStream fos = null;
+        try {
+            String[] split = base64.split(",");
+            String type="."+split[0].split("/")[1].split(";")[0];
+            //判断文件名长度
+            fileName=fileName.length()<8?fileName:fileName.substring(0,8);
+            //构造文件名
+            String name="/乐在购物网"
+                    + UUID.randomUUID().toString().substring(0, 5)
+                    + "_" + fileName;
+            base64 = split[1];
+            byte[] bytes = Base64.getDecoder().decode(base64);
+            file=new File(filePath + name + type);
+            fos = new java.io.FileOutputStream(file);
+            bos = new BufferedOutputStream(fos);
+            bos.write(bytes);
+            path = savePath+name+type;
+            log.info("图片名：{}", path);
+            log.info("图片大小：{}kb", Message.twoDecimalPlaces((double) file.length()/1024));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bos != null) {
+                try {
+                    bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return path;
+    }
 
     /**
      * 删除旧图片
      * @param path 图片路径
+     * @return is 否删除成功
      */
-    public void deleteImg(String path){
-        String p="files/";
-        File file = new File(p+path);
+    public boolean deleteImg(String path){
+        boolean is=false;
+        File file = new File(baseDir+path);
         if (file.exists()){
             boolean delete = file.delete();
             if (delete) {
-                log.info("旧图片删除成功");
+                log.info("旧图片删除成功："+path);
+                is=true;
             }else {
                 log.error("旧图片删除失败："+path);
             }
         }else {
             log.error("旧图片不存在："+path);
         }
+        return is;
     }
 
 

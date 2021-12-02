@@ -19,6 +19,24 @@
     <!--file upload-->
     <link rel="stylesheet" type="text/css" th:href="@{static/css/bootstrap-fileupload.min.css}" />
 
+    <!--图片裁剪-->
+    <link rel="stylesheet" type="text/css" href="/static/plug-in/image-cut/css/normalize.css" />
+<!--    <link rel="stylesheet" type="text/css" href="/static/plug-in/image-cut/css/default.css">-->
+    <style>
+        #clipArea {
+            margin: 20px;
+            height: 300px;
+        }
+        #file,
+        #clipBtn {
+            margin: 20px;
+        }
+        #view {
+            margin: 0 auto;
+            width: 200px;
+            height: 200px;
+        }
+    </style>
 </head>
 
 <body class="login-body">
@@ -70,23 +88,52 @@
             <label for="address" class="line">地区信息：</label>
             <input type="text" id="address" name="address" placeholder="所在地区" class="form-control" required>
 
-            <label for="store_image" class="line">商铺图片：</label>
-            <div class="fileupload fileupload-new" data-provides="fileupload">
-                <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
-                    <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
-                </div>
-                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                <br>
-                <span class="label label-danger ">注意!</span>
-                <span>请选择商铺的图片(大小2Mb以内)</span>
-                <div class="form-group">
-                   <span class="btn btn-default btn-file">
-                   <span class="fileupload-new"><i class="fa fa-picture-o"></i> 选择图片</span>
-                   <span class="fileupload-exists"><i class="fa fa-undo"></i> 更改</span>
-                   <input id="store_image" type="file" class="default" name="store_image" required />
-                   </span>
-                    <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
-                </div>
+            <div class="form-group">
+                <label for="image" class="line">商铺图片：</label>
+                    <div class="fileupload-new thumbnail" style="background-color: #d6d6d6" >
+                        <img id="show" style="width: 100px;height: 100px;background-color: white" alt="" />
+                    </div>
+                <span class="btn btn-default" data-toggle="modal" data-target="#img_cut"><i class="fa fa-picture-o"></i> 选择图片</span>
+                <input id="image" type="hidden" name="image" />
+<!--                <br>-->
+<!--                    <span class="label label-danger ">注意!</span>-->
+<!--                    <span>请选择商铺的图片(大小2Mb以内)</span>-->
+            </div>
+            <!-- 图片裁剪模态框（Modal） -->
+            <div class="modal fade" id="img_cut" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                &times;
+                            </button>
+                            <h4 class="modal-title" id="myModalLabel">
+                                选择图片裁剪
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div id="clipArea"></div>
+                            </div>
+                            <div class="row text-center">
+                                <div class="col-md-9">
+                                    <input type="file" id="file">
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-search btn-lg" id="clipBtn" onclick="return false;">截取图片</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="view"></div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                关闭
+                            </button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
             </div>
             <div>
                 <label for="store_introduce" class="line">商铺简介：</label>
@@ -108,10 +155,10 @@
                     </div>
                 </div>
             </div>
-            <button type="submit" name="submit" class="btn btn-lg btn-login btn-block">
-                <i class="fa fa-check"></i>
-            </button>
 
+            <button type="submit" name="submit" class="btn btn-lg btn-login btn-block">
+            <i class="fa fa-check"></i>
+            </button>
             <div class="registration">
                 已经注册了。
                 <a th:href="@{/login_merchantsPage}">
@@ -134,10 +181,15 @@
 <script th:src="@{/static/js/bootstrap.min.js}"></script>
 <script th:src="@{/static/js/modernizr.min.js}"></script>
 <!--file upload-->
-
 <script type="text/javascript" th:src="@{/static/js/bootstrap-fileupload.min.js}"></script>
+<!--图片裁剪-->
+<script src="/static/plug-in/image-cut/js/hammer.js"></script>
+<script src="/static/plug-in/image-cut/js/iscroll-zoom.js"></script>
+<script src="/static/plug-in/image-cut/js/jquery.photoClip.min.js"></script>
+<!--自定义js-->
 <script src="/static/my_js/mer/registration.js"></script>
 <script src="/static/my_js/input.js"></script>
+<script src="/static/my_js/img-cut.js"></script>
 <!--icheck -->
 <script src="/static/js/iCheck/jquery.icheck.js"></script>
 </body>

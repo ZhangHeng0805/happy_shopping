@@ -10,4 +10,6 @@ function titleInput(input,h_title,max) {
         $("#"+input).parent().removeClass("has-error").addClass("has-success");
         h_t.style.color="#4e4f6b";
     }
+    var v=$("#"+input).val()
+
 }

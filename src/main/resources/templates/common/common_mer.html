@@ -171,38 +171,77 @@
                     <h4 class="modal-title">修改密码</h4>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" th:action="@{#}" role="form" method="post" onsubmit="return submit()">
+                    <form class="form-horizontal" th:action="@{/modify_password}" role="form" method="post">
                         <div class="form-group">
                             <label class="col-lg-2 col-sm-2 control-label">旧密码</label>
                             <div class="col-lg-10">
-                                <input type="password" name="pwd1"class="form-control" id="password1" placeholder="请输入旧密码" required>
-                                <p class="help-block">（字数限制6~20字）</p>
+                                <input type="password"oninput="titleInput('password1','t_password1',18)" name="pwd1"class="form-control" id="password1" placeholder="请输入旧密码" required>
+                                <p id="t_password1" class="help-block">（字数限制6~18字）</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 col-sm-2 control-label">新密码</label>
                             <div class="col-lg-10">
-                                <input type="password" name="pwd2"class="form-control" id="password2" placeholder="请输入新密码" required>
-                                <p class="help-block">（字数限制6~20字）</p>
+                                <input type="password" oninput="titleInput('password2','t_password2',18)" class="form-control" id="password2" placeholder="请输入新密码" required>
+                                <p id="t_password2" class="help-block">（字数限制6~18字）</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 col-sm-2 control-label">再次确认</label>
                             <div class="col-lg-10">
-                                <input type="password" name="pwd3"class="form-control" id="password3" placeholder="请再次输入新密码" required>
-                                <p class="help-block">（字数限制6~20字）</p>
+                                <input type="password" oninput="titleInput('password3','t_password3',18)"  class="form-control" id="password3" placeholder="请再次输入新密码" required>
+                                <p id="t_password3" class="help-block">（字数限制6~18字）</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <!--验证码-->
+                            <div class="col-md-12" style="text-align: center">
+                                <div class="col-lg-4">
+                                    <img th:src="@{/static/images/QRcode.jpg}" style="height: 150px">
+                                </div>
+                                <div class="col-lg-6"style="padding-top: 15px">
+                                    <div class="row">
+                                        <label>扫码关注微信公众号,回复：<span class="text-danger" id="codeID">1234</span>；获取验证码</label>
+                                    </div>
+                                    <div class="row" style="padding-top: 10px">
+                                        <input type="hidden" name="id">
+                                        <input type="text" placeholder="输入验证码" class="form-control" name="code" required>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>
                     <script>
-                        function submit() {
-
+                        function sub_pwd(new_pwd,old_pwd,id,code) {
+                            $.ajax({
+                                url:'/modify_password',
+                                method:'post',
+                                data:{
+                                    new_pwd:new_pwd,
+                                    old_pwd:old_pwd,
+                                    id:id,
+                                    code:code
+                                },
+                                dataType:'json',
+                                success:function (d) {
+                                    if (d.code==200){
+                                        alert(d.message);
+                                        window.location.href="/exit_mer";
+                                    } else {
+                                        alert(d.message);
+                                    }
+                                },
+                                error:function (e) {
+                                    alert("修改密码错误："+e);
+                                    window.location.href="/exit_mer";
+                                }
+                            })
                         }
                     </script>
                 </div>
                 <div class="modal-footer">
                     <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
-                    <!--<button class="btn btn-primary" type="button">提交</button>-->
+                    <button class="btn btn-primary sub_pwd" >提交</button>
                 </div>
             </div>
         </div>
@@ -218,7 +257,7 @@
     <!--common scripts for all pages-->
     <script th:src="@{/static/js/scripts.js}"></script>
 
-
+    <script src="/static/my_js/input.js"></script>
     <!--文件上传-->
     <script type="text/javascript" th:src="@{/static/js/bootstrap-fileupload.min.js}"></script>
     <!--选择器 plugins-->
@@ -258,6 +297,50 @@
                 scrollTop:$(".top").offset().top
             },800);
         });
+        $(".sub_pwd").click(function () {
+            var old_pwd=$("#password1").val();
+            var new_pwd=$("#password2").val();
+            var new_pwd1=$("#password3").val();
+            var id=$("input[name='id']").val();
+            var code=$("input[name='code']").val();
+            if (old_pwd.length>=6&&old_pwd.length<=18){
+                if (new_pwd.length>=6&&new_pwd.length<=18){
+                    if (code.length>0){
+                        if (new_pwd===new_pwd1){
+                            if (new_pwd!=old_pwd){
+                                sub_pwd(new_pwd,old_pwd,id,code);
+                            } else {
+                                alert("新旧密码不能相同")
+                            }
+                        } else {
+                            alert("新密码两次输入不一致")
+                        }
+                    }else {
+                        alert("请输入验证码")
+                    }
+                }else {
+                    alert("新密码长度限制:6~18位")
+                }
+            } else {
+                alert("旧密码长度限制:6~18位")
+            }
+
+        })
+        $("#updatePassWord").on('show.bs.modal',
+            function() {
+                $.ajax({
+                    url:'/Verification_Code',
+                    method:'get',
+                    success:function (d) {
+                        $("#codeID").text(d);
+                        $("input[name='id']").val(d);
+                    },
+                    error:function (e) {
+                        alert("验证码获取错误："+e);
+                        window.location.href="/exit_mer";
+                    }
+                })
+            })
     </script>
 
 </div>

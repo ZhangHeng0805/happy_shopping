@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <title>乐在购物商家后台——添加商品</title>
     <link th:include="common/common_mer :: #com_css">
+    <!--图片裁剪-->
+    <link rel="stylesheet" type="text/css" href="/static/plug-in/image-cut/css/normalize.css" />
+    <style>
+        #clipArea {
+            margin: 20px;
+            height: 300px;
+        }
+        #file,
+        #clipBtn {
+            margin: 20px;
+        }
+        #view {
+            margin: 0 auto;
+            width: 200px;
+            height: 200px;
+        }
+    </style>
 </head>
 <body class="sticky-header">
 <section>
@@ -48,24 +65,48 @@
                                 </div>
                                 <!--商品图片-->
                                 <div class="col-md-10 form-group">
-                                    <label for="goods_image" class="control-label"><strong>商品图片：</strong></label>
-                                    <div class="fileupload fileupload-new" data-provides="fileupload">
-                                        <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
-                                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="" />
-                                        </div>
-                                        <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                                        <br>
-                                        <span class="label label-warning ">注意!</span>
-                                        <span>请选择商品的图片(大小1Mb以内)</span>
-                                        <div class="form-group">
-                                           <span class="btn btn-default btn-file">
-                                           <span class="fileupload-new"><i class="fa fa-picture-o"></i> 选择图片</span>
-                                           <span class="fileupload-exists"><i class="fa fa-undo"></i> 更改</span>
-                                           <input id="goods_image" type="file" class="default" name="image" required />
-                                           </span>
-                                            <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
-                                        </div>
+                                    <label for="image" class="control-label"><strong>商品图片：</strong></label>
+                                    <div class="text-center" style="background-color: #d6d6d6;width: 200px;" >
+                                        <img id="show" style="width: 100px;height: 100px;margin: 5px; background-color: white" alt="" />
                                     </div>
+                                    <span class="btn btn-default" data-toggle="modal" data-target="#img_cut"><i class="fa fa-picture-o"></i> 选择图片</span>
+                                    <input id="image" type="hidden" name="image" />
+                                </div>
+                                <!-- 图片裁剪模态框（Modal） -->
+                                <div class="modal fade" id="img_cut" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                    &times;
+                                                </button>
+                                                <h4 class="modal-title" id="myModalLabel">
+                                                    选择图片裁剪
+                                                </h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div id="clipArea"></div>
+                                                </div>
+                                                <div class="row text-center">
+                                                    <div class="col-md-9">
+                                                        <input type="file" id="file">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <button class="btn btn-search btn-lg" id="clipBtn" onclick="return false;">截取图片</button>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div id="view"></div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    关闭
+                                                </button>
+                                            </div>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal -->
                                 </div>
                                 <!--商品价格-->
                                 <div class="col-md-10 form-group">
@@ -108,8 +149,13 @@
 <script type="text/javascript" src="/static/js/data-tables/jquery.dataTables.js"></script>
 <script type="text/javascript" src="/static/js/data-tables/DT_bootstrap.js"></script>
 <script src="/static/js/editable-table.js"></script>
+<!--图片裁剪-->
+<script src="/static/plug-in/image-cut/js/hammer.js"></script>
+<script src="/static/plug-in/image-cut/js/iscroll-zoom.js"></script>
+<script src="/static/plug-in/image-cut/js/jquery.photoClip.min.js"></script>
 
 <script src="/static/my_js/input.js"></script>
+<script src="/static/my_js/img-cut.js"></script>
 <script src="/static/my_js/mer/addGoods.js"></script>
 <script>
     jQuery(document).ready(function() {

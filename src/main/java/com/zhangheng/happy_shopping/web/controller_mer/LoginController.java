@@ -173,13 +173,13 @@ public class LoginController {
      * 商家注册表单提交
      * @param mer 商家信息
      * @param model
-     * @param store_image 店铺图片
+     * @param image 店铺图片的base64
      * @param code 验证码
      * @param request
      * @return
      */
     @PostMapping("/regist_merchants")
-    private String regist_merchants(@Nullable Merchants mer, Model model,@Nullable MultipartFile store_image,@Nullable VerificationCode code,HttpServletRequest request){
+    private String regist_merchants(@Nullable Merchants mer, Model model,@Nullable String image,@Nullable VerificationCode code,HttpServletRequest request){
         Message msg = new Message();
         //判断验证码是否为空
         if (code.getCode()!=null&&code.getId()!=null) {
@@ -191,12 +191,12 @@ public class LoginController {
                     //判断验证码是否正确
                     if(codebyId.get().getCode().equals(code.getCode())){
                         //判断上传图片是否为空
-                        if (!store_image.isEmpty()) {
+                        if (!image.isEmpty()) {
                             Optional<Merchants> byId = merchantsRepository.findById(mer.getPhonenum());
                             //判断手机号是否注册
                             if (!byId.isPresent()) {
                                 FileLoadController fileLoadController = new FileLoadController();
-                                String s = fileLoadController.saveImage(store_image, mer.getStore_name(), "Store_Images");
+                                String s = fileLoadController.base64ToImg(image, mer.getStore_name(), "Store_Images");
                                 //判断图片保存是否成功
                                 if (s != null) {
                                     Store store = new Store();

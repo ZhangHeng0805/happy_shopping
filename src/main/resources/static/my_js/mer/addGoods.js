@@ -13,27 +13,22 @@ function data1() {
         },
         error:function (e) {
             alert('data1错误：'+e);
+            window.location.href="/exit_mer";
             window.close();
         }
     })
 }
 
 $("#GoodsForm").submit(function () {
-    var store_image=$("#goods_image").val();
+    var img=$("#image").val();
     var goods_name=$("#goods_name").val();
     var goods_introduction=$("#goods_introduction").val();
-    var extStart = store_image.lastIndexOf('.');
     if (goods_name.length<=15){
         if (goods_introduction.length<=50){
-            if(ext === '.PNG' || ext === '.JPG' || ext === '.JPEG' || ext === '.GIF') {
-                var file = $("#goods_image").get(0).files[0];
-                if (file.size < 1024 * 1024 * 1) {
-                    return true;
-                } else {
-                    alert("图片大小超过1M,请重新上传图片!");
-                }
-            }else {
-                alert('请上传正确格式的图片');
+            if (img.length > 0) {
+                return true;
+            } else {
+                alert("请选择商品图片");
             }
         } else {
             alert("商品简介过长")

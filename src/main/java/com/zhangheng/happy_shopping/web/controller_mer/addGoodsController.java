@@ -61,54 +61,50 @@ public class addGoodsController {
      * @return
      */
     @PostMapping("addGoods")
-    private String addGoods(Goods goods, MultipartFile image, Model model, HttpServletRequest request){
+    private String addGoods(Goods goods, String image, Model model, HttpServletRequest request){
         Message msg = new Message();
         if (goods!=null && goods.getGoods_name()!=null){
             if (!image.isEmpty()){
-                if (image.getSize()<1024*1024){
-                    Optional<Goods> byGoods_nameAndGoods_introduction = goodsRepository.findByGoods_nameAndGoods_introduction(goods.getGoods_name(), goods.getGoods_introduction());
-                    if (!byGoods_nameAndGoods_introduction.isPresent()) {
-                        String s = new FileLoadController().saveImage(image, goods.getGoods_name(), "Goods_Images");
-                        if (s != null) {
-                            try {
-                                goods.setGoods_image(s);//保存图片路径
-                                goods.setGoods_sales(0);//销量为0
-                                goods.setState(2);//商品审核中
-                                Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
-                                goods.setStore_name(merchants.getStore_name());//设置店名
-                                goods.setStore_id(merchants.getStore_id());//设置店铺id
-                                goods.setTime(TimeUtil.time(new Date()));//设置时间
-                                Goods save = goodsRepository.save(goods);
-                                if (save!=null) {
-                                    log.info("店铺《" + save.getStore_name() + "》[" + merchants.getPhonenum() + "]添加商品：" + save.getGoods_name());
-                                    msg.setMessage("商品：" + save.getGoods_name() + "，成功添加！");
-                                    msg.setCode(200);
-                                }else {
-                                    msg.setCode(500);
-                                    msg.setMessage("商品信息添加失败！");
-                                    new FileLoadController().deleteImg(s); //删除图片
-                                }
-                            } catch (Exception e) {
-                                new FileLoadController().deleteImg(s); //删除图片
-                                log.error(e.getMessage());
+                Optional<Goods> byGoods_nameAndGoods_introduction = goodsRepository.findByGoods_nameAndGoods_introduction(goods.getGoods_name(), goods.getGoods_introduction());
+                if (!byGoods_nameAndGoods_introduction.isPresent()) {
+                    String s = new FileLoadController().base64ToImg(image, goods.getGoods_name(), "Goods_Images");
+                    if (s != null) {
+                        try {
+                            goods.setGoods_image(s);//保存图片路径
+                            goods.setGoods_sales(0);//销量为0
+                            goods.setState(2);//商品审核中
+                            Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
+                            goods.setStore_name(merchants.getStore_name());//设置店名
+                            goods.setStore_id(merchants.getStore_id());//设置店铺id
+                            goods.setTime(TimeUtil.time(new Date()));//设置时间
+                            Goods save = goodsRepository.save(goods);
+                            if (save!=null) {
+                                log.info("店铺《" + save.getStore_name() + "》[" + merchants.getPhonenum() + "]添加商品：" + save.getGoods_name());
+                                msg.setMessage("商品：" + save.getGoods_name() + "，成功添加！");
+                                msg.setCode(200);
+                            }else {
                                 msg.setCode(500);
-                                msg.setMessage("错误：" + e.getMessage());
+                                msg.setMessage("商品信息添加失败！");
+                                new FileLoadController().deleteImg(s); //删除图片
                             }
-                        } else {
+                        } catch (Exception e) {
+                            new FileLoadController().deleteImg(s); //删除图片
+                            log.error(e.getMessage());
                             msg.setCode(500);
-                            msg.setMessage("图片保存错误，请检查图片");
+                            msg.setMessage("错误：" + e.getMessage());
                         }
-                    }else {
+                    } else {
                         msg.setCode(500);
-                        msg.setMessage("该商品已存在，请勿重复提交");
+                        msg.setMessage("图片保存错误，请检查图片");
                     }
                 }else {
                     msg.setCode(500);
-                    msg.setMessage("图片大小超过1Mb");
+                    msg.setMessage("该商品已存在，请勿重复提交");
                 }
+
             }else {
                 msg.setCode(500);
-                msg.setMessage("表单提交为空");
+                msg.setMessage("商品图片为空为空");
             }
         }else {
             msg.setCode(500);

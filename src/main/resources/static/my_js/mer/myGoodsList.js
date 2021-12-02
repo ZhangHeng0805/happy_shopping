@@ -12,6 +12,7 @@ function data1() {
         },
         error:function (e) {
             alert('data1错误：'+e);
+            window.location.href="/exit_mer";
             window.close();
         }
     })
@@ -28,9 +29,9 @@ function data2(id) {
         success:function (data) {
             // console.log(data);
             var html='';
-            $("#type_num").html(data.length);
+            $("#type_num").text(data.length);
             $(".goods_tbody").html(html);
-            html+='<section id="no-more-tables">' +
+            var h='<section id="no-more-tables">' +
                 '<table class="table table-bordered table-striped table-condensed cf" id="editable-sample">' +
                 '<thead class="cf">' +
                 '<tr>' +
@@ -63,27 +64,43 @@ function data2(id) {
                         staStr = "审核中";
                         break;
                 }
-                html += "<tr>" +
-                    "<td data-title='商品图片' class='col-sm-1' style='text-align: center'><img style='height: 45px;' src='/fileload/show/"+data[i].goods_image+"' alt='"+data[i].goods_name+"'></td>" +
-                    "<td data-title='商品id' class='col-sm-1' style='text-align: center'><label class='badge badge-primary'>" + data[i].id + "</label></td>" +
-                    "<td data-title='商品名称' class='col-sm-1' style='text-align: center'>" + data[i].goods_name + "</td>" +
-                    "<td data-title='商品类型' class='col-sm-1' style='text-align: center'>" + data[i].goods_type + "</td>" +
-                    "<td data-title='商品简介' class='col-sm-2' style='text-align: center'>" + data[i].goods_introduction + "</td>" +
-                    "<td data-title='商品销量(件)' class='col-sm-1' style='text-align: center'>" + data[i].goods_sales + "</td>" +
-                    "<td data-title='库存数量(件)' class='col-sm-1' style='text-align: center'>" + data[i].goods_num + "</td>" +
-                    "<td data-title='商品单价(元)' class='col-sm-1' style='text-align: center'>" + data[i].goods_price + "</td>" +
+                var b = "<tr>" +
+                    "<td data-title='商品图片' class='t"+i+"-img' style='text-align: center'><img style='height: 45px;' src='/fileload/show/"+data[i].goods_image+"' alt=''></td>" +
+                    "<td data-title='商品id' class='col-sm-1 t"+i+"-id' style='text-align: center'><label class='badge badge-primary'></label></td>" +
+                    "<td data-title='商品名称' class='col-sm-1 t"+i+"-name' style='text-align: center'><span><span></td>" +
+                    "<td data-title='商品类型' class='col-sm-1 t"+i+"-type' style='text-align: center'></td>" +
+                    "<td data-title='商品简介' class='col-sm-2 t"+i+"-introduction' style='text-align: center'></td>" +
+                    "<td data-title='商品销量(件)' class='col-sm-1 t"+i+"-sales' style='text-align: center'></td>" +
+                    "<td data-title='库存数量(件)' class='col-sm-1 t"+i+"-num' style='text-align: center'></td>" +
+                    "<td data-title='商品单价(元)' class='col-sm-1 t"+i+"-price' style='text-align: center'></td>" +
                     "<td data-title='商品状态' title='只有[已上线]的商品可以上架商场' class='col-sm-1' style='text-align: center'><label class='label " + staClass + "'>" + staStr + "</label></td>" +
                     "</tr>";
+                h+=b;
             }
-            html+="</tbody></table></section>";
-            $(".goods_tbody").html(html);
+            var f="</tbody></table></section>";
+            $(".goods_tbody").html(h+f);
+            inText(data);
             EditableTable.init();
+
         },
         error:function (e) {
             alert('data2错误：'+e);
+            window.location.href="/exit_mer";
             window.close();
         }
     })
+}
+function inText(data){
+    for (var i=0;i<data.length;i++) {
+        $(".t"+i+"-img").children("img").attr('alt',data[i].goods_name);
+        $(".t"+i+"-id").children("label").text(data[i].id);
+        $(".t"+i+"-name").children("span").text(data[i].goods_name);
+        $(".t"+i+"-type").text(data[i].goods_type);
+        $(".t"+i+"-introduction").text(data[i].goods_introduction);
+        $(".t"+i+"-sales").text(data[i].goods_sales);
+        $(".t"+i+"-num").text(data[i].goods_num);
+        $(".t"+i+"-price").text(data[i].goods_price);
+    }
 }
 $("#goods_type").change(function () {
     var value=$("#goods_type option:selected");

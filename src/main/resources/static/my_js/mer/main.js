@@ -24,7 +24,7 @@ function data1() {
             },
             error:function (e) {
                 alert('data1错误：'+e);
-                window.close();
+                window.location.href="/exit_mer";
             }
         }
     )
@@ -54,7 +54,7 @@ function data2() {
         },
         error:function (e) {
             alert('data2错误：'+e);
-            window.close();
+            window.location.href="/exit_mer";
         }
     })
 }
@@ -69,7 +69,7 @@ function data3() {
       },
       error:function (e) {
           alert('data3错误：'+e);
-          window.close();
+          window.location.href="/exit_mer";
       }
   })
 }
@@ -97,7 +97,7 @@ function data4() {
         },
         error:function (e) {
             alert('data4错误：'+e);
-            window.close();
+            window.location.href="/exit_mer";
         }
     })
 }
@@ -132,28 +132,42 @@ function data5() {
                     '<tbody>';
             for (var i=0;i<data.length;i++){
                 html+="<tr>" +
-                    "<td data-title='收货人' class='col-sm-1' style='text-align: center'>"+data[i].username+"</td>" +
-                    "<td data-title='订单时间' class='col-sm-1' style='text-align: center'>"+data[i].time+"</td>" +
-                    "<td data-title='联系电话' class='col-sm-1' style='text-align: center'>"+data[i].tel+"</td>" +
-                    "<td data-title='收货地址' class='col-sm-2' style='text-align: center'>"+data[i].address+"</td>" +
-                    "<td data-title='商品id' class='col-sm-1' style='text-align: center'><label class='label label-default'>"+data[i].goods_id+"</label></td>" +
-                    "<td data-title='商品名' class='col-sm-1' style='text-align: center'>"+data[i].goods_name+"</td>" +
-                    "<td data-title='单价' class='col-sm-1' style='text-align: center'>"+data[i].price+"</td>" +
-                    "<td data-title='数量' class='col-sm-1' style='text-align: center'>"+data[i].num+"</td>" +
-                    "<td data-title='总价' class='col-sm-1' style='text-align: center'>"+data[i].all_price+"</td>" +
+                    "<td data-title='收货人' class='col-sm-1 t"+i+"-username' style='text-align: center'></td>" +
+                    "<td data-title='订单时间' class='col-sm-1 t"+i+"-time' style='text-align: center'></td>" +
+                    "<td data-title='联系电话' class='col-sm-1 t"+i+"-tel' style='text-align: center'></td>" +
+                    "<td data-title='收货地址' class='col-sm-2 t"+i+"-address' style='text-align: center'></td>" +
+                    "<td data-title='商品id' class='col-sm-1 t"+i+"-goods_id' style='text-align: center'><label class='label label-default'></label></td>" +
+                    "<td data-title='商品名' class='col-sm-1 t"+i+"-goods_name' style='text-align: center'></td>" +
+                    "<td data-title='单价' class='col-sm-1 t"+i+"-price' style='text-align: center'></td>" +
+                    "<td data-title='数量' class='col-sm-1 t"+i+"-num' style='text-align: center'></td>" +
+                    "<td data-title='总价' class='col-sm-1 t"+i+"-all_price' style='text-align: center'></td>" +
                     "<td data-title='确认订单' class='col-sm-1' style='text-align: center'><button class='btn btn-success ok_order' onclick='ok("+data[i].id_goods+",\""+data[i].goods_name+"\")' >确认订单</button></td>" +
                     "<td data-title='拒绝订单' class='col-sm-1' style='text-align: center'><button class='btn btn-danger no_order' onclick='no("+data[i].id_goods+",\""+data[i].goods_name+"\")'>拒绝订单</button></td>" +
                     "</tr>";
             }
             html+="</tbody></table>";
             body.html(html);
+            inText(data);
             EditableTable.init();
         },
         error:function (e) {
             alert('data5错误：'+e);
-            window.close();
+            window.location.href="/exit_mer";
         }
     })
+}
+function inText(data){
+    for (var i=0;i<data.length;i++) {
+        $(".t"+i+"-username").text(data[i].username);
+        $(".t"+i+"-time").text(data[i].time);
+        $(".t"+i+"-tel").text(data[i].tel);
+        $(".t"+i+"-address").text(data[i].address);
+        $(".t"+i+"-goods_name").text(data[i].goods_name);
+        $(".t"+i+"-goods_id").children("label").text(data[i].goods_id);
+        $(".t"+i+"-price").text(data[i].price);
+        $(".t"+i+"-num").text(data[i].num);
+        $(".t"+i+"-all_price").text(data[i].all_price);
+    }
 }
 //滚动至未处理订单表格出
 $(".un_goodsnum_div").click(function () {
@@ -182,7 +196,7 @@ function ok(id,name) {
             },
             error:function (e) {
                 alert('确认订单错误：'+e);
-                window.close();
+                window.location.href="/exit_mer";
             }
 
         });
@@ -210,7 +224,7 @@ function no(id,name) {
             },
             error:function (e) {
                 alert('拒绝订单错误：'+e);
-                window.close();
+                window.location.href="/exit_mer";
             }
 
         });

@@ -9,10 +9,26 @@
     <script src="/static/img/js/addGoods.js"></script>
     <!--file upload-->
     <link rel="stylesheet" type="text/css" th:href="@{static/css/bootstrap-fileupload.min.css}" />
-  <title>乐在购物商家后台——账户设置</title>
+  <title>乐在购物商家后台—账户设置</title>
 
     <link th:include="common/common_mer :: #com_css">
-
+    <!--图片裁剪-->
+    <link rel="stylesheet" type="text/css" href="/static/plug-in/image-cut/css/normalize.css" />
+    <style>
+        #clipArea {
+            margin: 20px;
+            height: 300px;
+        }
+        #file,
+        #clipBtn {
+            margin: 20px;
+        }
+        #view {
+            margin: 0 auto;
+            width: 200px;
+            height: 200px;
+        }
+    </style>
 </head>
 
 <body class="sticky-header">
@@ -39,10 +55,10 @@
                         </div>
                         <div class="panel-body">
                             <div class="adv-table">
-                                <form class="form-horizontal"  th:action="@{/}" role="form" name="addGoodsFrom" method="post" enctype="multipart/form-data">
-                                    <h3>个人信息</h3>
+                                <form class="form-horizontal" th:action="@{/modify_account}" role="form" id="accountFrom" method="post" enctype="multipart/form-data">
                                     <!--提示信息-->
                                     <div th:replace="common/common_mer :: #com_alert"></div>
+                                    <h3>个人信息</h3>
                                     <!--商户姓名-->
                                     <div class="form-group">
                                         <label for="name" class="col-lg-2 col-sm-2 control-label"><strong>商户姓名</strong></label>
@@ -97,32 +113,55 @@
                                     </div>
                                     <!--店铺图片-->
                                     <div class="form-group">
-                                        <label for="store_image" class="col-lg-2 col-sm-2 control-label"><strong>店铺图片</strong></label>
+                                        <label for="image" class="col-lg-2 col-sm-2 control-label"><strong>店铺图片</strong></label>
                                         <div class="col-lg-10">
-                                            <div class="fileupload fileupload-new" data-provides="fileupload">
-                                                <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
-                                                    <img th:src="@{'/fileload/show/'+${session.store.store_image}}" alt="" />
-                                                </div>
-                                                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                                                <br>
-                                                <span class="label label-danger ">注意!</span>
-                                                <span>请选择商铺的图片(大小2Mb以内)</span>
-                                                <div class="form-group">
-                                                   <span class="btn btn-default btn-file">
-                                                   <span class="fileupload-new"><i class="fa fa-picture-o"></i> 选择图片</span>
-                                                   <span class="fileupload-exists"><i class="fa fa-undo"></i> 更改</span>
-                                                   <input id="store_image" type="file" class="default" name="image" required />
-                                                   </span>
-                                                    <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash"></i> 删除</a>
-                                                </div>
+                                            <div class="text-center" style="background-color: #d6d6d6;width: 200px;" >
+                                                <img id="show" th:src="@{'/fileload/show/'+${session.store.store_image}}" style="width: 100px;height: 100px;margin: 5px; background-color: white" alt="" />
                                             </div>
+                                            <span class="btn btn-default" data-toggle="modal" data-target="#img_cut"><i class="fa fa-picture-o"></i> 选择图片</span>
+                                            <input id="image" type="hidden" name="image" />
                                         </div>
+                                    </div>
+                                    <!-- 图片裁剪模态框（Modal） -->
+                                    <div class="modal fade" id="img_cut" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                        &times;
+                                                    </button>
+                                                    <h4 class="modal-title" id="myModalLabel">
+                                                        选择图片裁剪
+                                                    </h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div id="clipArea"></div>
+                                                    </div>
+                                                    <div class="row text-center">
+                                                        <div class="col-md-9">
+                                                            <input type="file" id="file">
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <button class="btn btn-search btn-lg" id="clipBtn" onsubmit="return false;" onclick="return false;">截取图片</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div id="view"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                        关闭
+                                                    </button>
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal -->
                                     </div>
                                     <!--店铺注册时间-->
                                     <div class="form-group">
                                         <label class="col-lg-2 col-sm-2 control-label"><strong>注册时间</strong></label>
                                         <div class="col-lg-10">
-                <!--                            <input type="text" th:value="${session.store.getStart_time()}" name="time" class="form-control"  placeholder="注册时间" disabled>-->
                                             <p class="help-block">[[${session.store.getStart_time()}]]</p>
                                         </div>
                                     </div>
@@ -141,14 +180,14 @@
                                         <label for="password" class="col-lg-2 col-sm-2 control-label"><strong>密码（必填）</strong></label>
                                         <div class="col-lg-10">
                                             <input type="password" name="password" class="form-control" oninput="titleInput('password','t_password',18)" id="password" placeholder="请输入密码" required>
-                                            <p class="help-block">（字数限制6~18字）</p>
+                                            <p id="t_password" class="help-block">（字数限制6~18字）</p>
                                         </div>
                                     </div>
                                     <!--提交-->
                                     <div class="form-group">
                                         <div class="col-lg-offset-2 col-lg-10">
-                                            <button type="submit" class="btn btn-success btn-lg">提交修改</button>
-                                            <label class="help-block">（修改信息需要填写密码验证，修改成功后需要重新登录）</label>
+                                            <button class="btn btn-success btn-lg submit">提交修改</button>
+                                            <label class="help-block">（修改信息需要填写密码验证）</label>
                                         </div>
                                     </div>
                                 </form>
@@ -167,7 +206,14 @@
 </section>
 
 <div th:replace="common/common_mer :: #com_js"></div>
-<script src="/static/my_js/input.js"></script>
+<!--图片裁剪-->
+<script src="/static/plug-in/image-cut/js/hammer.js"></script>
+<script src="/static/plug-in/image-cut/js/iscroll-zoom.js"></script>
+<script src="/static/plug-in/image-cut/js/jquery.photoClip.min.js"></script>
+
+<script src="/static/my_js/img-cut.js"></script>
+<script src="/static/my_js/mer/modifyAccount.js"></script>
+
 <script type="text/javascript" th:src="@{/static/js/bootstrap-fileupload.min.js}"></script>
 <script>
     function set_select_checked(selectId, checkValue){

@@ -1,10 +1,13 @@
 package com.zhangheng.happy_shopping.android.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /*
 * 店铺信息
 * */
+@Data
 @Entity
 @Table(name = "stores")
 public class Store {

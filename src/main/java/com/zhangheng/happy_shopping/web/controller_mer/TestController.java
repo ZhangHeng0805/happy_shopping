@@ -16,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
+/**
+ * 用于测试的
+ */
 @Controller
 public class TestController {
 
@@ -72,7 +75,7 @@ public class TestController {
     @PostMapping("/3")
     private Message image_upload(String img){
         Message msg = new Message();
-        String s = FiletypeUtil.base64ToImg(img, TimeUtil.timeTip(new Date()).substring(5, 12) , "测试图片");
+        String s = new FileLoadController().base64ToImg(img, TimeUtil.timeTip(new Date()).substring(5, 12) , "测试图片");
         log.info("图片："+s);
         if (s!=null){
             msg.setCode(200);

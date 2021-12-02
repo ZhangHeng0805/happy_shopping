@@ -17,6 +17,6 @@ public class mvcConfig implements WebMvcConfigurer {
                 ,"/OderListPage","/OrderGoodsByState"
                         ,"/addGoodsPage","/addGoods"
                 ,"/myGoodsListpage","/findGoodsByType"
-                ,"/modify_accountPage");
+                ,"/modify_account","/modify_accountPage","/modify_password");
     }
 }
