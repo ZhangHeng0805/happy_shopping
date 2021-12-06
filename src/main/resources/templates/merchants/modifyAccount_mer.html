@@ -160,9 +160,9 @@
                                     </div>
                                     <!--店铺注册时间-->
                                     <div class="form-group">
-                                        <label class="col-lg-2 col-sm-2 control-label"><strong>注册时间</strong></label>
+                                        <label for="start_time" class="col-lg-2 col-sm-2 control-label"><strong>注册时间</strong></label>
                                         <div class="col-lg-10">
-                                            <p class="help-block">[[${session.store.getStart_time()}]]</p>
+                                            <p id="start_time" class="help-block" th:text="${session.store.start_time}"></p>
                                         </div>
                                     </div>
                                     <hr/>

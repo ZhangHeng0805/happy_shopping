@@ -194,7 +194,9 @@ public class FileLoadController {
             log.error("错误："+e.getMessage());
         }finally {
             try {
-                input.close();
+                if (file.exists()) {
+                    input.close();
+                }
             }catch (Exception e){
                 log.error(e.getMessage());
 //                response.sendError(500,e.getMessage());

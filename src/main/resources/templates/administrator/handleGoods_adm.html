@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>乐在购物管理员后台-审核商品</title>
+    <link th:include="common/common_adm :: #com_css">
+
+</head>
+<body class="sticky-header">
+    <section>
+        <!--左部标签栏-->
+        <div th:replace="common/common_adm :: #com_leftmenu"></div>
+        <div class="main-content">
+            <!--顶部导航栏-->
+            <div th:replace="common/common_adm :: #com_headermenu"></div>
+            <div class="top"></div>
+            <!--主体内容-->
+            <div class="wrapper">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                审核商品数量：<span class="badge badge-success" id="goods_num"></span>件
+                                <span class="tools pull-right">
+                                <button class="btn btn-primary" onclick="ref()" title="点击刷新数据">刷新</button>
+                                <a href="javascript:;" class="fa fa-chevron-down"></a>
+                            </span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="adv-table editable-table goods_tbody">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom"></div>
+            <div th:replace="common/common_adm :: #com_footer"></div>
+        </div>
+    </section>
+
+    <div th:replace="common/common_mer :: #com_js"></div>
+
+    <script src="/static/my_js/adm/handleGoods.js"></script>
+    <!--表格-->
+    <script type="text/javascript" src="/static/js/data-tables/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="/static/js/data-tables/DT_bootstrap.js"></script>
+    <script src="/static/js/editable-table.js"></script>
+
+    <script>
+        jQuery(document).ready(function() {
+            getData();
+        });
+    </script>
+</body>
+</html>

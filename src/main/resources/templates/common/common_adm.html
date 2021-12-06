@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员公告页面</title>
+    <div id="com_css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="ThemeBucket">
+        <link rel="shortcut icon" href="#" type="image/png">
+        <link th:href="@{/static/css/bootstrap.min.css}"rel="stylesheet">
+        <link th:href="@{/static/css/style.css}"rel="stylesheet">
+        <link th:href="@{/static/css/style-responsive.css}" rel="stylesheet">
+        <link th:href="@{/static/css/bootstrap-reset.css}" rel="stylesheet">
+        <!--表格-->
+        <link href="/static/css/table-responsive.css" rel="stylesheet" />
+        <!--文件上传-->
+        <link rel="stylesheet" type="text/css" th:href="@{static/css/bootstrap-fileupload.min.css}" />
+        <!--Morris Chart CSS -->
+        <link rel="stylesheet" href="/static/js/morris-chart/morris.css">
+    </div>
+</head>
+<body>
+<!-- 左侧标签栏 -->
+<div id="com_leftmenu" class="left-side sticky-left-side">
+    <!--logo and iconic logo start-->
+    <div class="logo">
+        <a th:href="@{/home}"><img th:src="@{/static/images/logo.png}" alt=""></a>
+    </div>
+    <div class="logo-icon text-center">
+        <a th:href="@{/home}"><img th:src="@{/static/images/logo_icon.png}" alt=""></a>
+    </div>
+    <!--logo and iconic logo end-->
+    <div class="left-side-inner">
+        <!-- visible to small devices only -->
+        <div class="visible-xs hidden-sm hidden-md hidden-lg">
+            <div class="media logged-user">
+                <img alt="" src="/static/images/user/头像%20男孩5.png" class="media-object">
+                <div class="media-body">
+                    <h4><a href="#" th:text="${'来自：['+session.admin.password+']的管理员'}">账号</a></h4>
+                    <span>"管理员"</span>
+                </div>
+            </div>
+        </div>
+        <!--左菜单-->
+        <ul class="nav nav-pills nav-stacked custom-nav">
+            <hr>
+            <!--系统主页-->
+            <li th:class="${active}=='0'?'active':''"class=""><a href="/home"><i class="fa fa-home"></i> <span>系统主页</span></a></li>
+            <hr>
+            <!--审核商品-->
+            <li th:class="${active}=='1'?'active':''"class=""><a th:href="@{/handle_goodsPage}"><i class="fa fa-gavel"></i> <span>审核商品</span></a></li>
+            <!--退出登录-->
+            <li><a th:href="@{/exit_adm}" onclick="exit()"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
+            <script>
+                function exit() {
+                    if (window.history && window.history.pushState()) {
+                        $(window).on('popstate', function () {
+                            window.history.forward(1);
+                        });
+                    }
+                }
+            </script>
+        </ul>
+        <!--sidebar nav end-->
+    </div>
+</div>
+<!-- 顶部导航栏-->
+<div id="com_headermenu" class="header-section">
+
+    <!--toggle button start-->
+    <a class="toggle-btn"><i class="fa fa-bars"></i></a>
+    <!--toggle button end-->
+    <!--notification menu start -->
+    <div class="menu-right">
+        <ul class="notification-menu">
+            <li>
+                <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <img src="/static/images/user/头像%20男孩5.png" alt="管理员" />
+                    <span th:text="${'来自：['+session.admin.password+']的管理员'}"></span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                    <li><a th:href="@{/exit_adm}" onclick="exit()"><i class="fa fa-sign-out"></i> 退出登录</a></li>
+                </ul>
+            </li>
+
+        </ul>
+    </div>
+    <!--notification menu end -->
+</div>
+<!--底部页脚-->
+<footer class="sticky-footer" id="com_footer">
+
+    2021 &copy; <a href="https://github.com/ZhangHeng0805" target="_blank"><span class="fa fa-github"></span>星曦向荣</a>
+    - @ <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=wriqo6ylqqespezy_vL3grOz7KGtrw"><i class="fa fa-envelope-o"></i>联系反馈</a>
+    <span class="tools pull-right">
+        <span class="btn btn-default up_down"><label class="fa  fa-angle-double-down"></label></span>
+        <span class="btn btn-default up_top"><label class="fa  fa-angle-double-up"></label></span>
+    </span>
+</footer>
+<!--公共js-->
+<div id="com_js">
+    <script th:src="@{/static/js/jquery-1.10.2.min.js}"></script>
+    <script th:src="@{/static/js/jquery-ui-1.9.2.custom.min.js}"></script>
+    <script th:src="@{/static/js/jquery-migrate-1.2.1.min.js}"></script>
+    <script th:src="@{/static/js/bootstrap.min.js}"></script>
+    <script th:src="@{/static/js/modernizr.min.js}"></script>
+    <script th:src="@{/static/js/jquery.nicescroll.js}"></script>
+    <!--common scripts for all pages-->
+    <script th:src="@{/static/js/scripts.js}"></script>
+    <!--input输入-->
+    <script src="/static/my_js/input.js"></script>
+    <!--文件上传-->
+    <script type="text/javascript" th:src="@{/static/js/bootstrap-fileupload.min.js}"></script>
+    <script>
+        $(".up_down").click(function () {
+            $("html,body").animate({
+                scrollTop:$(".bottom").offset().top
+            },800);
+        });
+        $(".up_top").click(function () {
+            $("html,body").animate({
+                scrollTop:$(".top").offset().top
+            },800);
+        });
+    </script>
+</div>
+</body>
+</html>

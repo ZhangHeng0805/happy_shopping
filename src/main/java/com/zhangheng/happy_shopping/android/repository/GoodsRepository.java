@@ -26,6 +26,15 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
     @Query("update Goods sc set sc.goods_sales = sc.goods_sales + ?1 where sc.goods_id = ?2")
     public void addGoods_Sales(Integer num, Integer goods_id);
 
+    /**
+     * 根据商品id修改商品状态
+     * @param state 修改的状态
+     * @param goods_id 商品id
+     */
+    @Modifying
+    @Query("update Goods sc set sc.state = ?1 where sc.goods_id = ?2")
+    public int updateGoods_StateByGoods_id(Integer state, Integer goods_id);
+
     //修改商品库存
     @Modifying
     @Query("update Goods sc set sc.goods_num = sc.goods_num + ?1 where sc.goods_id = ?2")
@@ -34,6 +43,7 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
     //根据店铺id查询商品
     @Query(value = "select * from Goods where store_id = ?1",nativeQuery = true)
     List<Goods> findByStore_id(Integer store_id);
+
     //根据店铺id和商品状态查询商品
     @Query(value = "select * from Goods where store_id = ?1 and goods_type = ?2",nativeQuery = true)
     List<Goods> findByStore_idAndGoods_type(Integer store_id,String type);
@@ -44,12 +54,21 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
     //根据商品类型和状态查询商品
     @Query("select u from Goods u where u.goods_type = ?1 and u.state= ?2")
     List<Goods> findByGoods_typeAndState(String type,int state);
-    //根据商品状态查询商品
+
+    /**
+     * 根据商品状态查询
+     * @param state 商品状态
+     * @return
+     */
     @Query("select u from Goods u where u.state = ?1")
     List<Goods> findByState(int state);
 
+    /**
+     * 根据商品id删除商品
+     * @param goods_id 商品id
+     */
     @Modifying
-    @Query("delete from Goods sc where sc.store_id=?1 and sc.goods_id = ?2")
-    public void deleteByStore_idAndGoods_id(Integer store_id, Integer goods_id);
+    @Query("delete from Goods sc where sc.goods_id = ?1")
+    public int deleteByGoods_id(Integer goods_id);
 
 }

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>管理员公共页</title>
+    <title>商家公共页</title>
     <!--公共css-->
     <div id="com_css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -27,6 +27,7 @@
         <link rel="stylesheet" type="text/css" href="/static/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
         <link rel="stylesheet" type="text/css" href="/static/js/bootstrap-datetimepicker/css/datetimepicker-custom.css" />
 
+        <!--表格-->
         <link href="/static/css/table-responsive.css" rel="stylesheet" />
         <!--文件上传-->
         <link rel="stylesheet" type="text/css" th:href="@{static/css/bootstrap-fileupload.min.css}" />
@@ -229,6 +230,8 @@
                                         window.location.href="/exit_mer";
                                     } else {
                                         alert(d.message);
+                                        getcode();
+                                        $("input[name='code']").val('');
                                     }
                                 },
                                 error:function (e) {
@@ -241,7 +244,7 @@
                 </div>
                 <div class="modal-footer">
                     <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
-                    <button class="btn btn-primary sub_pwd" >提交</button>
+                    <button class="btn btn-primary sub_pwd">修改</button>
                 </div>
             </div>
         </div>
@@ -256,7 +259,7 @@
     <script th:src="@{/static/js/jquery.nicescroll.js}"></script>
     <!--common scripts for all pages-->
     <script th:src="@{/static/js/scripts.js}"></script>
-
+    <!--input输入-->
     <script src="/static/my_js/input.js"></script>
     <!--文件上传-->
     <script type="text/javascript" th:src="@{/static/js/bootstrap-fileupload.min.js}"></script>
@@ -325,22 +328,25 @@
                 alert("旧密码长度限制:6~18位")
             }
 
-        })
-        $("#updatePassWord").on('show.bs.modal',
-            function() {
-                $.ajax({
-                    url:'/Verification_Code',
-                    method:'get',
-                    success:function (d) {
-                        $("#codeID").text(d);
-                        $("input[name='id']").val(d);
-                    },
-                    error:function (e) {
-                        alert("验证码获取错误："+e);
-                        window.location.href="/exit_mer";
-                    }
-                })
+        });
+        //修改密码弹窗显示时
+        $("#updatePassWord").on('show.bs.modal',function () {
+            //获取验证码
+            $.ajax({
+                url:'/Verification_Code?t='+Date.now(),
+                method:'get',
+                success:function (d) {
+                    $("#codeID").text(d);
+                    $("input[name='id']").val(d);
+                },
+                error:function (e) {
+                    alert("验证码获取错误："+e);
+                    window.location.href="/exit_mer";
+                }
             })
+        });
+
+
     </script>
 
 </div>

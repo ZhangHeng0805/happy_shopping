@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>乐在购物管理员后台-系统主页</title>
+    <link th:include="common/common_adm :: #com_css">
+</head>
+<body class="sticky-header">
+<section>
+    <!--左部标签栏-->
+    <div th:replace="common/common_adm :: #com_leftmenu"></div>
+    <div class="main-content">
+        <!--顶部导航栏-->
+        <div th:replace="common/common_adm :: #com_headermenu"></div>
+        <div class="top"></div>
+        <!--主体内容-->
+        <div class="wrapper">
+
+        </div>
+        <div class="bottom"></div>
+        <div th:replace="common/common_adm :: #com_footer"></div>
+    </div>
+</section>
+
+<div th:replace="common/common_mer :: #com_js"></div>
+</body>
+</html>

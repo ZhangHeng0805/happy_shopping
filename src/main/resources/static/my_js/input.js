@@ -11,5 +11,13 @@ function titleInput(input,h_title,max) {
         h_t.style.color="#4e4f6b";
     }
     var v=$("#"+input).val()
-
+}
+function set_select_checked(selectId, checkValue){
+    var select = document.getElementById(selectId);
+    for (var i = 0; i < select.options.length; i++){
+        if (select.options[i].value == checkValue){
+            select.options[i].selected = true;
+            break;
+        }
+    }
 }

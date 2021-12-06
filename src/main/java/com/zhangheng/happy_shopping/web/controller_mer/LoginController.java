@@ -57,7 +57,7 @@ public class LoginController {
         Message msg = new Message();
         msg.setCode(100);
         msg.setMessage("请登录，注意错误机会只有5次");
-        log.info("来自："+ CusAccessObjectUtil.getRequst(request));
+        log.info("商家登录页："+ CusAccessObjectUtil.getRequst(request));
 //        model.addAttribute("msg",msg);
         return "merchants/login_mer";
     }
@@ -83,7 +83,7 @@ public class LoginController {
             if (PhoneNumUtil.isMobile(merchants.getPhonenum())){
                 olog.setTel(merchants.getPhonenum());
                 boolean b = loginService.login_log(olog);
-                //根据请求和操作类型查询操作记录
+                //根据请求request和操作类型查询操作记录
                 Optional<OperationLog> requestAndType = logRepository.findByRequestAndType(CusAccessObjectUtil.getRequst(request), 0);
                 //判断是否重复操作
                 if (b) {

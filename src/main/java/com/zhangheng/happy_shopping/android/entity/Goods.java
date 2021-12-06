@@ -36,7 +36,7 @@ public class Goods {
     @Column
     private String time;//更改时间
     @Column
-    private Integer state;//商品状态(0:上线；1:下线 2:审核中)
+    private Integer state;//商品状态(0:上线；1:下线 2:审核中 3:商品违规)
 
     public Integer getGoods_id() {
         return goods_id;

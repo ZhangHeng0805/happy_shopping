@@ -26,7 +26,10 @@ $("#GoodsForm").submit(function () {
     if (goods_name.length<=15){
         if (goods_introduction.length<=50){
             if (img.length > 0) {
-                return true;
+                var b = confirm("确定添加新商品？(新商品需要等待审核才能上线)");
+                if (b){
+                    return true;
+                }
             } else {
                 alert("请选择商品图片");
             }

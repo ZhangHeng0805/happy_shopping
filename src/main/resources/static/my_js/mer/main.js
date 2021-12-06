@@ -62,7 +62,7 @@ data2();
 //查询本店总营业额
 function data3() {
   $.ajax({
-      url:'/count_price',
+      url:'/count_price?t='+Date.now(),
       method:'get',
       success:function (data) {
           document.getElementById("count_price").innerText=data.toString();
@@ -76,7 +76,7 @@ function data3() {
 //查询近7天的订单数据
 function data4() {
     $.ajax({
-        url:'/findGoodnumBytimeAndtype',
+        url:'/findGoodnumBytimeAndtype?t='+Date.now(),
         method:'get',
         dataType:'json',
         success:function (data) {

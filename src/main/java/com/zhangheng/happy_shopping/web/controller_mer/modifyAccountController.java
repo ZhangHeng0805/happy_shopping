@@ -70,7 +70,7 @@ public class modifyAccountController {
                 //补充店铺信息
                 sto.setStore_id(store.getStore_id());
                 sto.setBoss_name(store.getBoss_name());
-                sto.setStart_time(sto.getStart_time());
+                sto.setStart_time(store.getStart_time());
                 //判断是否上传图片
                 if (image.isEmpty()){//没有上传
                     sto.setStore_image(store.getStore_image());

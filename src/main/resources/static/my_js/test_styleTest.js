@@ -103,11 +103,11 @@
 Morris.Donut({
     element: 'huanxing-data-js',
     data: [
-        {value: 70, label: '手机', formatted: '70%' },
-        {value: 15.5, label: '电脑', formatted: '15.5%' },
-        {value: 10, label: '电视', formatted: '10%' },
-        {value: 4.5, label: '其他', formatted: '4.5%' },
-        {value: 0, label: 'iPad', formatted: '0%' }
+        {value: 4, label: '手机', formatted: '70%' },
+        {value: 3, label: '电脑', formatted: '15.5%' },
+        {value: 2, label: '电视', formatted: '10%' },
+        {value: 1, label: '其他', formatted: '4.5%' },
+        {value: 3, label: 'iPad', formatted: '0%' }
     ],
     backgroundColor: '#fff',
     labelColor: '#1fb5ac',

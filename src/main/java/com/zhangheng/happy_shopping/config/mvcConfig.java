@@ -1,5 +1,6 @@
 package com.zhangheng.happy_shopping.config;
 
+import com.zhangheng.happy_shopping.interceptor.AdminLoginInterceptor;
 import com.zhangheng.happy_shopping.interceptor.MerLoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -16,7 +17,10 @@ public class mvcConfig implements WebMvcConfigurer {
                         "/count_price","/findGoodnumBytimeAndtype","/un_goodsOrder","/Ok_Order","/No_Order"
                 ,"/OderListPage","/OrderGoodsByState"
                         ,"/addGoodsPage","/addGoods"
-                ,"/myGoodsListpage","/findGoodsByType"
+                ,"/myGoodsListpage","/findGoodsByType","/updata_GoodsState","/delete_Goods","/update_goods"
                 ,"/modify_account","/modify_accountPage","/modify_password");
+        registry.addInterceptor(new AdminLoginInterceptor())
+                .addPathPatterns("/home"
+                        , "/handle_goodsPage","/get_sta2Goods");
     }
 }

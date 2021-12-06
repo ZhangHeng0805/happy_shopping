@@ -2,8 +2,25 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>乐在购物商家后台——商品列表</title>
+    <title>乐在购物商家后台—商品列表</title>
     <link th:include="common/common_mer :: #com_css">
+    <!--图片裁剪-->
+    <link rel="stylesheet" type="text/css" href="/static/plug-in/image-cut/css/normalize.css" />
+    <style>
+        #clipArea {
+            margin: 20px;
+            height: 300px;
+        }
+        #file,
+        #clipBtn {
+            margin: 20px;
+        }
+        #view {
+            margin: 0 auto;
+            width: 200px;
+            height: 200px;
+        }
+    </style>
 </head>
 <body class="sticky-header">
 <section>
@@ -20,8 +37,7 @@
                     <div class="panel panel-success">
                         <div class="panel-heading">
                             商品类型：
-                            <select id="goods_type">
-                            </select>
+                            <select id="goods_type"></select>
                             <span class="tools pull-right">
                                 <button class="btn btn-primary" onclick="ref()" title="点击刷新数据">刷新</button>
                                 <a href="javascript:;" class="fa fa-chevron-down"></a>
@@ -41,20 +57,154 @@
     </div>
 </section>
 
-<div th:replace="common/common_mer :: #com_js"></div>
+<!-- 修改商品Modal -->
+<div class="modal fade" id="updateGoods" role="dialog" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">修改商品：<span id="model_title"></span></h4>
+            </div>
+            <form role="form">
+            <div class="modal-body">
+                    <div class="form-group">
+                        <label for="model_goods_name" class="col-lg-2 col-sm-2 control-label">商品名称:</label>
+                        <div class="col-lg-10">
+                            <input type="hidden" id="model_goods_id">
+                            <input id="model_goods_name" type="text" placeholder="请输入商品名称" oninput="titleInput('model_goods_name','t_goods_name',15)" class="form-control" autofocus required>
+                            <p id="t_goods_name" class="help-block">请输入商品的名陈（字数限制15字）</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="model_goods_type" class="col-lg-2 col-sm-2 control-label">商品类型:</label>
+                        <div class="col-lg-10">
+                            <select id="model_goods_type" class="form-control" required></select>
+                            <p id="t_goods_type" class="help-block">请选择商品的类型</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="model_goods_introduction" class="col-lg-2 col-sm-2 control-label">商品简介:</label>
+                        <div class="col-lg-10">
+                            <textarea id="model_goods_introduction" rows="2" maxlength="50" type="text" placeholder="请输入商品简介（商品规格大小...）" oninput="titleInput('model_goods_introduction','t_goods_introduction',50)" class="form-control" required></textarea>
+                            <p id="t_goods_introduction" class="help-block">请输入商品的简介（字数限制50字）</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="image" class="col-lg-2 col-sm-2 control-label">商品图片:</label>
+                        <div class="col-lg-10">
+                            <div class="text-center" style="background-color: #d6d6d6;width: 200px;" >
+                                <img id="show" style="width: 100px;height: 100px;margin: 5px; background-color: white" alt="" />
+                            </div>
+                            <span class="btn btn-default" data-toggle="modal" data-target="#img_cut"><i class="fa fa-picture-o"></i> 选择图片</span>
+                            <input id="image" type="hidden" />
+                            <p  class="help-block"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="model_goods_price" class="col-lg-2 col-sm-2 control-label">商品价格:</label>
+                        <div class="col-lg-10">
+                            <div class="iconic-input">
+                                <i class="fa fa-cny"></i>
+                                <input id="model_goods_price"type="number" min="0.01" step="0.01" max="999999" placeholder="请输入商品价格" class="form-control" required>
+                                <p id="t_goods_price" class="help-block">价格范围：0.01~999999元</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="model_goods_num" class="col-lg-2 col-sm-2 control-label">商品库存:</label>
+                        <div class="col-lg-10">
+                            <div class="iconic-input">
+                                <i class="fa fa-plus-square"></i>
+                                <input id="model_goods_num" type="number" min="0" step="1" max="99999999" placeholder="请输入商品库存" class="form-control" required>
+                                <p id="t_goods_num" class="help-block">库存范围：<span id="data_num">0</span>~99999999件</p>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+                <button class="btn btn-primary" onclick="sub_goods()">修改</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- modal -->
+<!-- 图片裁剪模态框（Modal） -->
+<div class="modal fade" id="img_cut" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    选择图片裁剪
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="clipArea"></div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-md-9">
+                        <input type="file" id="file">
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-search btn-lg" id="clipBtn" onclick="return false;">截取图片</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="view"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    完成
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 
+<div th:replace="common/common_mer :: #com_js"></div>
 
 <script src="/static/my_js/mer/myGoodsList.js"></script>
 <!--表格-->
 <script type="text/javascript" src="/static/js/data-tables/jquery.dataTables.js"></script>
 <script type="text/javascript" src="/static/js/data-tables/DT_bootstrap.js"></script>
 <script src="/static/js/editable-table.js"></script>
-
-<script src="/static/my_js/input.js"></script>
+<!--图片裁剪-->
+<script src="/static/plug-in/image-cut/js/hammer.js"></script>
+<script src="/static/plug-in/image-cut/js/iscroll-zoom.js"></script>
+<script src="/static/plug-in/image-cut/js/jquery.photoClip.min.js"></script>
+<!--<script src="/static/my_js/input.js"></script>-->
 <script>
     jQuery(document).ready(function() {
-        data1();
         data2(typeState);
+        getGoodsType();
+    });
+    $("#clipArea").photoClip({
+        width: 200,
+        height: 200,
+        file: "#file",
+        view: "#view",
+        ok: "#clipBtn",
+        outputType: "png",
+        strictSize: true,
+        loadStart: function(file) {
+            console.log("照片读取中");
+        },
+        loadComplete: function(src) {
+            console.log("照片读取完成!");
+        },
+        loadError: function(event) {
+            console.log("错误："+event);
+        },
+        clipFinish: function(dataURL) {
+            // console.log(dataURL);
+            imgdata=dataURL;
+        }
     });
 </script>
 </body>

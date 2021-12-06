@@ -18,6 +18,7 @@ public class LoginService {
 
     public boolean login_log(OperationLog log){
         if (log.getRequest()!=null){
+            //根据request和操作类型查询
             Optional<OperationLog> requestAndType = logRepository.findByRequestAndType(log.getRequest(), log.getType());
             //判断有无操作记录
             if (requestAndType.isPresent()){
