@@ -14,10 +14,6 @@
         <link th:href="@{/static/css/bootstrap-reset.css}" rel="stylesheet">
         <!--表格-->
         <link href="/static/css/table-responsive.css" rel="stylesheet" />
-        <!--文件上传-->
-        <link rel="stylesheet" type="text/css" th:href="@{static/css/bootstrap-fileupload.min.css}" />
-        <!--Morris Chart CSS -->
-        <link rel="stylesheet" href="/static/js/morris-chart/morris.css">
     </div>
 </head>
 <body>
@@ -50,6 +46,9 @@
             <hr>
             <!--审核商品-->
             <li th:class="${active}=='1'?'active':''"class=""><a th:href="@{/handle_goodsPage}"><i class="fa fa-gavel"></i> <span>审核商品</span></a></li>
+            <!--商家列表-->
+            <li th:class="${active}=='2'?'active':''"class=""><a th:href="@{/merchantsListPage}"><i class="fa fa-user"></i> <span>商家列表</span></a></li>
+            <hr>
             <!--退出登录-->
             <li><a th:href="@{/exit_adm}" onclick="exit()"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
             <script>

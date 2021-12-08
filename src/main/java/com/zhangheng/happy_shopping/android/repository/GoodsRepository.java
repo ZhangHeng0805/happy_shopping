@@ -14,14 +14,31 @@ import java.util.Optional;
 @Repository
 public interface GoodsRepository extends JpaRepository<Goods, Integer> {
 
-    //根据商品名和介绍查询商品
+
+    /**
+     * 根据商品名和介绍查询商品
+     * @param goods_name
+     * @param goods_introduction
+     * @return
+     */
     @Query(value = "select * from Goods where goods_name = ?1 and goods_introduction = ?2",nativeQuery = true)
     Optional<Goods> findByGoods_nameAndGoods_introduction(String goods_name, String goods_introduction);
-    //根据店铺id和商品类型查询商品数
+
+    /**
+     * 根据店铺id和商品类型查询商品数
+     * @param store_id
+     * @param goods_type
+     * @return
+     */
     @Query(value = "select count(*) from Goods where store_id = ?1 and goods_type = ?2",nativeQuery = true)
     Integer countByStore_idAndGoods_type(Integer store_id, String goods_type);
 
-    //修改商品销量
+
+    /**
+     * 修改商品销量
+     * @param num
+     * @param goods_id
+     */
     @Modifying
     @Query("update Goods sc set sc.goods_sales = sc.goods_sales + ?1 where sc.goods_id = ?2")
     public void addGoods_Sales(Integer num, Integer goods_id);
@@ -35,23 +52,54 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
     @Query("update Goods sc set sc.state = ?1 where sc.goods_id = ?2")
     public int updateGoods_StateByGoods_id(Integer state, Integer goods_id);
 
-    //修改商品库存
+    /**
+     * 修改商品库存
+     * @param goods_num
+     * @param goods_id
+     */
     @Modifying
     @Query("update Goods sc set sc.goods_num = sc.goods_num + ?1 where sc.goods_id = ?2")
     public void updateGoods_num(Integer goods_num, Integer goods_id);
 
-    //根据店铺id查询商品
+    /**
+     * 根据店铺id查询商品
+     * @param store_id
+     * @return
+     */
     @Query(value = "select * from Goods where store_id = ?1",nativeQuery = true)
     List<Goods> findByStore_id(Integer store_id);
 
-    //根据店铺id和商品状态查询商品
+
+    /**
+     * 根据店铺id和商品状态查询商品
+     * @param store_id
+     * @param type
+     * @return
+     */
     @Query(value = "select * from Goods where store_id = ?1 and goods_type = ?2",nativeQuery = true)
     List<Goods> findByStore_idAndGoods_type(Integer store_id,String type);
 
-    //根据商品类型查询商品
+    /**
+     * 根据商品类型统计数量
+     * @param type
+     * @return
+     */
+    @Query(value = "select count(*) from Goods where goods_type = ?1",nativeQuery = true)
+    int countByGoods_type(String type);
+    /**
+     * 根据商品类型查询商品
+     * @param type
+     * @return
+     */
     @Query("select u from Goods u where u.goods_type = ?1")
     List<Goods> findByGoods_type(String type);
-    //根据商品类型和状态查询商品
+
+    /**
+     * 根据商品类型和状态查询商品
+     * @param type
+     * @param state
+     * @return
+     */
     @Query("select u from Goods u where u.goods_type = ?1 and u.state= ?2")
     List<Goods> findByGoods_typeAndState(String type,int state);
 

@@ -226,14 +226,14 @@ var imgdata=null;
 
 //当裁剪图片提示框关闭时
 $('#img_cut').on('hide.bs.modal', function () {
-    $("#updateGoods").modal('show')
+    $("#updateGoods").modal('show');
     if (imgdata!=null) {
         //图片预览
         $("#show").attr("src", imgdata);
         //input赋值
         $("#image").val(imgdata);
     }else {
-        alert("请点击截取按钮裁剪图片")
+        // alert("请点击截取按钮裁剪图片")
     }
 });
 
@@ -242,6 +242,7 @@ var data_goods_num;
 //打开修改商品信息的面板
 function openmodel(i) {
     $("#model_title").text(GoodsData[i].goods_name);
+    $("#img_goods").text(GoodsData[i].goods_name);
     $("#model_goods_id").val(GoodsData[i].id);
     $("#model_goods_name").val(GoodsData[i].goods_name);
     set_select_checked('model_goods_type',GoodsData[i].goods_type);

@@ -23,18 +23,35 @@ public class HandleGoodsController {
     @Autowired
     private GoodsRepository goodsRepository;
 
+    /**
+     * 跳转至审核商品界面
+     * @param model
+     * @return
+     */
     @GetMapping("/handle_goodsPage")
     private String handle_goodsPage(Model model){
         model.addAttribute("active",1);
         return "administrator/handleGoods_adm";
     }
 
+    /**
+     * 获取审核商品的数据
+     * @param request
+     * @return
+     */
     @ResponseBody
     @PostMapping("/get_sta2Goods")
     private List<Goods> get_sta2Goods(HttpServletRequest request){
         List<Goods> byState = goodsRepository.findByState(2);
         return byState;
     }
+
+    /**
+     * 修改审核商品的状态
+     * @param goods_id
+     * @param state
+     * @return
+     */
     @ResponseBody
     @PostMapping("/setState_sta2Goods")
     private Message setState_sta2Goods(int goods_id,int state){

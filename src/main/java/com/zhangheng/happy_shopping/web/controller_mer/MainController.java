@@ -256,7 +256,7 @@ public class MainController {
                 Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
                 if (merchants.getStore_id().equals(byId.get().getStore_id())) {
                     if (byId.get().getState()==0) {
-                        int i = listGoodsRepository.updateStateBtId(2, id);
+                        int i = listGoodsRepository.updateStateById(2, id);
                         if (i>0){
                             msg.setCode(200);
                             msg.setMessage("订单:"+byId.get().getList_id().substring(byId.get().getList_id().indexOf("_")+1)+",确认成功!");
@@ -299,7 +299,7 @@ public class MainController {
                 Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
                 if (merchants.getStore_id().equals(byId.get().getStore_id())) {
                     if (byId.get().getState()==0) {
-                        int i = listGoodsRepository.updateStateBtId(1, id);
+                        int i = listGoodsRepository.updateStateById(1, id);
                         if (i>0){
                             msg.setCode(200);
                             msg.setMessage("订单:"+byId.get().getList_id().substring(byId.get().getList_id().indexOf("_")+1)+",拒绝成功!");

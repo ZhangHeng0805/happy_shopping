@@ -19,8 +19,10 @@ public class mvcConfig implements WebMvcConfigurer {
                         ,"/addGoodsPage","/addGoods"
                 ,"/myGoodsListpage","/findGoodsByType","/updata_GoodsState","/delete_Goods","/update_goods"
                 ,"/modify_account","/modify_accountPage","/modify_password");
+
         registry.addInterceptor(new AdminLoginInterceptor())
-                .addPathPatterns("/home"
-                        , "/handle_goodsPage","/get_sta2Goods");
+                .addPathPatterns("/home","/get_count","/get_order","/getGoodsNum_ByState"
+                        , "/handle_goodsPage","/get_sta2Goods","/setState_sta2Goods"
+                ,"/merchantsListPage","/getMerchantsList");
     }
 }

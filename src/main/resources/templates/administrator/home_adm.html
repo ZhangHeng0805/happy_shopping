@@ -4,18 +4,128 @@
     <meta charset="UTF-8">
     <title>乐在购物管理员后台-系统主页</title>
     <link th:include="common/common_adm :: #com_css">
+    <!--Morris Chart CSS -->
+    <link rel="stylesheet" href="/static/js/morris-chart/morris.css">
 </head>
 <body class="sticky-header">
 <section>
     <!--左部标签栏-->
     <div th:replace="common/common_adm :: #com_leftmenu"></div>
+
     <div class="main-content">
         <!--顶部导航栏-->
         <div th:replace="common/common_adm :: #com_headermenu"></div>
         <div class="top"></div>
+
         <!--主体内容-->
         <div class="wrapper">
-
+            <!--第一行-->
+            <div class="row">
+                <!--数据标签-->
+                <div class="col-md-6">
+                    <!--数据标签 start-->
+                    <div class="row state-overview">
+                        <div class="col-md-6 col-xs-12 col-sm-6">
+                            <div class="panel purple">
+                                <div class="symbol">
+                                    <i class="fa fa-yen"></i>
+                                </div>
+                                <div class="state-value">
+                                    <div class="value">
+                                        <span id="count_price">0</span>元
+                                    </div>
+                                    <div class="title">平台总成交额</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12 col-sm-6">
+                            <div class="panel red">
+                                <div class="symbol">
+                                    <i class="fa fa-legal"></i>
+                                </div>
+                                <div class="state-value">
+                                    <div class="value">
+                                        <span id="count_num">0</span>单
+                                    </div>
+                                    <div class="title">平台总成交量</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row state-overview">
+                        <div class="col-md-6 col-xs-12 col-sm-6">
+                            <div class="panel blue">
+                                <div class="symbol">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <div class="state-value">
+                                    <div class="value">
+                                        <span id="count_merchants">0</span>家
+                                    </div>
+                                    <div class="title"> 平台商家数量</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-xs-12 col-sm-6">
+                            <div class="panel green">
+                                <div class="symbol">
+                                    <i class="fa fa-group"></i>
+                                </div>
+                                <div class="state-value">
+                                    <div class="value">
+                                        <span id="count_customer">0</span>人
+                                    </div>
+                                    <div class="title"> 平台顾客数量</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--数据标签 end-->
+                </div>
+                <!--环形图-->
+                <div class="col-md-6">
+                    <!--订单环形数据图 start-->
+                    <div class="panel deep-purple-box" title="平台订单情况">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-7 col-sm-7 col-xs-7">
+                                    <div id="graph-donut" class="revenue-graph"></div>
+                                </div>
+                                <div class="col-md-5 col-sm-5 col-xs-5">
+                                    <ul class="bar-legend">
+                                        <li><span class="purple"></span>[未处理]</li>
+                                        <li><span class="yellow"></span>[拒绝发货]</li>
+                                        <li><span class="blue"></span>[待收货]</li>
+                                        <li><span class="green"></span>[已收货]</li>
+                                        <li><span class="red"></span> [退货]</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--订单环形数据图 end-->
+                </div>
+            </div>
+            <!--商品类型数量数据柱状图-->
+            <div class="row">
+                <div class="col-md-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            平台商品类型图:
+                            <span>总数：<span id="zhuzhuang-data" class="badge badge-success"></span>件</span>
+                            <span class="tools pull-right">
+                            <button class="btn btn-primary" onclick="data1()" title="点击刷新数据">刷新</button>
+                            <a href="javascript:;" class="fa fa-chevron-down"></a>
+                        </span>
+                        </header>
+                        <div class="panel-body">
+                            <div class="chartJS">
+                                <div id="zhuzhuang-data-js" height="250" width="800"></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
         </div>
         <div class="bottom"></div>
         <div th:replace="common/common_adm :: #com_footer"></div>
@@ -23,5 +133,20 @@
 </section>
 
 <div th:replace="common/common_mer :: #com_js"></div>
+<!--Morris Chart-->
+<script src="/static/js/morris-chart/morris.js"></script>
+<script src="/static/js/morris-chart/raphael-min.js"></script>
+<!--Sparkline Chart-->
+<script th:src="@{/static/js/sparkline/jquery.sparkline.js}"></script>
+<script th:src="@{/static/js/sparkline/sparkline-init.js}"></script>
+
+<script src="/static/my_js/adm/home.js"></script>
+<script>
+    jQuery(document).ready(function() {
+        get_count();
+        get_order();
+        data1();
+    });
+</script>
 </body>
 </html>
