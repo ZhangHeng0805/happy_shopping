@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Repository
@@ -50,8 +51,16 @@ public interface ListGoodsRepository extends JpaRepository<goods, Integer> {
      */
     @Modifying
     @Query("update goods sc set sc.state =  ?1 where sc.list_id = ?2 and sc.goods_id=?3")
-    int updateStateByList_idAndGoods_id(int state, String list_id, Integer goods_id);
+    Integer updateStateByList_idAndGoods_id(int state, String list_id, Integer goods_id);
 
+    /**
+     * 根据低昂单号和商品id查询订单商品
+     * @param list_id
+     * @param goods_id
+     * @return
+     */
+    @Query("select gs from goods gs where gs.list_id=?1 and gs.goods_id=?2 ")
+    Optional<goods> findByList_idAndGoods_id(String list_id,int goods_id);
     /**
      * 根据订单商品id修改订单商品的状态
      * @param state

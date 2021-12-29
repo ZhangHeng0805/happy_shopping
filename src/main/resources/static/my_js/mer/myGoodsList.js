@@ -19,7 +19,7 @@ function data2(id) {
                 '<table class="table table-bordered table-striped table-condensed cf" id="editable-sample">' +
                 '<thead class="cf">' +
                 '<tr>' +
-                '<th style="text-align: center">商品图片</th>' +
+                '<th style="text-align: center">图片</th>' +
                 '<th style="text-align: center">商品id</th>' +
                 '<th style="text-align: center">商品名称</th>' +
                 '<th style="text-align: center">商品类型</th>' +
@@ -71,7 +71,7 @@ function data2(id) {
                         break;
                 }
                 var b = "<tr>" +
-                    "<td data-title='商品图片' class='t"+i+"-img' style='text-align: center'><img style='height: 50px;' src='/fileload/show/"+data[i].goods_image+"' alt=''></td>" +
+                    "<td data-title='图片' class='t"+i+"-img' style='text-align: center'><img style='height: 50px;' src='/fileload/show/"+data[i].goods_image+"' alt=''></td>" +
                     "<td data-title='商品id' class='col-sm-1 t"+i+"-id' style='text-align: center'><label class='badge badge-primary'></label></td>" +
                     "<td data-title='商品名称' class='col-sm-1 t"+i+"-name' style='text-align: center'><span><span></td>" +
                     "<td data-title='商品类型' class='col-sm-1 t"+i+"-type' style='text-align: center'></td>" +

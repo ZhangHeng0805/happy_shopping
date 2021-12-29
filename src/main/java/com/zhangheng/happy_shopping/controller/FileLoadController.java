@@ -278,7 +278,7 @@ public class FileLoadController {
         if (type.length()>0){
             try {
                 update_files.clear();
-                update_files = FolderFileScanner.scanFilesWithRecursion(baseDir+"update\\"+type);
+                update_files = FolderFileScanner.scanFilesWithRecursion(baseDir+"update/"+type);
                 if (!update_files.isEmpty()) {
                     for (Object o : update_files) {
                         String s1 = "";
@@ -309,7 +309,7 @@ public class FileLoadController {
                     msg.setMessage("更新文件为空");
                 }
 //                    log.info("更新查询title:"+result.getTitle());
-                log.info("应用更新查询:"+msg.getMessage());
+//                log.info("应用更新查询:"+msg.getMessage());
 
             } catch (Exception e) {
                 if (e.getMessage().indexOf("路径错误或没有此文件夹")>1){

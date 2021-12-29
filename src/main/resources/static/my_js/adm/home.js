@@ -21,7 +21,7 @@ function get_order() {
         url:'/get_order',
         method:'post',
         success:function (data) {
-            console.log(data);
+            // console.log(data);
             // Morris数据扇形图
             Morris.Donut({
                 element: 'graph-donut',
@@ -50,6 +50,7 @@ function data1() {
             success:function (data) {
                 document.getElementById("zhuzhuang-data-js").innerHTML='';
                 // console.log(data);
+                //Morris数据柱状图
                 Morris.Bar({
                     element: 'zhuzhuang-data-js',
                     data: data,

@@ -4,6 +4,7 @@ import com.zhangheng.happy_shopping.android.entity.Merchants;
 import com.zhangheng.happy_shopping.android.entity.Store;
 import com.zhangheng.happy_shopping.android.repository.MerchantsRepository;
 import com.zhangheng.happy_shopping.android.repository.StoreRepository;
+import com.zhangheng.happy_shopping.utils.Message;
 import com.zhangheng.happy_shopping.utils.TimeUtil;
 import com.zhangheng.happy_shopping.web.controller_adm.bean.MerchantsInfo;
 import org.slf4j.Logger;
@@ -36,6 +37,12 @@ public class MerchantsListController {
         model.addAttribute("active",2);
         return "administrator/merchantsList";
     }
+
+    /**
+     * 获取所有商家的信息
+     * 商家列表中的表格数据
+     * @return
+     */
     @ResponseBody
     @PostMapping("/getMerchantsList")
     private List<MerchantsInfo> getMerchantsList(){
@@ -56,9 +63,35 @@ public class MerchantsListController {
                 info.setEmail(mer.getEmail());
                 info.setTel(mer.getPhonenum());
                 info.setState(mer.getState());
+                info.setTurnover(store.getTurnover());
                 list.add(info);
             }
         }
         return list;
+    }
+
+    @ResponseBody
+    @PostMapping("/set_merchantsState")
+    private Message set_merchantsState(String tel,int state){
+        Message msg = new Message();
+        if (tel!=null){
+            if (state==0 || state==1){
+                int i = merchantsRepository.updateStateByPhonenum(state, tel);
+                if (i>0){
+                    msg.setCode(200);
+                    msg.setMessage("修改成功！");
+                }else {
+                    msg.setCode(500);
+                    msg.setMessage("修改失败！");
+                }
+            }else {
+                msg.setCode(500);
+                msg.setMessage("商家状态设置错误！");
+            }
+        }else {
+            msg.setCode(500);
+            msg.setMessage("表单信息提交为空！");
+        }
+        return msg;
     }
 }

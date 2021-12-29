@@ -3,12 +3,10 @@ package com.zhangheng.happy_shopping.android.controller;
 import com.google.gson.Gson;
 import com.zhangheng.happy_shopping.android.entity.Customer;
 import com.zhangheng.happy_shopping.android.entity.Goods;
+import com.zhangheng.happy_shopping.android.entity.Store;
 import com.zhangheng.happy_shopping.android.entity.submitgoods.SubmitGoods;
 import com.zhangheng.happy_shopping.android.entity.submitgoods.goods;
-import com.zhangheng.happy_shopping.android.repository.CustomerRepository;
-import com.zhangheng.happy_shopping.android.repository.GoodsRepository;
-import com.zhangheng.happy_shopping.android.repository.ListGoodsRepository;
-import com.zhangheng.happy_shopping.android.repository.SubmitGoodsRepository;
+import com.zhangheng.happy_shopping.android.repository.*;
 import com.zhangheng.happy_shopping.utils.CusAccessObjectUtil;
 import com.zhangheng.happy_shopping.utils.Message;
 import com.zhangheng.happy_shopping.utils.PhoneNumUtil;
@@ -30,6 +28,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 顾客操作商品
+ */
 @RequestMapping("Goods")
 @Controller
 public class GoodsContorller {
@@ -41,6 +42,8 @@ public class GoodsContorller {
     private SubmitGoodsRepository submitGoodsRepository;
     @Autowired
     private ListGoodsRepository listGoodsRepository;
+    @Autowired
+    private StoreRepository storeRepository;
     private Logger log = LoggerFactory.getLogger(getClass());
 
 
@@ -53,9 +56,8 @@ public class GoodsContorller {
     @ResponseBody
     public List<Goods> getAllList(@Nullable @RequestParam String GoodsType, HttpServletRequest request){
         List<Goods> goods = new ArrayList<>();
-        log.info("获取商品列表请求："+ CusAccessObjectUtil.getIpAddress(request)+"/"+CusAccessObjectUtil.getUser_Agent(request));
-
-        log.info("查询商品类型："+GoodsType);
+//        log.info("获取商品列表请求："+ CusAccessObjectUtil.getIpAddress(request)+"/"+CusAccessObjectUtil.getUser_Agent(request));
+//        log.info("查询商品类型："+GoodsType);
         if (GoodsType!=null) {
             if (GoodsType.equals("全部")) {
                 goods = goodsRepository.findByState(0);
@@ -179,20 +181,58 @@ public class GoodsContorller {
         goods goods = new goods();
         //检查手机号格式
         if (PhoneNumUtil.isMobile(phone)) {
+            //根据手机号查询顾客
             Optional<Customer> byId = customerRepository.findById(phone);
             //检查用户是否存在
             if (byId.isPresent()) {
                 try {
                     //验证密码是否正确
                     if (byId.get().getPassword().equals(password)) {
-                        //根据订单号和商品id修改订单商品状态
-                        listGoodsRepository.updateStateByList_idAndGoods_id(3, submit_id, goods_id);
-                        //确认收货后根据商品id修改商品的销量
-                        goodsRepository.addGoods_Sales(num, goods_id);
-                        msg.setCode(200);
-                        msg.setTime(TimeUtil.time(new Date()));
-                        msg.setTitle("收货成功");
-                        msg.setMessage(String.valueOf(goods_id));
+                        //判断订单商品是否存在
+                        Optional<com.zhangheng.happy_shopping.android.entity.submitgoods.goods> list_idAndGoods_id = listGoodsRepository.findByList_idAndGoods_id(submit_id, goods_id);
+                        if (list_idAndGoods_id.isPresent()) {
+                            if (list_idAndGoods_id.get().getNum().equals(num)) {
+                                //根据订单号和商品id修改订单商品状态
+                                int i = listGoodsRepository.updateStateByList_idAndGoods_id(3, submit_id, goods_id);
+                                //确认收货后根据商品id修改商品的销量
+                                goodsRepository.addGoods_Sales(num, goods_id);
+                                //计算该订单商品的总价
+                                double v = Message.twoDecimalPlaces(list_idAndGoods_id.get().getGoods_price() * num);
+                                //根据店铺id查询的店铺
+                                Optional<Store> byId1 = storeRepository.findById(list_idAndGoods_id.get().getStore_id());
+                                //判断店铺是否存在
+                                if (byId1.isPresent()) {
+                                    Double turnover = byId1.get().getTurnover()+v;
+                                    int i1=storeRepository.updateTurnoverByStore_id(turnover, byId1.get().getStore_id());
+                                    if (i > 0 || i1 > 0) {
+                                        msg.setCode(200);
+                                        msg.setTime(TimeUtil.time(new Date()));
+                                        msg.setTitle("收货成功");
+                                        msg.setMessage(String.valueOf(goods_id));
+                                    } else {
+                                        msg.setCode(500);
+                                        msg.setTime(TimeUtil.time(new Date()));
+                                        msg.setTitle("收货失败！");
+                                        msg.setMessage("对不起,数据修改失败！");
+                                    }
+                                }else {
+                                    msg.setCode(500);
+                                    msg.setTime(TimeUtil.time(new Date()));
+                                    msg.setTitle("商品的店铺错误！");
+                                    msg.setMessage("对不起,商品的店铺不存在！");
+                                }
+                            }else {
+                                msg.setCode(500);
+                                msg.setTime(TimeUtil.time(new Date()));
+                                msg.setTitle("商品数量错误！");
+                                msg.setMessage("对不起,商品数量错误！");
+                            }
+                        }else {
+                            msg.setCode(500);
+                            msg.setTime(TimeUtil.time(new Date()));
+                            msg.setTitle("商品不见了！");
+                            msg.setMessage("对不起,没有查找到该订单商品的信息！");
+                        }
                     }else {
                         msg.setCode(500);
                         msg.setTime(TimeUtil.time(new Date()));
@@ -200,6 +240,7 @@ public class GoodsContorller {
                         msg.setMessage("对不起,您的密码错误");
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     msg.setCode(500);
                     msg.setTime(TimeUtil.time(new Date()));
                     msg.setTitle("错误");

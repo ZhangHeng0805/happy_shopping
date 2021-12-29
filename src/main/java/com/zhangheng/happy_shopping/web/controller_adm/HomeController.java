@@ -111,27 +111,52 @@ public class HomeController {
             switch (i){
                 case 0:
                     order.setLabel("未处理");
-                    String s0="订单数比例："+Message.twoDecimalPlaces(value /count)*100+"%";
+                    String s0;
+                    if (count>0) {
+                        s0 = "订单数比例：" + Message.twoDecimalPlaces((double)   value / count) * 100 + "%";
+                    }else {
+                        s0 = "订单数比例：" + 0.0 + "%";
+                    }
                     order.setFormatted(s0);
                     break;
                 case 1:
                     order.setLabel("拒绝发货");
-                    String s1="订单数比例："+Message.twoDecimalPlaces(value /count)*100+"%";
+                    String s1;
+                    if (count>0) {
+                        s1 = "订单数比例：" + Message.twoDecimalPlaces((double)value / count) * 100 + "%";
+                    }else {
+                        s1 = "订单数比例：" + 0.0 + "%";
+                    }
                     order.setFormatted(s1);
                     break;
                 case 2:
                     order.setLabel("待收货");
-                    String s2="订单数比例："+Message.twoDecimalPlaces(value /count)*100+"%";
+                    String s2;
+                    if (count>0) {
+                        s2 = "订单数比例：" + Message.twoDecimalPlaces((double)value / count) * 100 + "%";
+                    }else {
+                        s2 = "订单数比例：" + 0.0 + "%";
+                    }
                     order.setFormatted(s2);
                     break;
                 case 3:
                     order.setLabel("已收货");
-                    String s3="订单数比例："+Message.twoDecimalPlaces(value /count)*100+"%";
+                    String s3;
+                    if (count>0) {
+                        s3 = "订单数比例：" + Message.twoDecimalPlaces((double) value / count) * 100 + "%";
+                    }else {
+                        s3 = "订单数比例：" + 0.0 + "%";
+                    }
                     order.setFormatted(s3);
                     break;
                 case 4:
                     order.setLabel("退货");
-                    String s4="订单数比例："+Message.twoDecimalPlaces(value /count)*100+"%";
+                    String s4;
+                    if (count>0) {
+                        s4 = "订单数比例：" + Message.twoDecimalPlaces((double)value / count) * 100 + "%";
+                    }else {
+                        s4 = "订单数比例：" + 0.0 + "%";
+                    }
                     order.setFormatted(s4);
                     break;
             }
@@ -160,4 +185,5 @@ public class HomeController {
         }
         return list;
     }
+
 }

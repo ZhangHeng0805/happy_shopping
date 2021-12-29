@@ -73,14 +73,18 @@ function data3() {
       }
   })
 }
-//查询近7天的订单数据
+//查询近几天的订单数据
 function data4() {
     $.ajax({
         url:'/findGoodnumBytimeAndtype?t='+Date.now(),
         method:'get',
+        data:{
+            n:10
+        },
         dataType:'json',
         success:function (data) {
             // console.log(data);
+            $("#days").text(data.length);
             document.getElementById("huxian-data-js").innerHTML='';
             Morris.Line({
                 element: 'huxian-data-js',
@@ -93,7 +97,7 @@ function data4() {
             });
             var datum = data[data.length-1];//最新一天数据
             var count=datum.sta0+datum.sta1+datum.sta2+datum.sta3+datum.sta4;
-            $("#count_order").html(count);
+            $("#count_order").text(count);
         },
         error:function (e) {
             alert('data4错误：'+e);
@@ -156,6 +160,7 @@ function data5() {
         }
     })
 }
+//填充数据
 function inText(data){
     for (var i=0;i<data.length;i++) {
         $(".t"+i+"-username").text(data[i].username);
@@ -169,7 +174,7 @@ function inText(data){
         $(".t"+i+"-all_price").text(data[i].all_price);
     }
 }
-//滚动至未处理订单表格出
+//滚动至未处理订单表格处
 $(".un_goodsnum_div").click(function () {
     $("html,body").animate({
         scrollTop:$(".goods_tbody").offset().top
@@ -189,7 +194,7 @@ function ok(id,name) {
             success:function (data) {
                 if (data.code===200){
                     alert("[成功]："+data.message);
-                    data5();
+                    ref();
                 } else {
                     alert("[失败]："+data.message);
                 }
@@ -202,6 +207,11 @@ function ok(id,name) {
         });
         return false;
     }
+}
+function ref() {
+    data2();//根据商品的订单状态查询本店订单商品数量（店铺订单数据标签）
+    data4();//查询近几天的订单数据（订单数据曲线图）
+    data5();//查询本店未处理的订单商品(未处理商品订单的表格)
 }
 //拒绝订单
 function no(id,name) {
@@ -217,7 +227,7 @@ function no(id,name) {
             success:function (data) {
                 if (data.code===200){
                     alert("[成功]；"+data.message);
-                    data5();
+                    ref();
                 } else {
                     alert("[失败]；"+data.message);
                 }

@@ -105,7 +105,7 @@ public class LoginController {
                                     Optional<Store> storeOptional = storeRepository.findById(byId.get().getStore_id());
                                     request.getSession().setAttribute("store", storeOptional.get());
 
-                                    log.info("商家登录:" + byId.get().getPhonenum() + "姓名:" + byId.get().getName());
+                                    log.info("商家登录:" + byId.get().getPhonenum() + "\t姓名:" + byId.get().getName());
                                     return "redirect:/main";
                                 }else {
                                     msg.setCode(404);
@@ -206,6 +206,7 @@ public class LoginController {
                                     store.setStart_time(time);
                                     store.setStore_introduce(mer.getStore_introduce());
                                     store.setStore_name(mer.getStore_name());
+                                    store.setTurnover(0.0);
                                     try {
                                         Store save = storeRepository.save(store);
                                         //判断商铺信息保存是否成功

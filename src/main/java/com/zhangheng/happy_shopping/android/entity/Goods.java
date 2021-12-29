@@ -8,9 +8,10 @@ import javax.persistence.*;
 *
 * 商品信息
 * */
-@Data
+
 @Entity
 @Table(name = "goods")
+@Data
 public class Goods {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

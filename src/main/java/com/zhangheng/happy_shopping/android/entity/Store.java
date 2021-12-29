@@ -24,6 +24,8 @@ public class Store {
     @Column
     private String start_time;//开店时间
     @Column
+    private Double turnover;//营业额
+    @Column
     private String store_introduce;//店铺介绍介绍
 
     public Integer getStore_id() {
@@ -62,9 +64,18 @@ public class Store {
         return start_time;
     }
 
+    public Double getTurnover() {
+        return turnover;
+    }
+
+    public void setTurnover(Double turnover) {
+        this.turnover = turnover;
+    }
+
     public void setStart_time(String start_time) {
         this.start_time = start_time;
     }
+
 
     public String getStore_introduce() {
         return store_introduce;

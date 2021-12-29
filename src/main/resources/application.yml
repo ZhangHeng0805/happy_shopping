@@ -31,9 +31,9 @@ spring:
   servlet:
     multipart:
 #      最大请求大小（总文件大小）
-      max-request-size: 100MB
+      max-request-size: 10MB
 #      最大文件大小（单个文件大小）
-      max-file-size: 10MB
+      max-file-size: 2MB
   output:
     ansi:
       enabled: always
@@ -47,6 +47,8 @@ spring:
     static-locations: classpath:/static/
   mvc:
     static-path-pattern: /static/**
+  banner:
+    location: classpath:banner.txt
 
 
 server:
@@ -59,3 +61,5 @@ server:
     max-http-form-post-size: 100MB
   error:
     include-exception: true
+logging:
+  config: classpath:logging.xml

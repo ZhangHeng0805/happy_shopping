@@ -1,6 +1,7 @@
 package com.zhangheng.happy_shopping.web.controller_mer;
 
 import com.zhangheng.happy_shopping.android.entity.Merchants;
+import com.zhangheng.happy_shopping.android.entity.Store;
 import com.zhangheng.happy_shopping.android.entity.submitgoods.SubmitGoods;
 import com.zhangheng.happy_shopping.android.entity.submitgoods.goods;
 import com.zhangheng.happy_shopping.android.repository.GoodsRepository;
@@ -22,9 +23,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -113,7 +116,7 @@ public class MainController {
     private Double count_price(HttpServletRequest request){
 //        log.info("查询本店营业额");
         Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
-        //根据店铺id查询订单商品
+        //根据店铺id和订单状态查询订单商品
         List<goods> byStore_id = listGoodsRepository.findByStore_idAndState(merchants.getStore_id(),3);
         double count=0;
         //计算总价
@@ -122,66 +125,76 @@ public class MainController {
         }
         //保留两位小数
         count=Message.twoDecimalPlaces(count);//保留两位小数
+        Optional<Store> byId = storeRepository.findById(merchants.getStore_id());
+        //判断店铺营业额是否相等
+        if (byId.get().getTurnover()!=count){
+            //如果不相等，则修改
+            storeRepository.updateTurnoverByStore_id(count, merchants.getStore_id());
+        }
         return count;
     }
 
     /**
      *  查询近几天的订单情况
+     * @param n 天数
      * @param request
      * @return
      */
     @ResponseBody
     @GetMapping("/findGoodnumBytimeAndtype")
-    private List<goodsnumBytimeAndtype> findGoodnumBytimeAndtype(HttpServletRequest request){
+    private List<goodsnumBytimeAndtype> findGoodnumBytimeAndtype(int n,HttpServletRequest request){
 //        log.info("根据时间和订单类型查询本店营业额");
+
         Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
         ArrayList<goodsnumBytimeAndtype> list = new ArrayList<>();
-        //查询近7天的数据
-        for (int i=0;i<7;i++){
-            String time=TimeUtil.fewDaysAgo(TimeUtil.time(new Date()), 6-i).substring(0,11);
-            List<SubmitGoods> timeLike = submitGoodsRepository.findByTimeLike(time);
-            goodsnumBytimeAndtype bytimeAndtype = new goodsnumBytimeAndtype();
-            bytimeAndtype.setTime(time.substring(8));
+        if (n>0) {
+            //查询近n天的数据
+            for (int i = 0; i < n; i++) {
+                String time = TimeUtil.fewDaysAgo(TimeUtil.time(new Date()), (n-1) - i).substring(0, 11);
+                List<SubmitGoods> timeLike = submitGoodsRepository.findByTimeLike(time);
+                goodsnumBytimeAndtype bytimeAndtype = new goodsnumBytimeAndtype();
+                bytimeAndtype.setTime(time.substring(5).replace("日", "").replace("月","-"));
 //            double count_price=0;//计算当天总收益
-            //遍历当天的订单
-            for (SubmitGoods submitGoods : timeLike) {
-                List<goods> goods_list = submitGoods.getGoods_list();
-                //遍历订单中的商品
-                for (goods g : goods_list) {
-                    //判断订单商品是否属于本店
-                    if (g.getStore_id().equals(merchants.getStore_id())){
+                //遍历当天的订单
+                for (SubmitGoods submitGoods : timeLike) {
+                    List<goods> goods_list = submitGoods.getGoods_list();
+                    //遍历订单中的商品
+                    for (goods g : goods_list) {
+                        //判断订单商品是否属于本店
+                        if (g.getStore_id().equals(merchants.getStore_id())) {
 
-                        switch (g.getState()){
-                            case 0://待处理
+                            switch (g.getState()) {
+                                case 0://待处理
 //                                count_price+=g.getGoods_price()*g.getNum();
-                                int i0 = bytimeAndtype.getSta0() + 1;
-                                bytimeAndtype.setSta0(i0);
-                                break;
-                            case 1://拒绝发货
+                                    int i0 = bytimeAndtype.getSta0() + 1;
+                                    bytimeAndtype.setSta0(i0);
+                                    break;
+                                case 1://拒绝发货
 //                                count_price+=g.getGoods_price()*g.getNum();
-                                int i1 = bytimeAndtype.getSta1()+1;
-                                bytimeAndtype.setSta1(i1);
-                                break;
-                            case 2://待收货
+                                    int i1 = bytimeAndtype.getSta1() + 1;
+                                    bytimeAndtype.setSta1(i1);
+                                    break;
+                                case 2://待收货
 //                                count_price+=g.getGoods_price()*g.getNum();
-                                int i2 = bytimeAndtype.getSta2() + 1;
-                                bytimeAndtype.setSta2(i2);
-                                break;
-                            case 3://已收货
+                                    int i2 = bytimeAndtype.getSta2() + 1;
+                                    bytimeAndtype.setSta2(i2);
+                                    break;
+                                case 3://已收货
 //                                count_price+=g.getGoods_price()*g.getNum();
-                                int i3 = bytimeAndtype.getSta3() + 1;
-                                bytimeAndtype.setSta3(i3);
-                                break;
-                            case 4://退货
-                                int i4 = bytimeAndtype.getSta4() + 1;
-                                bytimeAndtype.setSta4(i4);
-                                break;
+                                    int i3 = bytimeAndtype.getSta3() + 1;
+                                    bytimeAndtype.setSta3(i3);
+                                    break;
+                                case 4://退货
+                                    int i4 = bytimeAndtype.getSta4() + 1;
+                                    bytimeAndtype.setSta4(i4);
+                                    break;
+                            }
                         }
                     }
                 }
-            }
 //            bytimeAndtype.setCont_price(Message.twoDecimalPlaces(count_price));
-            list.add(bytimeAndtype);
+                list.add(bytimeAndtype);
+            }
         }
         return list;
     }

@@ -21,7 +21,7 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
      * @param goods_introduction
      * @return
      */
-    @Query(value = "select * from Goods where goods_name = ?1 and goods_introduction = ?2",nativeQuery = true)
+    @Query(value = "select * from goods where goods_name = ?1 and goods_introduction = ?2",nativeQuery = true)
     Optional<Goods> findByGoods_nameAndGoods_introduction(String goods_name, String goods_introduction);
 
     /**
@@ -30,7 +30,7 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
      * @param goods_type
      * @return
      */
-    @Query(value = "select count(*) from Goods where store_id = ?1 and goods_type = ?2",nativeQuery = true)
+    @Query(value = "select count(*) from goods where store_id = ?1 and goods_type = ?2",nativeQuery = true)
     Integer countByStore_idAndGoods_type(Integer store_id, String goods_type);
 
 
@@ -66,7 +66,7 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
      * @param store_id
      * @return
      */
-    @Query(value = "select * from Goods where store_id = ?1",nativeQuery = true)
+    @Query(value = "select * from goods where store_id = ?1",nativeQuery = true)
     List<Goods> findByStore_id(Integer store_id);
 
 
@@ -76,7 +76,7 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
      * @param type
      * @return
      */
-    @Query(value = "select * from Goods where store_id = ?1 and goods_type = ?2",nativeQuery = true)
+    @Query(value = "select * from goods where store_id = ?1 and goods_type = ?2",nativeQuery = true)
     List<Goods> findByStore_idAndGoods_type(Integer store_id,String type);
 
     /**
@@ -84,7 +84,7 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
      * @param type
      * @return
      */
-    @Query(value = "select count(*) from Goods where goods_type = ?1",nativeQuery = true)
+    @Query(value = "select count(*) from goods where goods_type = ?1",nativeQuery = true)
     int countByGoods_type(String type);
     /**
      * 根据商品类型查询商品

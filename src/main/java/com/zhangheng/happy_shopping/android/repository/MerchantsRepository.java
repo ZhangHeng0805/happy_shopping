@@ -14,4 +14,7 @@ public interface MerchantsRepository extends JpaRepository<Merchants, String> {
     @Modifying
     @Query("update Merchants m set m.password = ?1 where m.phonenum = ?2")
     int updatePasswordByPhonenum(String password,String phonenum);
+    @Modifying
+    @Query("update Merchants m set m.state = ?1 where m.phonenum = ?2")
+    int updateStateByPhonenum(int state,String phonenum);
 }

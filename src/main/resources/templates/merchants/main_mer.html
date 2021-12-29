@@ -16,6 +16,7 @@
         <!--顶部导航栏-->
         <div th:replace="common/common_mer :: #com_headermenu"></div>
         <div class="top"></div>
+
         <div class="page-heading">
             <div class="row">
                 <div class="col-sm-1 text-center">
@@ -71,7 +72,7 @@
                             <span class="label label-danger un_goodsnum_div" id="un_goodsnum_div"><label class="fa fa-bell"></label>未处理:<span class="badge badge-warning un_goodsnum"></span>件</span>
                             <span class="label label-success" id="tit_goodsnum_div"><label class="fa fa-bell"></label>暂无订单</span>
                             <span class="tools pull-right">
-                                <button class="btn btn-primary" id="refresh2" onclick="data2()" title="点击刷新数据">刷新</button>
+                                <button class="btn btn-primary" id="refresh2" onclick="ref()" title="点击刷新数据">刷新</button>
                                 <a href="javascript:;" class="fa fa-chevron-up"></a>
                             </span>
                         </header>
@@ -176,15 +177,15 @@
                     </section>
                 </div>
             </div>
-            <!--近7天的订单弧线图-->
+            <!--近几天的订单弧线图-->
             <div class="row">
                 <div class="col-md-12">
                     <section class="panel">
                         <header class="panel-heading">
-                            近7天的订单详情:今日订单
+                            近<span id="days"></span>天的订单详情:今日订单
                             <label class="badge badge-success" id="count_order">0</label>件
                             <span class="tools pull-right">
-                            <button class="btn btn-primary" id="refresh3" onclick="data4()" title="点击刷新数据">刷新</button>
+                            <button class="btn btn-primary" id="refresh3" onclick="ref()" title="点击刷新数据">刷新</button>
                             <a href="javascript:;" class="fa fa-chevron-down"></a>
                         </span>
                         </header>
@@ -201,9 +202,9 @@
                 <div class="col-md-12">
                     <section class="panel">
                         <header class="panel-heading">
-                            未处理的订单:<span class="badge badge-important" id="un_goodsnum"></span>件
+                            未处理的订单:<span class="badge badge-important" id="un_goodsnum">0</span>件
                             <span class="tools pull-right">
-                            <button class="btn btn-primary" onclick="data5()" title="点击刷新数据">刷新</button>
+                            <button class="btn btn-primary" onclick="ref()" title="点击刷新数据">刷新</button>
                             <a href="javascript:;" class="fa fa-chevron-down"></a>
                         </span>
                         </header>

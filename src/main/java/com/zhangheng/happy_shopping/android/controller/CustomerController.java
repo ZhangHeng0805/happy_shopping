@@ -65,7 +65,7 @@ public class CustomerController {
                         msg.setCode(500);
                         msg.setTime(TimeUtil.time(new Date()));
                         msg.setTitle("登录失败");
-                        msg.setMessage("用户不存在");
+                        msg.setMessage("账号错误，该用户不存在");
                     }
 
                 }else {
@@ -89,7 +89,7 @@ public class CustomerController {
     }
 
     /**
-     * 获取顾客信息
+     * 根据手机号，密码获取顾客信息
      * @param customerJson 顾客的JSON数据（手机号，密码）
      * @return
      */
@@ -317,7 +317,7 @@ public class CustomerController {
                         msg.setTime(TimeUtil.time(new Date()));
                         msg.setCode(500);
                         msg.setTitle("用户不存在");
-                        msg.setMessage("该账号的用户不存在");
+                        msg.setMessage("账号错误，该账号的用户不存在");
                     }
 
                 } else {
@@ -351,8 +351,8 @@ public class CustomerController {
         iconList.clear();
         try {
             list.clear();
-            //扫描改文件夹下的所有文件
-            list= FolderFileScanner.scanFilesWithNoRecursion("files\\customer");
+            //扫描该文件夹下的所有文件
+            list= FolderFileScanner.scanFilesWithNoRecursion("files/customer");
             for (Object o:list){
                 String s1="";
                 String s= (String) o;
@@ -373,7 +373,7 @@ public class CustomerController {
     }
 
     /**
-     * 顾客注册
+     * 顾客注册接口
      * @param json
      * @return
      */
@@ -422,25 +422,36 @@ public class CustomerController {
         log.info(msg.toString());
         return msg;
     }
+
+    /**
+     * 顾客位置接口
+     * @param location
+     * @return
+     */
     @PostMapping("share_location")
-    public List<ShareLocation> location(@Nullable String location){
+    public List<ShareLocation> location(String location){
         if (location!=null) {
             Gson gson = new Gson();
             ShareLocation shareLocation = gson.fromJson(location, ShareLocation.class);
-            Optional<Customer> byId = customerRepository.findById(shareLocation.getPhone());
-            if (byId.isPresent()) {
-                log.info("位置共享：" + shareLocation);
-                ShareLocation save = locationRepository.saveAndFlush(shareLocation);
-                List<ShareLocation> locations = new ArrayList<>();
-                locations = locationRepository.findAll();
-                return locations;
+            if (PhoneNumUtil.isMobile(shareLocation.getPhone())) {
+                Optional<Customer> byId = customerRepository.findById(shareLocation.getPhone());
+                if (byId.isPresent()) {
+//                    log.info("位置共享：" + shareLocation);
+                    ShareLocation save = locationRepository.saveAndFlush(shareLocation);
+                    List<ShareLocation> locations = new ArrayList<>();
+                    locations = locationRepository.findAll();
+                    return locations;
+                } else {
+                    log.warn("位置共享：用户不存在");
+                }
             }else {
-                log.warn("位置共享用户不存在");
-                return null;
+                log.error("位置共享：手机号格式异常");
             }
         }else {
-            log.error("接收数据为null");
-            return null;
+            log.error("位置共享：接收数据为null");
+
         }
+        return null;
     }
+
 }
