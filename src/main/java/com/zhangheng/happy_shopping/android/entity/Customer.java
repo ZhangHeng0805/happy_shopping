@@ -1,5 +1,7 @@
 package com.zhangheng.happy_shopping.android.entity;
 
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -8,6 +10,7 @@ import javax.persistence.Table;
 /*顾客信息*/
 @Table(name = "customer")
 @Entity
+@Data
 public class Customer {
     @Id
     private String phone;//手机号
@@ -23,6 +26,8 @@ public class Customer {
     private String address;//地址
     @Column
     private String time;//注册时间
+    @Column
+    private int state;//账号状态[0:正常 1:封禁]
 
     public String getPhone() {
         return phone;
@@ -78,5 +83,13 @@ public class Customer {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }

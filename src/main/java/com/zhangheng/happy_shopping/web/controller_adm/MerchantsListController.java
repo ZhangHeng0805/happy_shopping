@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 商家列表界面
+ * 商家管理界面
  */
 @Controller
 public class MerchantsListController {

@@ -113,7 +113,7 @@ public class HomeController {
                     order.setLabel("未处理");
                     String s0;
                     if (count>0) {
-                        s0 = "订单数比例：" + Message.twoDecimalPlaces((double)   value / count) * 100 + "%";
+                        s0 = "订单数比例：" + Message.twoDecimalPlaces(((double)value / count) * 100) + "%";
                     }else {
                         s0 = "订单数比例：" + 0.0 + "%";
                     }
@@ -123,7 +123,7 @@ public class HomeController {
                     order.setLabel("拒绝发货");
                     String s1;
                     if (count>0) {
-                        s1 = "订单数比例：" + Message.twoDecimalPlaces((double)value / count) * 100 + "%";
+                        s1 = "订单数比例：" + Message.twoDecimalPlaces(((double)value / count) * 100) + "%";
                     }else {
                         s1 = "订单数比例：" + 0.0 + "%";
                     }
@@ -133,7 +133,7 @@ public class HomeController {
                     order.setLabel("待收货");
                     String s2;
                     if (count>0) {
-                        s2 = "订单数比例：" + Message.twoDecimalPlaces((double)value / count) * 100 + "%";
+                        s2 = "订单数比例：" + Message.twoDecimalPlaces(((double)value / count) * 100) + "%";
                     }else {
                         s2 = "订单数比例：" + 0.0 + "%";
                     }
@@ -143,7 +143,7 @@ public class HomeController {
                     order.setLabel("已收货");
                     String s3;
                     if (count>0) {
-                        s3 = "订单数比例：" + Message.twoDecimalPlaces((double) value / count) * 100 + "%";
+                        s3 = "订单数比例：" + Message.twoDecimalPlaces(((double)value / count) * 100) + "%";
                     }else {
                         s3 = "订单数比例：" + 0.0 + "%";
                     }
@@ -153,7 +153,7 @@ public class HomeController {
                     order.setLabel("退货");
                     String s4;
                     if (count>0) {
-                        s4 = "订单数比例：" + Message.twoDecimalPlaces((double)value / count) * 100 + "%";
+                        s4 = "订单数比例：" + Message.twoDecimalPlaces(((double)value / count) * 100) + "%";
                     }else {
                         s4 = "订单数比例：" + 0.0 + "%";
                     }

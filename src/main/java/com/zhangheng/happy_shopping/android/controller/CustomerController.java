@@ -30,6 +30,8 @@ public class CustomerController {
     private ShareLocationRepository locationRepository;
     private ArrayList<Object> list = new ArrayList<>();
 
+    private static final String[] accont_state={"正常","封禁"};
+
     /**
      * 顾客登录
      * @param loginJson 登录的JSON数据（手机号，密码）
@@ -51,10 +53,17 @@ public class CustomerController {
                     if (customer.isPresent()){
                         //验证密码是否正确
                         if (customer.get().getPassword().equals(user.getPassword())){
-                            msg.setCode(200);
-                            msg.setTime(TimeUtil.time(new Date()));
-                            msg.setTitle("登录成功");
-                            msg.setMessage(customer.get().getUsername());
+                            if (customer.get().getState()==0) {
+                                msg.setCode(200);
+                                msg.setTime(TimeUtil.time(new Date()));
+                                msg.setTitle("登录成功");
+                                msg.setMessage(customer.get().getUsername());
+                            }else {
+                                msg.setCode(500);
+                                msg.setTime(TimeUtil.time(new Date()));
+                                msg.setTitle("账号"+accont_state[customer.get().getState()]);
+                                msg.setMessage("对不起！您的账号状态为:"+accont_state[customer.get().getState()]+",暂时无法登录。");
+                            }
                         }else {
                             msg.setCode(500);
                             msg.setTime(TimeUtil.time(new Date()));

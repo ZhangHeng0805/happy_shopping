@@ -46,8 +46,11 @@
             <hr>
             <!--审核商品-->
             <li th:class="${active}=='1'?'active':''"class=""><a th:href="@{/handle_goodsPage}"><i class="fa fa-gavel"></i> <span>审核商品</span></a></li>
-            <!--商家列表-->
-            <li th:class="${active}=='2'?'active':''"class=""><a th:href="@{/merchantsListPage}"><i class="fa fa-user"></i> <span>商家列表</span></a></li>
+            <hr>
+            <!--商家管理-->
+            <li th:class="${active}=='2'?'active':''"class=""><a th:href="@{/merchantsListPage}"><i class="fa fa-user"></i> <span>商家管理</span></a></li>
+            <li th:class="${active}=='3'?'active':''"class=""><a th:href="@{/customersListPage}"><i class="fa fa-users"></i> <span>顾客管理</span></a></li>
+            <li th:class="${active}=='4'?'active':''"class=""><a th:href="@{/merchantsListPage}"><i class="fa fa-tasks"></i> <span>商品管理</span></a></li>
             <hr>
             <!--退出登录-->
             <li><a th:href="@{/exit_adm}" onclick="exit()"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
