@@ -29,6 +29,10 @@ public class Customer {
     @Column
     private int state;//账号状态[0:正常 1:封禁]
 
+    public static final String[] accont_state={"正常","封禁"};
+    //重置的初始密码
+    public static final String reset_pwd="123456";
+
     public String getPhone() {
         return phone;
     }

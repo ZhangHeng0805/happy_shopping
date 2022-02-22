@@ -142,11 +142,11 @@ public class MainController {
      */
     @ResponseBody
     @GetMapping("/findGoodnumBytimeAndtype")
-    private List<goodsnumBytimeAndtype> findGoodnumBytimeAndtype(int n,HttpServletRequest request){
+    private List<goodsnumBytimeAndtype> findGoodnumBytimeAndtype(int count_down,HttpServletRequest request){
 //        log.info("根据时间和订单类型查询本店营业额");
-
         Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
         ArrayList<goodsnumBytimeAndtype> list = new ArrayList<>();
+        int n=count_down>0?count_down:7;
         if (n>0) {
             //查询近n天的数据
             for (int i = 0; i < n; i++) {
@@ -154,7 +154,6 @@ public class MainController {
                 List<SubmitGoods> timeLike = submitGoodsRepository.findByTimeLike(time);
                 goodsnumBytimeAndtype bytimeAndtype = new goodsnumBytimeAndtype();
                 bytimeAndtype.setTime(time.substring(5).replace("日", "").replace("月","-"));
-//            double count_price=0;//计算当天总收益
                 //遍历当天的订单
                 for (SubmitGoods submitGoods : timeLike) {
                     List<goods> goods_list = submitGoods.getGoods_list();
@@ -162,25 +161,21 @@ public class MainController {
                     for (goods g : goods_list) {
                         //判断订单商品是否属于本店
                         if (g.getStore_id().equals(merchants.getStore_id())) {
-
                             switch (g.getState()) {
                                 case 0://待处理
-//                                count_price+=g.getGoods_price()*g.getNum();
+
                                     int i0 = bytimeAndtype.getSta0() + 1;
                                     bytimeAndtype.setSta0(i0);
                                     break;
                                 case 1://拒绝发货
-//                                count_price+=g.getGoods_price()*g.getNum();
                                     int i1 = bytimeAndtype.getSta1() + 1;
                                     bytimeAndtype.setSta1(i1);
                                     break;
                                 case 2://待收货
-//                                count_price+=g.getGoods_price()*g.getNum();
                                     int i2 = bytimeAndtype.getSta2() + 1;
                                     bytimeAndtype.setSta2(i2);
                                     break;
                                 case 3://已收货
-//                                count_price+=g.getGoods_price()*g.getNum();
                                     int i3 = bytimeAndtype.getSta3() + 1;
                                     bytimeAndtype.setSta3(i3);
                                     break;
@@ -192,7 +187,6 @@ public class MainController {
                         }
                     }
                 }
-//            bytimeAndtype.setCont_price(Message.twoDecimalPlaces(count_price));
                 list.add(bytimeAndtype);
             }
         }

@@ -30,7 +30,6 @@ public class CustomerController {
     private ShareLocationRepository locationRepository;
     private ArrayList<Object> list = new ArrayList<>();
 
-    private static final String[] accont_state={"正常","封禁"};
 
     /**
      * 顾客登录
@@ -61,8 +60,8 @@ public class CustomerController {
                             }else {
                                 msg.setCode(500);
                                 msg.setTime(TimeUtil.time(new Date()));
-                                msg.setTitle("账号"+accont_state[customer.get().getState()]);
-                                msg.setMessage("对不起！您的账号状态为:"+accont_state[customer.get().getState()]+",暂时无法登录。");
+                                msg.setTitle("账号"+Customer.accont_state[customer.get().getState()]);
+                                msg.setMessage("对不起！您的账号状态为:"+Customer.accont_state[customer.get().getState()]+",暂时无法登录。");
                             }
                         }else {
                             msg.setCode(500);

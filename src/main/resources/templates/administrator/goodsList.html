@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>乐在购物管理员后台-顾客管理</title>
+    <title>乐在购物管理员后台-商品管理</title>
     <link th:include="common/common_adm :: #com_css">
 </head>
 <body class="sticky-header">
@@ -17,16 +17,16 @@
         <div class="wrapper">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="panel panel-success">
+                    <div class="panel panel-warning">
                         <div class="panel-heading">
-                            顾客数量：<span class="badge badge-info" id="cus_num"></span>家
+                            商品数量：<span class="badge badge-primary" id="goods_num"></span>件
                             <span class="tools pull-right">
                                 <button class="btn btn-primary" onclick="ref()" title="点击刷新数据">刷新</button>
                                 <a href="javascript:;" class="fa fa-chevron-down"></a>
                             </span>
                         </div>
                         <div class="panel-body">
-                            <div class="adv-table editable-table cus_tbody">
+                            <div class="adv-table editable-table goods_tbody">
                             </div>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
 </section>
 <div th:replace="common/common_adm :: #com_js"></div>
 
-<script src="/static/my_js/adm/customersList.js"></script>
+<script src="/static/my_js/adm/goodsList.js"></script>
 <!--表格-->
 <script type="text/javascript" src="/static/js/data-tables/jquery.dataTables.js"></script>
 <script type="text/javascript" src="/static/js/data-tables/DT_bootstrap.js"></script>

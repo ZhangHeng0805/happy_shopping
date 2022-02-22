@@ -13,17 +13,17 @@ function getData() {
                 '<table class="table table-bordered table-striped table-condensed cf" id="editable-sample">' +
                 '<thead class="cf">' +
                 '<tr>' +
-                '<th style="text-align: center">店铺图片</th>' +
+                '<th style="text-align: center">店铺图</th>' +
                 '<th style="text-align: center">店铺id</th>' +
-                '<th style="text-align: center">店铺名称</th>' +
-                '<th style="text-align: center">商家姓名</th>' +
+                '<th style="text-align: center">店铺名</th>' +
+                '<th style="text-align: center">商家名</th>' +
                 '<th style="text-align: center">商家电话</th>' +
-                '<th style="text-align: center">商家邮箱</th>' +
+                '<th style="text-align: center">邮箱</th>' +
                 '<th style="text-align: center">店铺地址</th>' +
                 '<th style="text-align: center">店铺简介</th>' +
-                '<th style="text-align: center">营业额(元)</th>' +
+                '<th style="text-align: center" title="所有确认收货的订单金额之和">营业额(元)</th>' +
                 '<th style="text-align: center">注册时长(天)</th>' +
-                '<th style="text-align: center">账号状态</th>' +
+                '<th style="text-align: center">状态</th>' +
                 '<th style="text-align: center">操作</th>' +
                 '</tr>' +
                 '</thead>' +
@@ -60,11 +60,11 @@ function getData() {
                     "<td data-title='店铺id' class='col-sm-1 t" + i + "-store_id' style='text-align: center'><label class='badge badge-primary'></label></td>" +
                     "<td data-title='店铺名称' class='col-sm-1 t" + i + "-store_name' style='text-align: center'></td>" +
                     "<td data-title='商家姓名' class='col-sm-1 t" + i + "-mer_name' style='text-align: center'></td>" +
-                    "<td data-title='商家电话' class='col-sm-2 t" + i + "-tel' style='text-align: center'></td>" +
-                    "<td data-title='商家邮箱' class='col-sm-2 t" + i + "-email' style='text-align: center'></td>" +
-                    "<td data-title='店铺地址' class='col-sm-2 t" + i + "-store_address' style='text-align: center'></td>" +
-                    "<td data-title='店铺简介' class='col-sm-2 t" + i + "-store_introduce' style='text-align: center'></td>" +
-                    "<td data-title='营业额(元)' class='col-sm-2 t" + i + "-turnover' style='text-align: center'></td>" +
+                    "<td data-title='商家电话' class='col-sm-1 t" + i + "-tel' style='text-align: center'></td>" +
+                    "<td data-title='商家邮箱' class='t" + i + "-email' style='text-align: center'></td>" +
+                    "<td data-title='店铺地址' class='col-sm-2 t" + i + "-store_address'></td>" +
+                    "<td data-title='店铺简介' class='col-sm-2 t" + i + "-store_introduce'></td>" +
+                    "<td data-title='营业额(元)' class='col-sm-1 t" + i + "-turnover' style='text-align: center'></td>" +
                     "<td data-title='注册时长(天)' class='col-sm-1 t" + i + "-time' style='text-align: center'></td>" +
                     "<td data-title='账号状态' class='col-sm-1 t" + i + "-state' style='text-align: center'><label class='label "+staClass+"'>"+staText+"</label></td>" +
                     "<td data-title='操作' class='col-sm-1 t" + i + "' style='text-align: center'><button class='btn "+btnClass+"' onclick='"+cli+"'>"+btnText+"</button></td>" +
@@ -93,7 +93,7 @@ function inText(data) {
         $(".t" + i + "-email").text(data[i].email);
         $(".t" + i + "-store_address").text(data[i].store_address);
         $(".t" + i + "-store_introduce").text(data[i].store_introduce);
-        $(".t" + i + "-turnover").text(data[i].turnover);
+        $(".t" + i + "-turnover").text('¥ '+data[i].turnover);
         $(".t" + i + "-time").text(data[i].time);
     }
 }

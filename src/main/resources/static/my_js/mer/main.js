@@ -79,7 +79,7 @@ function data4() {
         url:'/findGoodnumBytimeAndtype?t='+Date.now(),
         method:'get',
         data:{
-            n:10
+            count_down:10
         },
         dataType:'json',
         success:function (data) {
@@ -100,6 +100,7 @@ function data4() {
             $("#count_order").text(count);
         },
         error:function (e) {
+            console.log(e);
             alert('data4错误：'+e);
             window.location.href="/exit_mer";
         }

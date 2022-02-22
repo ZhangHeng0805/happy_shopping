@@ -24,6 +24,7 @@ public class mvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/home","/get_count","/get_order","/getGoodsNum_ByState"
                         , "/handle_goodsPage","/get_sta2Goods","/setState_sta2Goods"
                 ,"/merchantsListPage","/getMerchantsList","/set_merchantsState"
-                ,"/customersListPage");
+                ,"/customersListPage","/getCustomerssList","/set_customerState"
+                ,"/goodsListPage","/getGoodsList","/set_goodsState");
     }
 }
