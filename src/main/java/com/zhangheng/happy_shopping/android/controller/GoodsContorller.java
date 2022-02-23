@@ -110,7 +110,8 @@ public class GoodsContorller {
                         goodsRepository.updateGoods_num(-g.getNum(), g.getGoods_id());
                     }else {
                         msg.setCode(500);
-                        msg.setMessage("商品：["+g.getGoods_name()+"]的库存不够，请重新选购");
+                        msg.setTitle(g.getGoods_name()+"的库存不足");
+                        msg.setMessage("商品：["+g.getGoods_name()+"]的库存还有"+byId.get().getGoods_num()+"件，请刷新后重新选购");
                         return msg;
                     }
                 }
@@ -120,7 +121,6 @@ public class GoodsContorller {
                     msg.setMessage("订单提交成功");
                 } else {
                     msg.setTitle("订单提交失败");
-                    msg.setTitle("订单保存失败");
                     msg.setCode(500);
                 }
 

@@ -1,11 +1,14 @@
 package com.zhangheng.happy_shopping.controller;
 
 
+import com.zhangheng.happy_shopping.android.entity.PhoneInfo;
+import com.zhangheng.happy_shopping.android.repository.PhoneInfoRepository;
 import com.zhangheng.happy_shopping.utils.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +33,8 @@ public class FileLoadController {
     private static String baseDir = "files/";
     Logger log = LoggerFactory.getLogger(FileLoadController.class);
     private ArrayList<Object> update_files = new ArrayList<>();//更新文件集合
-
+    @Autowired
+    private PhoneInfoRepository phoneInfoRepository;
 
     /**
      * 保存图片，并返回保存路径，(如果返回为null则保存失败)
@@ -274,7 +278,9 @@ public class FileLoadController {
         Message msg=new Message();
         ArrayList<String> list = new ArrayList<>();
         list.clear();
-        log.info("应用更新查询:"+CusAccessObjectUtil.getRequst(request));
+        String requst = CusAccessObjectUtil.getRequst(request);
+        log.info("应用更新查询:"+ requst);
+        phoneInfoRepository.saveAndFlush(PhoneInfo.UserAgentToPhoneInfo(requst));
         if (type.length()>0){
             try {
                 update_files.clear();

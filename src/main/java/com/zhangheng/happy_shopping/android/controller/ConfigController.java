@@ -1,6 +1,7 @@
 package com.zhangheng.happy_shopping.android.controller;
 
 import com.zhangheng.happy_shopping.android.entity.ChatConfig;
+import com.zhangheng.happy_shopping.android.entity.PhoneInfo;
 import com.zhangheng.happy_shopping.android.repository.ChatConfigRep;
 import com.zhangheng.happy_shopping.utils.CusAccessObjectUtil;
 import org.slf4j.Logger;
@@ -39,7 +40,9 @@ public class ConfigController {
         }else {
             log.error("chatconfig错误：本地端口"+port+"查询为空");
         }
-        log.info("获取聊天室配置的请求："+ CusAccessObjectUtil.getRequst(request));
+
+        String requst = CusAccessObjectUtil.getRequst(request);
+        log.info("获取聊天室配置的请求："+ requst);
         return chatConfig;
     }
 }
