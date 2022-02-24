@@ -75,7 +75,7 @@ public class MainController {
         List<goods_type> all = goodsTypeRepository.findAll();
         for (goods_type type : all) {
             Integer i = goodsRepository.countByStore_idAndGoods_type(merchants.getStore_id(), type.getType());
-            if (i>=0) {
+            if (i>0) {
                 goodsnumBygoodstype gn = new goodsnumBygoodstype();
                 gn.setType(type.getType());
                 gn.setNum(i);
@@ -136,7 +136,7 @@ public class MainController {
 
     /**
      *  查询近几天的订单情况
-     * @param n 天数
+     * @param count_down 天数
      * @param request
      * @return
      */
@@ -163,7 +163,6 @@ public class MainController {
                         if (g.getStore_id().equals(merchants.getStore_id())) {
                             switch (g.getState()) {
                                 case 0://待处理
-
                                     int i0 = bytimeAndtype.getSta0() + 1;
                                     bytimeAndtype.setSta0(i0);
                                     break;
@@ -191,6 +190,28 @@ public class MainController {
             }
         }
         return list;
+    }
+
+    /**
+     * 查询今日营业额
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/findTodayTurnover")
+    private Double findTodayTurnover(HttpServletRequest request){
+        Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
+        List<SubmitGoods> byTimeLike = submitGoodsRepository.findByTimeLike(TimeUtil.time(new Date()).split(" ")[0]);
+        double count=0;
+        for (SubmitGoods sg : byTimeLike) {
+            List<goods> goods_list = sg.getGoods_list();
+            for (goods g : goods_list) {
+                if (g.getState()==3){
+                    count+=g.getGoods_price()*g.getNum();
+                }
+            }
+        }
+        return Message.twoDecimalPlaces(count);
     }
 
     /**

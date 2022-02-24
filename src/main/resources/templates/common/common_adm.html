@@ -9,6 +9,7 @@
         <meta name="author" content="ThemeBucket">
         <link rel="shortcut icon" href="#" type="image/png">
         <link th:href="@{/static/css/bootstrap.min.css}"rel="stylesheet">
+        <link th:href="@{/static/fonts/css/font-awesome.min.css}"rel="stylesheet">
         <link th:href="@{/static/css/style.css}"rel="stylesheet">
         <link th:href="@{/static/css/style-responsive.css}" rel="stylesheet">
         <link th:href="@{/static/css/bootstrap-reset.css}" rel="stylesheet">
@@ -42,15 +43,21 @@
         <ul class="nav nav-pills nav-stacked custom-nav">
             <hr>
             <!--系统主页-->
-            <li th:class="${active}=='0'?'active':''"class=""><a href="/home"><i class="fa fa-home"></i> <span>系统主页</span></a></li>
+            <li th:class="${active}=='0'?'active':''"><a href="/home"><i class="fa fa-home"></i> <span>系统主页</span></a></li>
             <hr>
             <!--审核商品-->
-            <li th:class="${active}=='1'?'active':''"class=""><a th:href="@{/handle_goodsPage}"><i class="fa fa-gavel"></i> <span>审核商品</span></a></li>
+            <li th:class="${active}=='1'?'active':''"><a th:href="@{/handle_goodsPage}"><i class="fa fa-gavel"></i> <span>审核商品</span></a></li>
             <hr>
             <!--商家管理-->
-            <li th:class="${active}=='2'?'active':''"class=""><a th:href="@{/merchantsListPage}"><i class="fa fa-user"></i> <span>商家管理</span></a></li>
-            <li th:class="${active}=='3'?'active':''"class=""><a th:href="@{/customersListPage}"><i class="fa fa-users"></i> <span>顾客管理</span></a></li>
-            <li th:class="${active}=='4'?'active':''"class=""><a th:href="@{/goodsListPage}"><i class="fa fa-tasks"></i> <span>商品管理</span></a></li>
+            <li th:class="${active}=='2'?'active':''"><a th:href="@{/merchantsListPage}"><i class="fa fa-user"></i> <span>商家管理</span></a></li>
+            <!--店铺管理-->
+            <li th:class="${active}=='6'?'active':''"><a th:href="@{/storesListPage}"><i class="fa fa-building-o"></i> <span>店铺管理</span></a></li>
+            <!--顾客管理-->
+            <li th:class="${active}=='3'?'active':''"><a th:href="@{/customersListPage}"><i class="fa fa-users"></i> <span>顾客管理</span></a></li>
+            <!--商品管理-->
+            <li th:class="${active}=='4'?'active':''"><a th:href="@{/goodsListPage}"><i class="fa fa-tasks"></i> <span>商品管理</span></a></li>
+            <!--商品类型管理-->
+            <li th:class="${active}=='5'?'active':''"><a th:href="@{/goodsTypePage}"><i class="fa fa-tags"></i> <span>商品类型管理</span></a></li>
             <hr>
             <!--退出登录-->
             <li><a th:href="@{/exit_adm}" onclick="exit()"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>

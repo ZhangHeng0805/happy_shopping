@@ -64,10 +64,10 @@ public class HandleGoodsController {
                         int i = goodsRepository.updateGoods_StateByGoods_id(state, goods_id);
                         if (i>0){
                             msg.setCode(200);
-                            msg.setMessage("商品状态变更成功！");
+                            msg.setMessage("商品状态更新成功！");
                         }else {
                             msg.setCode(200);
-                            msg.setMessage("商品状态变更失败！");
+                            msg.setMessage("商品状态更新失败！");
                         }
                     }else {
                         msg.setCode(500);

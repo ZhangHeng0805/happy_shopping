@@ -16,7 +16,7 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer store_id;//店铺id
     @Column
-    private String store_name;//店家名称
+    private String store_name;//店铺名称
     @Column
     private String store_image;//店家图片
     @Column
@@ -26,7 +26,7 @@ public class Store {
     @Column
     private Double turnover;//营业额
     @Column
-    private String store_introduce;//店铺介绍介绍
+    private String store_introduce;//店铺介绍
 
     public Integer getStore_id() {
         return store_id;

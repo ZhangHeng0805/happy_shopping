@@ -105,7 +105,8 @@ function inText(data){
         $(".t"+i+"-img").children("img").attr('alt',data[i].goods_name);
         $(".t"+i+"-id").children("label").text(data[i].id);
         $(".t"+i+"-name").children("span").text(data[i].goods_name);
-        $(".t"+i+"-type").text(data[i].goods_type);
+        var type=data[i].goods_type.indexOf('暂无分类')<0?data[i].goods_type:"<lable class='label label-danger' title='请及时修改该商品的类型'>暂无分类</lable>";
+        $(".t"+i+"-type").html(type);
         $(".t"+i+"-introduction").text(data[i].goods_introduction);
         $(".t"+i+"-sales").text(data[i].goods_sales);
         $(".t"+i+"-num").text(data[i].goods_num);

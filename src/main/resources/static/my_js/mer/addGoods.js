@@ -1,7 +1,7 @@
 
 function data1() {
     $.ajax({
-        url:'/findGoodsType',
+        url:'/findGoodsType?t='+Date.now(),
         method:'get',
         dataType:'json',
         success:function (data) {

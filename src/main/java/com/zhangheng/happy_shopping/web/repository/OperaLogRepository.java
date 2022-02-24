@@ -12,7 +12,12 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface OperaLogRepository extends JpaRepository<OperationLog,Integer> {
-    //根据request和操作类型查询
+    /**
+     * 根据request和操作类型查询
+     * @param request
+     * @param type
+     * @return
+     */
     @Query(value = "select * from operation_log where request = ?1 and type = ?2",nativeQuery = true)
     Optional<OperationLog> findByRequestAndType(String request, Integer type);
 

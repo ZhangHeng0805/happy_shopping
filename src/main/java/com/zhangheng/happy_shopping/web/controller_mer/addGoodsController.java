@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,14 +43,20 @@ public class addGoodsController {
     }
 
     /**
-     * 查询所有的商品类型
+     * 查询所有的商品类型(未拦截)
      * @return
      */
     @ResponseBody
     @GetMapping("/findGoodsType")
     private List<goods_type> findGoodsType(){
         List<goods_type> all = goodsTypeRepository.findAll();
-        return all;
+        List<goods_type> list=new ArrayList<>();
+        for (goods_type gt : all) {
+            if (gt.getId()!=0){
+                list.add(gt);
+            }
+        }
+        return list;
     }
 
     /**

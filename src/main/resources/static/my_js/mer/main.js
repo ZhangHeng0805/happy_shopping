@@ -75,6 +75,7 @@ function data3() {
 }
 //查询近几天的订单数据
 function data4() {
+    data6();
     $.ajax({
         url:'/findGoodnumBytimeAndtype?t='+Date.now(),
         method:'get',
@@ -102,6 +103,21 @@ function data4() {
         error:function (e) {
             console.log(e);
             alert('data4错误：'+e);
+            window.location.href="/exit_mer";
+        }
+    })
+}
+function data6(){
+    $.ajax({
+        url:'/findTodayTurnover',
+        method:'post',
+        dataType:'json',
+        success:function (data) {
+            $("#today_money").text('¥ '+data)
+        },
+        error:function (e) {
+            console.log(e);
+            alert('data6错误：'+e);
             window.location.href="/exit_mer";
         }
     })
