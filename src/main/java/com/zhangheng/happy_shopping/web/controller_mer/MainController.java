@@ -206,7 +206,8 @@ public class MainController {
         for (SubmitGoods sg : byTimeLike) {
             List<goods> goods_list = sg.getGoods_list();
             for (goods g : goods_list) {
-                if (g.getState()==3){
+                //排除退货的营业额
+                if (g.getState()!=4){
                     count+=g.getGoods_price()*g.getNum();
                 }
             }

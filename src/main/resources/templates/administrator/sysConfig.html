@@ -2,7 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>乐在购物管理员后台-商品类型管理</title>
+    <title>乐在购物管理员后台-系统配置</title>
     <link th:include="common/common_adm :: #com_css">
 </head>
 <body class="sticky-header">
@@ -17,17 +17,17 @@
         <div class="wrapper">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="panel panel-warning">
+                    <div class="panel panel-info">
                         <div class="panel-heading">
-                            商品类型数量：<span class="badge badge-primary" id="goodsType_num"></span>种
+                            聊天服务配置
                             <span class="tools pull-right">
                                 <button class="btn btn-primary" onclick="ref()" title="点击刷新数据">刷新</button>
                                 <a href="javascript:;" class="fa fa-chevron-down"></a>
                             </span>
                         </div>
                         <div class="panel-body">
-                            <button class="btn btn-success" onclick="Add()" type="button"><i class="fa fa-plus"></i>新增类型</button>
-                            <div class="adv-table editable-table goodsType_tbody"></div>
+                            <div class="adv-table editable-table chat_tbody">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -38,16 +38,14 @@
     </div>
 </section>
 <div th:replace="common/common_adm :: #com_js"></div>
-
-<script src="/static/my_js/adm/goodsType.js"></script>
+<script src="/static/my_js/adm/sysConfig.js"></script>
 <!--表格-->
 <script type="text/javascript" src="/static/js/data-tables/jquery.dataTables.js"></script>
 <script type="text/javascript" src="/static/js/data-tables/DT_bootstrap.js"></script>
 <script src="/static/js/editable-table.js"></script>
-
 <script>
     jQuery(document).ready(function() {
-        getData();
+        getChatConfig();
     });
 </script>
 </body>

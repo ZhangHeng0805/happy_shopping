@@ -28,6 +28,7 @@ public class mvcConfig implements WebMvcConfigurer {
                 ,"/customersListPage","/getCustomerssList","/set_customerState"
                 ,"/goodsListPage","/getGoodsList","/set_goodsState"
                 ,"/goodsTypePage","/getGoodsTypeList","/update_goodsType","/del_goodsType","/add_goodsType"
-                ,"/storesListPage","/getstoresList");
+                ,"/storesListPage","/getstoresList"
+                ,"/sysConfigPage","/getChatConfig");
     }
 }

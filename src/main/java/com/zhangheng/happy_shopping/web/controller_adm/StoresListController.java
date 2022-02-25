@@ -49,6 +49,10 @@ public class StoresListController {
         return "administrator/storesList";
     }
 
+    /**
+     * 获取店铺数据
+     * @return
+     */
     @ResponseBody
     @PostMapping("/getstoresList")
     private List<Store> getstoresList(){

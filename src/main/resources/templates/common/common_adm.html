@@ -59,6 +59,9 @@
             <!--商品类型管理-->
             <li th:class="${active}=='5'?'active':''"><a th:href="@{/goodsTypePage}"><i class="fa fa-tags"></i> <span>商品类型管理</span></a></li>
             <hr>
+            <!--系统配置-->
+            <li th:class="${active}=='7'?'active':''"><a th:href="@{/sysConfigPage}"><i class="fa fa-cogs"></i> <span>系统配置</span></a></li>
+            <hr>
             <!--退出登录-->
             <li><a th:href="@{/exit_adm}" onclick="exit()"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>
             <script>

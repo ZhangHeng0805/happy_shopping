@@ -55,22 +55,29 @@ public class PhoneInfo {
         String ip=split2[0];
         String Phone=split2[1];
         pi.setIp(ip);
+
         String model=Phone.substring(Phone.indexOf(info[0])+info[0].length(),Phone.indexOf(") ("+info[1]));
         pi.setModel(model);
+
         int sdk=Integer.valueOf(Phone.substring(Phone.indexOf(info[1])+info[1].length(),Phone.indexOf(") ("+info[2])));
         pi.setSdk(sdk);
+
         String release=Phone.substring(Phone.indexOf(info[2])+info[2].length(),Phone.indexOf(") ("+info[3]));
         pi.setRelease(release);
+
         String Appversion=Phone.substring(Phone.indexOf(info[3])+info[3].length(),Phone.indexOf(") ("+info[4]));
         pi.setApp_version(Appversion);
+
         String Tel=Phone.substring(Phone.indexOf(info[4])+info[4].length(),Phone.indexOf(") ("+info[5]));
         String[] Telsplit = Tel.split("]");
         if (!Telsplit[1].equals("null")){
             pi.setTel(Telsplit[1]);
         }
         pi.setTel_type(Telsplit[0].substring(1));
+
         String id=Phone.substring(Phone.indexOf(info[5])+info[5].length(),Phone.lastIndexOf(")"));
         pi.setId(id);
+
         pi.setLast_time(TimeUtil.time(new Date()));
         return pi;
     }

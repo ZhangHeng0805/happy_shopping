@@ -11,13 +11,13 @@ public class ChatConfig {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column
+    @Column(name = "[ip]")
     private String ip;//服务器IP地址
     @Column(name = "[port]")
     private String port;//服务器端口号
-    @Column
+    @Column(name = "[local_port]")
     private String localPort;//本地端口号
-    @Column
+    @Column(name = "[explain]")
     private String explain;//配置说明
 
     public Integer getId() {

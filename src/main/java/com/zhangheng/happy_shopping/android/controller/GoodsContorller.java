@@ -107,6 +107,7 @@ public class GoodsContorller {
                 for (goods g : goods_list) {
                     Optional<Goods> byId = goodsRepository.findById(g.getGoods_id());
                     if (byId.get().getGoods_num()>=g.getNum()) {
+                        //减少商品的库存
                         goodsRepository.updateGoods_num(-g.getNum(), g.getGoods_id());
                     }else {
                         msg.setCode(500);
@@ -194,7 +195,7 @@ public class GoodsContorller {
                             if (list_idAndGoods_id.get().getNum().equals(num)) {
                                 //根据订单号和商品id修改订单商品状态
                                 int i = listGoodsRepository.updateStateByList_idAndGoods_id(3, submit_id, goods_id);
-                                //确认收货后根据商品id修改商品的销量
+                                //确认收货后根据商品id增加商品的销量
                                 goodsRepository.addGoods_Sales(num, goods_id);
                                 //计算该订单商品的总价
                                 double v = Message.twoDecimalPlaces(list_idAndGoods_id.get().getGoods_price() * num);
@@ -202,7 +203,7 @@ public class GoodsContorller {
                                 Optional<Store> byId1 = storeRepository.findById(list_idAndGoods_id.get().getStore_id());
                                 //判断店铺是否存在
                                 if (byId1.isPresent()) {
-                                    Double turnover = byId1.get().getTurnover()+v;
+                                    Double turnover = Message.twoDecimalPlaces(byId1.get().getTurnover()+v);
                                     int i1=storeRepository.updateTurnoverByStore_id(turnover, byId1.get().getStore_id());
                                     if (i > 0 || i1 > 0) {
                                         msg.setCode(200);
@@ -278,6 +279,7 @@ public class GoodsContorller {
             ,@RequestParam("password") String password
             ,@RequestParam("goods_id") Integer goods_id){
         Message msg = new Message();
+        msg.setTime(TimeUtil.time(new Date()));
         //判断手机号格式
         if (PhoneNumUtil.isMobile(phone)) {
             Optional<Customer> byId = customerRepository.findById(phone);
@@ -286,12 +288,83 @@ public class GoodsContorller {
                 try {
                     //验证密码是否正确
                     if (byId.get().getPassword().equals(password)) {
+                        //修改订单商品的状态
                         listGoodsRepository.updateStateByList_idAndGoods_id(4, submit_id, goods_id);
+                        //退货后恢复该商品的库存
                         goodsRepository.updateGoods_num(num,goods_id);
-                        msg.setTime(TimeUtil.time(new Date()));
                         msg.setCode(200);
                         msg.setTitle("退货成功");
                         msg.setMessage(String.valueOf(goods_id));
+                    }else {
+                        msg.setCode(500);
+                        msg.setTitle("密码错误");
+                        msg.setMessage("对不起,您的密码错误");
+                    }
+                } catch (Exception e) {
+                    msg.setCode(500);
+                    msg.setTitle("错误");
+                    msg.setMessage(e.getMessage());
+                }
+            }else {
+                msg.setCode(500);
+                msg.setTitle("用户不存在");
+                msg.setMessage("对不起,没有找到用户信息");
+            }
+        }else {
+            msg.setCode(500);
+            msg.setTitle("信息错误");
+            msg.setMessage("账户手机号错误");
+        }
+        return msg;
+    }
+    @PostMapping("Del_Order")//订单商品删除
+    @ResponseBody
+    public Message submitOrderDel(
+            @RequestParam("submit_id") String submit_id
+            ,@RequestParam("num") int num
+            ,@RequestParam("phone") String phone
+            ,@RequestParam("password") String password
+            ,@RequestParam("goods_id") Integer goods_id){
+        Message msg = new Message();
+        //判断手机号格式
+        if (PhoneNumUtil.isMobile(phone)) {
+            Optional<Customer> byId = customerRepository.findById(phone);
+            //检查用户是否存在
+            if (byId.isPresent()) {
+                try {
+                    //验证密码是否正确
+                    if (byId.get().getPassword().equals(password)) {
+                        Optional<SubmitGoods> byId1 = submitGoodsRepository.findById(submit_id);
+                        if (byId1.isPresent()) {
+                            if (byId1.get().getGoods_list().size()==1){
+                                if (byId1.get().getGoods_list().get(0).getGoods_id().equals(goods_id)){
+                                    //如果订单中的商品只有一个，并且和要删除的订单商品一致，则直接删除该订单
+                                    submitGoodsRepository.deleteById(submit_id);
+                                    msg.setTime(TimeUtil.time(new Date()));
+                                    msg.setCode(200);
+                                    msg.setTitle("删除成功");
+                                    msg.setMessage(String.valueOf(goods_id));
+                                    return msg;
+                                }
+                            }
+                            Integer i = listGoodsRepository.deleteByList_idAndGoods_id(submit_id, goods_id);
+                            if (i > 0) {
+                                msg.setTime(TimeUtil.time(new Date()));
+                                msg.setCode(200);
+                                msg.setTitle("删除成功");
+                                msg.setMessage(String.valueOf(goods_id));
+                            } else {
+                                msg.setTime(TimeUtil.time(new Date()));
+                                msg.setCode(500);
+                                msg.setTitle("退货失败");
+                                msg.setMessage("对不起,订单商品删除失败");
+                            }
+                        }else {
+                            msg.setTime(TimeUtil.time(new Date()));
+                            msg.setCode(500);
+                            msg.setTitle("订单不存在");
+                            msg.setMessage("对不起,该订单信息找不到");
+                        }
                     }else {
                         msg.setCode(500);
                         msg.setTime(TimeUtil.time(new Date()));

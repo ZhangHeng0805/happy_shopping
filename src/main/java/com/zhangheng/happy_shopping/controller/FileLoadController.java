@@ -274,13 +274,15 @@ public class FileLoadController {
      */
     @PostMapping("updatelist/{type}")
     @ResponseBody
-    public Message updatelist(@Nullable @PathVariable("type") String type,HttpServletRequest request){
+    public Message updatelist(@Nullable @PathVariable("type") String type,HttpServletRequest request,@Nullable String notice){
         Message msg=new Message();
         ArrayList<String> list = new ArrayList<>();
         list.clear();
         String requst = CusAccessObjectUtil.getRequst(request);
         log.info("应用更新查询:"+ requst);
-        phoneInfoRepository.saveAndFlush(PhoneInfo.UserAgentToPhoneInfo(requst));
+        PhoneInfo s2 = PhoneInfo.UserAgentToPhoneInfo(requst);
+        s2.setNotice(notice);
+        phoneInfoRepository.saveAndFlush(s2);
         if (type.length()>0){
             try {
                 update_files.clear();

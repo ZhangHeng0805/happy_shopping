@@ -54,6 +54,16 @@ public interface ListGoodsRepository extends JpaRepository<goods, Integer> {
     Integer updateStateByList_idAndGoods_id(int state, String list_id, Integer goods_id);
 
     /**
+     * 根据订单号和商品id删除订单商品
+     * @param list_id
+     * @param goods_id
+     * @return
+     */
+    @Modifying
+    @Query("delete from goods sc  where sc.list_id = ?1 and sc.goods_id=?2")
+    Integer deleteByList_idAndGoods_id(String list_id, Integer goods_id);
+
+    /**
      * 根据低昂单号和商品id查询订单商品
      * @param list_id
      * @param goods_id

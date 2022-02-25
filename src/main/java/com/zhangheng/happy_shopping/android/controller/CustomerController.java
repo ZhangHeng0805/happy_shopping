@@ -111,11 +111,15 @@ public class CustomerController {
             Optional<Customer> byId = customerRepository.findById(cus.getPhone());
             //判断用户是否存在
             if (byId.isPresent()) {
-                //判断密码是否正确
-                if (byId.get().getPassword().equals(cus.getPassword())){
-                    customer=byId.get();
+                if(byId.get().getState()==0) {
+                    //判断密码是否正确
+                    if (byId.get().getPassword().equals(cus.getPassword())) {
+                        customer = byId.get();
+                    } else {
+                        log.info("密码错误");
+                    }
                 }else {
-                    log.info("密码错误");
+                    log.info("用户账号状态异常");
                 }
             }else {
                 log.info("用户不存在");
