@@ -1,4 +1,4 @@
-
+//数据标签
 function get_count() {
     $.ajax({
         url:'/get_count',
@@ -16,6 +16,7 @@ function get_count() {
         }
     })
 }
+//订单扇形图
 function get_order() {
     $.ajax({
         url:'/get_order',
@@ -41,7 +42,7 @@ function get_order() {
         }
     })
 }
-//根据商品类型查询本店商品数量
+//根据商品类型查询本店商品数量（商品类型柱状图）
 function data1() {
     $.ajax({
             url:'/getGoodsNum_ByState',

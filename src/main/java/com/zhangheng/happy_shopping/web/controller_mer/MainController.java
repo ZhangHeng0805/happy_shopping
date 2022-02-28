@@ -206,9 +206,12 @@ public class MainController {
         for (SubmitGoods sg : byTimeLike) {
             List<goods> goods_list = sg.getGoods_list();
             for (goods g : goods_list) {
-                //排除退货的营业额
-                if (g.getState()!=4){
-                    count+=g.getGoods_price()*g.getNum();
+                //判断订单商品是否属于本店
+                if(g.getStore_id().equals(merchants.getStore_id())) {
+                    //排除退货的营业额
+                    if (g.getState() != 4) {
+                        count += g.getGoods_price() * g.getNum();
+                    }
                 }
             }
         }

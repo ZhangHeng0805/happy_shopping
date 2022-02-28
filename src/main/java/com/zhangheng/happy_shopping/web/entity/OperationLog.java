@@ -21,7 +21,7 @@ public class OperationLog {
     @Column
     private int count;//操作次数
     @Column
-    private int type;//操作类型(0商家登录;1管理员登录)
+    private int type;//操作类型(0商家登录;1管理员登录;2顾客登录)
     @Column
     private String info;//操作信息
 

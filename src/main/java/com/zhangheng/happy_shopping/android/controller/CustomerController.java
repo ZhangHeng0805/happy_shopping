@@ -5,16 +5,17 @@ import com.zhangheng.happy_shopping.android.entity.Customer;
 import com.zhangheng.happy_shopping.android.entity.ShareLocation;
 import com.zhangheng.happy_shopping.android.repository.CustomerRepository;
 import com.zhangheng.happy_shopping.android.repository.ShareLocationRepository;
-import com.zhangheng.happy_shopping.utils.FolderFileScanner;
-import com.zhangheng.happy_shopping.utils.Message;
-import com.zhangheng.happy_shopping.utils.PhoneNumUtil;
-import com.zhangheng.happy_shopping.utils.TimeUtil;
+import com.zhangheng.happy_shopping.utils.*;
+import com.zhangheng.happy_shopping.web.entity.OperationLog;
+import com.zhangheng.happy_shopping.web.repository.OperaLogRepository;
+import com.zhangheng.happy_shopping.web.service.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,10 @@ public class CustomerController {
     @Autowired
     private ShareLocationRepository locationRepository;
     private ArrayList<Object> list = new ArrayList<>();
+    @Autowired
+    private LoginService loginService;
+    @Autowired
+    private OperaLogRepository logRepository;
 
 
     /**
@@ -37,8 +42,14 @@ public class CustomerController {
      * @return
      */
     @PostMapping("Login")
-    public Message Login(@Nullable @RequestParam("CustomerLogin") String loginJson){
+    public Message Login(@Nullable @RequestParam("CustomerLogin") String loginJson, HttpServletRequest request){
         Message msg = new Message();
+        //操作记录
+        OperationLog olog = new OperationLog();
+        olog.setRequest(CusAccessObjectUtil.getRequst(request));
+        olog.setInfo("顾客登录操作");
+        olog.setTime(TimeUtil.time(new Date()));
+        olog.setType(2);
         //判断提交数据不为空
         if (loginJson!=null){
             Gson gson = new Gson();
@@ -47,33 +58,63 @@ public class CustomerController {
             if (PhoneNumUtil.isMobile(user.getPhone())){
                 //判断密码长度
                 if (user.getPassword().length()>=6&&user.getPassword().length()<=18){
-                    Optional<Customer> customer = customerRepository.findById(user.getPhone());
-                    //判断用户是否操作
-                    if (customer.isPresent()){
-                        //验证密码是否正确
-                        if (customer.get().getPassword().equals(user.getPassword())){
-                            if (customer.get().getState()==0) {
-                                msg.setCode(200);
-                                msg.setTime(TimeUtil.time(new Date()));
-                                msg.setTitle("登录成功");
-                                msg.setMessage(customer.get().getUsername());
-                            }else {
+                    olog.setTel(user.getPhone());
+                    boolean b = loginService.login_log(olog);
+                    //根据请求request和操作类型查询操作记录
+                    Optional<OperationLog> requestAndType = logRepository.findByRequestAndType(CusAccessObjectUtil.getRequst(request), 2);
+                    int count = requestAndType.get().getCount();
+                    //判断是否重复操作
+                    if (b) {
+                        Optional<Customer> customer = customerRepository.findById(user.getPhone());
+                        //判断用户是否存在
+                        if (customer.isPresent()) {
+                            //验证密码是否正确
+                            if (customer.get().getPassword().equals(user.getPassword())) {
+                                if (customer.get().getState() == 0) {
+                                    requestAndType.get().setCount(0);
+                                    requestAndType.get().setTime(TimeUtil.time(new Date()));
+                                    requestAndType.get().setInfo("顾客["+customer.get().getUsername()+"]登录成功");
+                                    logRepository.saveAndFlush(requestAndType.get());
+                                    msg.setCode(200);
+                                    msg.setTime(TimeUtil.time(new Date()));
+                                    msg.setTitle("登录成功");
+                                    msg.setMessage(customer.get().getUsername());
+                                } else {
+                                    msg.setCode(500);
+                                    msg.setTime(TimeUtil.time(new Date()));
+                                    msg.setTitle("账号" + Customer.accont_state[customer.get().getState()]);
+//                                    msg.setMessage("对不起！您的账号状态为:" + Customer.accont_state[customer.get().getState()] + ",暂时无法登录。");
+                                    if (LoginService.Max_Count-count >0) {
+                                        msg.setMessage("账号" + Customer.accont_state[customer.get().getState()]+"！你还有" + (LoginService.Max_Count- count) + "次重试的机会");
+                                    }else {
+                                        msg.setMessage("对不起,你没有登录机会了，请"+LoginService.Wait_Time+"分钟后在来");
+                                    }
+                                }
+                            } else {
                                 msg.setCode(500);
                                 msg.setTime(TimeUtil.time(new Date()));
-                                msg.setTitle("账号"+Customer.accont_state[customer.get().getState()]);
-                                msg.setMessage("对不起！您的账号状态为:"+Customer.accont_state[customer.get().getState()]+",暂时无法登录。");
+                                msg.setTitle("登录失败");
+                                if (LoginService.Max_Count-count >0) {
+                                    msg.setMessage("密码错误！你还有" + (LoginService.Max_Count- count) + "次重试的机会");
+                                }else {
+                                    log.warn("顾客登录频繁:"+requestAndType.get().getRequest());
+                                    msg.setMessage("对不起,你没有登录机会了，请"+LoginService.Wait_Time+"分钟后在来");
+                                }
                             }
-                        }else {
+                        } else {
                             msg.setCode(500);
                             msg.setTime(TimeUtil.time(new Date()));
                             msg.setTitle("登录失败");
-                            msg.setMessage("密码错误");
+                            if (LoginService.Max_Count-count >0) {
+                                msg.setMessage("账号错误！你还有" + (LoginService.Max_Count- count) + "次重试的机会");
+                            }else {
+                                msg.setMessage("对不起,你没有登录机会了,请"+LoginService.Wait_Time+"分钟后在来");
+                            }
                         }
                     }else {
+                        int i = TimeUtil.minutesDifference(requestAndType.get().getTime(), TimeUtil.time(new Date()));
                         msg.setCode(500);
-                        msg.setTime(TimeUtil.time(new Date()));
-                        msg.setTitle("登录失败");
-                        msg.setMessage("账号错误，该用户不存在");
+                        msg.setMessage("错误次数过多,请"+(LoginService.Wait_Time-i)+"分钟后再操作");
                     }
 
                 }else {
@@ -89,6 +130,7 @@ public class CustomerController {
                 msg.setMessage("账号格式错误");
             }
         }else {
+            msg.setCode(500);
             msg.setTitle("登录失败");
             msg.setMessage("服务器没有收到登录内容");
         }

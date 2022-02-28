@@ -29,10 +29,8 @@ function data1() {
         }
     )
 }
-data1();
 //根据商品的订单状态查询本店订单商品数量
 function data2() {
-    data3();
     $.ajax({
         url:'/findGoodsNumByOrderState',
         method:'post',
@@ -58,7 +56,6 @@ function data2() {
         }
     })
 }
-data2();
 //查询本店总营业额
 function data3() {
   $.ajax({
@@ -75,7 +72,6 @@ function data3() {
 }
 //查询近几天的订单数据
 function data4() {
-    data6();
     $.ajax({
         url:'/findGoodnumBytimeAndtype?t='+Date.now(),
         method:'get',
@@ -107,6 +103,7 @@ function data4() {
         }
     })
 }
+//查询本店今日营业额
 function data6(){
     $.ajax({
         url:'/findTodayTurnover',
@@ -122,7 +119,6 @@ function data6(){
         }
     })
 }
-data4();
 //查询本店未处理的订单商品
 function data5() {
     $.ajax({
@@ -225,11 +221,7 @@ function ok(id,name) {
         return false;
     }
 }
-function ref() {
-    data2();//根据商品的订单状态查询本店订单商品数量（店铺订单数据标签）
-    data4();//查询近几天的订单数据（订单数据曲线图）
-    data5();//查询本店未处理的订单商品(未处理商品订单的表格)
-}
+
 //拒绝订单
 function no(id,name) {
     var d=confirm("确定拒绝此订单商品（"+name+"）？");
@@ -257,4 +249,13 @@ function no(id,name) {
         });
         return false;
     }
+}
+//刷新
+function ref() {
+    data1();//根据商品类型查询本店商品数量
+    data2();//根据商品的订单状态查询本店订单商品数量（店铺订单数据标签）
+    data3();//查询本店总营业额
+    data4();//查询近几天的订单数据（订单数据曲线图）
+    data5();//查询本店未处理的订单商品(未处理商品订单的表格)
+    data6();//查询本店今日营业额
 }

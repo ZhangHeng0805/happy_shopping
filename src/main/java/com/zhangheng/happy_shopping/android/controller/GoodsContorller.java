@@ -80,55 +80,67 @@ public class GoodsContorller {
         if (submitGoodsList!=null) {
             Gson gson = new Gson();
             SubmitGoods submitGoods = gson.fromJson(submitGoodsList, SubmitGoods.class);
-            System.out.println(submitGoods.toString());
-            List<goods> goods_list = submitGoods.getGoods_list();
-            List<Integer> id = new ArrayList<>();
-            List<Integer> n = new ArrayList<>();
-            for (goods g : goods_list) {
-                id.add(g.getGoods_id());
-                n.add(g.getNum());
-                g.setState(0);
-            }
-            List<Goods> allById = goodsRepository.findAllById(id);//根据订单的商品id查询商品信息
-            double count = 0;
-            //计算订单总价
-            for (Goods goods : allById) {
-                for (goods g : goods_list) {
-                    if (g.getGoods_id().equals(goods.getGoods_id())) {
-                        count += goods.getGoods_price() * g.getNum();
+            Optional<Customer> byId1 = customerRepository.findById(submitGoods.getPhone());
+            if (byId1.isPresent()) {
+                if (byId1.get().getState()==0) {
+                    List<goods> goods_list = submitGoods.getGoods_list();
+                    List<Integer> id = new ArrayList<>();
+                    List<Integer> n = new ArrayList<>();
+                    for (goods g : goods_list) {
+                        id.add(g.getGoods_id());
+                        n.add(g.getNum());
+                        g.setState(0);
                     }
-                }
-            }
-            BigDecimal bg = new BigDecimal(count);
-            count = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();//保留两位小数
-            log.info("总金额：" + count);
-            if (count == submitGoods.getCount_price()) {
-                //修改商品库存
-                for (goods g : goods_list) {
-                    Optional<Goods> byId = goodsRepository.findById(g.getGoods_id());
-                    if (byId.get().getGoods_num()>=g.getNum()) {
-                        //减少商品的库存
-                        goodsRepository.updateGoods_num(-g.getNum(), g.getGoods_id());
-                    }else {
-                        msg.setCode(500);
-                        msg.setTitle(g.getGoods_name()+"的库存不足");
-                        msg.setMessage("商品：["+g.getGoods_name()+"]的库存还有"+byId.get().getGoods_num()+"件，请刷新后重新选购");
-                        return msg;
+                    List<Goods> allById = goodsRepository.findAllById(id);//根据订单的商品id查询商品信息
+                    double count = 0;
+                    //计算订单总价
+                    for (Goods goods : allById) {
+                        for (goods g : goods_list) {
+                            if (g.getGoods_id().equals(goods.getGoods_id())) {
+                                count += goods.getGoods_price() * g.getNum();
+                            }
+                        }
                     }
-                }
-                SubmitGoods submitGoods1 = submitGoodsRepository.saveAndFlush(submitGoods);
-                if (submitGoods1 != null) {
-                    msg.setCode(200);
-                    msg.setMessage("订单提交成功");
-                } else {
-                    msg.setTitle("订单提交失败");
-                    msg.setCode(500);
-                }
+                    BigDecimal bg = new BigDecimal(count);
+                    count = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();//保留两位小数
+                    log.info("订单：" + submitGoods.getSubmit_id() + "，总金额：" + count);
+                    if (count == submitGoods.getCount_price()) {
+                        //修改商品库存
+                        for (goods g : goods_list) {
+                            Optional<Goods> byId = goodsRepository.findById(g.getGoods_id());
+                            if (byId.get().getGoods_num() >= g.getNum()) {
+                                //减少商品的库存
+                                goodsRepository.updateGoods_num(-g.getNum(), g.getGoods_id());
+                            } else {
+                                msg.setCode(500);
+                                msg.setTitle(g.getGoods_name() + "的库存不足");
+                                msg.setMessage("商品：[" + g.getGoods_name() + "]的库存还有" + byId.get().getGoods_num() + "件，请刷新后重新选购");
+                                return msg;
+                            }
+                        }
+                        SubmitGoods submitGoods1 = submitGoodsRepository.saveAndFlush(submitGoods);
+                        if (submitGoods1 != null) {
+                            msg.setCode(200);
+                            msg.setMessage("订单提交成功");
+                        } else {
+                            msg.setTitle("订单提交失败");
+                            msg.setCode(500);
+                        }
 
-            } else {
-                msg.setTitle("订单提交失败");
-                msg.setMessage("价格异常,订单提交失败");
+                    } else {
+                        msg.setTitle("订单提交失败");
+                        msg.setMessage("价格异常,订单提交失败");
+                        msg.setCode(500);
+                    }
+                }else {
+                    msg.setTitle("账号异常");
+                    msg.setCode(500);
+                    msg.setMessage("对不起，您的账号状态异常，请前往“我的”查看或重新登录");
+                }
+            }else {
+                msg.setTitle("订单手机号错误");
                 msg.setCode(500);
+                msg.setMessage("订单手机号必须为顾客账号的手机号");
             }
         }else {
             msg.setTitle("订单提交失败");

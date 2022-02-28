@@ -98,14 +98,14 @@ public class LoginController {
                                     requestAndType.get().setCount(0);
                                     requestAndType.get().setTel(byId.get().getPhonenum());
                                     requestAndType.get().setTime(TimeUtil.time(new Date()));
-                                    requestAndType.get().setInfo("商家登录成功");
+                                    requestAndType.get().setInfo("商家["+byId.get().getName()+"]登录成功");
                                     logRepository.saveAndFlush(requestAndType.get());
 
                                     request.getSession().setAttribute("merchants", byId.get());
                                     Optional<Store> storeOptional = storeRepository.findById(byId.get().getStore_id());
                                     request.getSession().setAttribute("store", storeOptional.get());
 
-                                    log.info("商家登录:" + byId.get().getPhonenum() + "\t姓名:" + byId.get().getName());
+                                    log.info("商家登录:" + byId.get().getPhonenum() + "\t 姓名:" + byId.get().getName());
                                     return "redirect:/main";
                                 }else {
                                     msg.setCode(404);
@@ -117,25 +117,25 @@ public class LoginController {
                             }
                         } else {
                             msg.setCode(500);
-                            if (5-requestAndType.get().getCount()>0) {
-                                msg.setMessage("密码错误,你还有" + (5-requestAndType.get().getCount()) + "次机会");
+                            if (LoginService.Max_Count-requestAndType.get().getCount()>0) {
+                                msg.setMessage("密码错误,你还有" + (LoginService.Max_Count-requestAndType.get().getCount()) + "次机会");
                             }else {
                                 log.warn("商家登录频繁:"+requestAndType.get().getRequest());
-                                msg.setMessage("对不起,你没有登录机会了，请5分钟后在来");
+                                msg.setMessage("对不起,你没有登录机会了，请"+LoginService.Wait_Time+"分钟后在来");
                             }
                         }
                     } else {
                         msg.setCode(500);
-                        if (5-requestAndType.get().getCount()>0) {
-                            msg.setMessage("该手机号未注册,你还有" + (5-requestAndType.get().getCount()) + "次机会");
+                        if (LoginService.Max_Count-requestAndType.get().getCount()>0) {
+                            msg.setMessage("该手机号未注册,你还有" + (LoginService.Max_Count-requestAndType.get().getCount()) + "次机会");
                         }else {
-                            msg.setMessage("对不起,你没有登录机会了,请5分钟后在来");
+                            msg.setMessage("对不起,你没有登录机会了,请"+LoginService.Wait_Time+"分钟后在来");
                         }
                     }
                 }else {
                     int i = TimeUtil.minutesDifference(requestAndType.get().getTime(), TimeUtil.time(new Date()));
                     msg.setCode(500);
-                    msg.setMessage("错误次数过多,请"+(5-i)+"分钟后再操作");
+                    msg.setMessage("错误次数过多,请"+(LoginService.Wait_Time-i)+"分钟后再操作");
                 }
             }else {
                 msg.setCode(500);

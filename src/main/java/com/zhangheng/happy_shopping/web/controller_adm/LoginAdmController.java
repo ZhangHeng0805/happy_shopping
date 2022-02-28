@@ -75,6 +75,7 @@ public class LoginAdmController {
                         requestAndType.get().setTime(TimeUtil.time(new Date()));
                         requestAndType.get().setInfo("管理员登录成功");
                         logRepository.saveAndFlush(requestAndType.get());
+                        //将登陆者的ip地址设置到管理员登录信息中
                         loginAdmin.setPassword(CusAccessObjectUtil.getIpAddress(request));
                         request.getSession().setAttribute("admin",loginAdmin);
                         msg.setCode(200);
@@ -82,26 +83,26 @@ public class LoginAdmController {
                         return "redirect:/home";
                     } else {
                         msg.setCode(500);
-                        if (5-count >0) {
-                            msg.setMessage("密码错误！你还有" + (5- count) + "次机会");
+                        if (LoginService.Max_Count-count >0) {
+                            msg.setMessage("密码错误！你还有" + (LoginService.Max_Count- count) + "次机会");
                         }else {
                             log.warn("管理员登录频繁:"+requestAndType.get().getRequest());
-                            msg.setMessage("对不起,你没有登录机会了，请5分钟后在来");
+                            msg.setMessage("对不起,你没有登录机会了，请"+LoginService.Wait_Time+"分钟后在来");
                         }
                     }
                 } else {
                     msg.setCode(500);
-                    if (5-count >0) {
-                        msg.setMessage("账号错误！你还有" + (5- count) + "次机会");
+                    if (LoginService.Max_Count-count >0) {
+                        msg.setMessage("账号错误！你还有" + (LoginService.Max_Count- count) + "次机会");
                     }else {
-                        msg.setMessage("对不起,你没有登录机会了,请5分钟后在来");
+                        msg.setMessage("对不起,你没有登录机会了,请"+LoginService.Wait_Time+"分钟后在来");
                     }
 
                 }
             }else {
                 int i = TimeUtil.minutesDifference(requestAndType.get().getTime(), TimeUtil.time(new Date()));
                 msg.setCode(500);
-                msg.setMessage("错误次数过多,请"+(5-i)+"分钟后再操作");
+                msg.setMessage("错误次数过多,请"+(LoginService.Wait_Time-i)+"分钟后再操作");
             }
         }else {
             msg.setCode(404);
