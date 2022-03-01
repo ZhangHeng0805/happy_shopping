@@ -76,7 +76,13 @@ public class LoginAdmController {
                         requestAndType.get().setInfo("管理员登录成功");
                         logRepository.saveAndFlush(requestAndType.get());
                         //将登陆者的ip地址设置到管理员登录信息中
-                        loginAdmin.setPassword(CusAccessObjectUtil.getIpAddress(request));
+                        String ipAddress = CusAccessObjectUtil.getIpAddress(request);
+                        if (ipAddress.length()>20){
+                            StringBuilder stringBuilder=new StringBuilder(ipAddress);
+                            stringBuilder.replace(new Double(ipAddress.length()*0.2).intValue(),new Double(ipAddress.length()*0.8).intValue(),"***");
+                            ipAddress=stringBuilder.toString();
+                        }
+                        loginAdmin.setPassword(ipAddress);
                         request.getSession().setAttribute("admin",loginAdmin);
                         msg.setCode(200);
                         msg.setMessage("登录成功！");

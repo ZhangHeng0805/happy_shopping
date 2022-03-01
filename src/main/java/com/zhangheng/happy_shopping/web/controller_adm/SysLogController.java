@@ -42,6 +42,11 @@ public class SysLogController {
         return "administrator/sysLog";
     }
 
+    /**
+     * 根据登录类型查询登录日志
+     * @param type
+     * @return
+     */
     @ResponseBody
     @PostMapping("/getLogByType")
     private List<OperationLog> getLogByType(int type){
@@ -53,6 +58,11 @@ public class SysLogController {
         }
         return logs;
     }
+
+    /**
+     * 查询App客户端信息
+     * @return
+     */
     @ResponseBody
     @PostMapping("/getPhoneInfoList")
     private List<PhoneInfo> getPhoneInfoList(){
