@@ -61,6 +61,9 @@
             <hr>
             <!--系统配置-->
             <li th:class="${active}=='7'?'active':''"><a th:href="@{/sysConfigPage}"><i class="fa fa-cogs"></i> <span>系统配置</span></a></li>
+            <!--系统日志-->
+            <li th:class="${active}=='8'?'active':''"><a th:href="@{/sysLogPage}"><i class="fa fa-bell-o"></i> <span>系统日志</span></a></li>
+
             <hr>
             <!--退出登录-->
             <li><a th:href="@{/exit_adm}" onclick="exit()"><i class="fa fa-sign-in"></i> <span>重新登录</span></a></li>

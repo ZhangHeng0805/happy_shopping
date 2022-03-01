@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>乐在购物管理员后台-系统日志</title>
+    <link th:include="common/common_adm :: #com_css">
+</head>
+<body class="sticky-header">
+<section>
+    <!--左部标签栏-->
+    <div th:replace="common/common_adm :: #com_leftmenu"></div>
+    <div class="main-content">
+        <!--顶部导航栏-->
+        <div th:replace="common/common_adm :: #com_headermenu"></div>
+        <div class="top"></div>
+        <!--主体内容-->
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <header class="panel-heading custom-tab dark-tab">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#t1" data-toggle="tab" onclick="ref(1)">
+                                        <i class="fa fa-home"></i>
+                                        登录日志
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="#t2" data-toggle="tab" onclick="ref(2)">
+                                        <i class="fa fa-android"></i>
+                                        App客户端
+                                    </a>
+                                </li>
+                            </ul>
+                        </header>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="t1">
+                                    <select id="select_log">
+                                        <option value="1">管理员登录</option>
+                                        <option value="0">商家登录</option>
+                                        <option value="2">顾客登录</option>
+                                    </select>
+                                    日志：<span class="badge badge-info" id="t1_title"></span>条
+                                    <div class="adv-table editable-table tbody_t1">
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="t2">
+                                    App客户端：<span class="badge badge-info" id="t2_title"></span>个
+                                    <div class="adv-table editable-table tbody_t2">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="bottom"></div>
+        <div th:replace="common/common_adm :: #com_footer"></div>
+    </div>
+</section>
+<div th:replace="common/common_adm :: #com_js"></div>
+<script src="/static/my_js/adm/sysLog.js"></script>
+<!--表格-->
+<script type="text/javascript" src="/static/js/data-tables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/static/js/data-tables/DT_bootstrap.js"></script>
+<script src="/static/js/editable-table.js"></script>
+<script>
+    jQuery(document).ready(function() {
+        ref(sta);
+    });
+</script>
+</body>
+</html>

@@ -22,13 +22,14 @@ public class mvcConfig implements WebMvcConfigurer {
                 ,"/modify_account","/modify_accountPage","/modify_password");
         //管理员拦截
         registry.addInterceptor(new AdminLoginInterceptor())
-                .addPathPatterns("/home","/get_count","/get_order","/getGoodsNum_ByState"
+                .addPathPatterns("/home","/get_count","/get_order","/getGoodsNum_ByType"
                         , "/handle_goodsPage","/get_sta2Goods","/setState_sta2Goods"
                 ,"/merchantsListPage","/getMerchantsList","/set_merchantsState"
                 ,"/customersListPage","/getCustomerssList","/set_customerState"
                 ,"/goodsListPage","/getGoodsList","/set_goodsState"
                 ,"/goodsTypePage","/getGoodsTypeList","/update_goodsType","/del_goodsType","/add_goodsType"
                 ,"/storesListPage","/getstoresList"
-                ,"/sysConfigPage","/getChatConfig");
+                ,"/sysConfigPage","/getChatConfig"
+                ,"/sysLogPage","/getLogByType","/getPhoneInfoList");
     }
 }

@@ -1,8 +1,8 @@
 var goodsTypeData;
 function getData() {
     $.ajax({
-        url:'/findGoodsType?t='+Date.now(),
-        method:'get',
+        url:'/getGoodsNum_ByType',
+        method:'post',
         dataType:'json',
         success:function (d) {
             goodsTypeData=d;
@@ -13,8 +13,9 @@ function getData() {
                 '<table class="table table-bordered table-striped table-condensed cf" id="editable-sample">' +
                 '<thead class="cf">' +
                 '<tr>' +
-                '<th style="text-align: center">类型名称</th>' +
                 '<th style="text-align: center">类型id</th>' +
+                '<th style="text-align: center">类型名称</th>' +
+                '<th style="text-align: center">商品数量</th>' +
                 '<th style="text-align: center">修改操作</th>' +
                 '<th style="text-align: center">删除操作</th>' +
                 '</tr>' +
@@ -22,8 +23,9 @@ function getData() {
                 '<tbody>';
             for (var i=0;i<d.length;i++) {
                 html += "<tr>" +
-                    "<td data-title='类型名称' class='col-sm-8 t" + i + "-type' style='text-align: center'><strong class='text-info'></strong></td>" +
-                    "<td data-title='类型id' class='col-sm-2 t" + i + "-id' style='text-align: center'><label class='badge badge-info'></label></td>" +
+                    "<td data-title='类型id' class='col-sm-2 t" + i + "-id' style='text-align: center'><label class='badge badge-primary'></label></td>" +
+                    "<td data-title='类型名称' class='col-sm-6 t" + i + "-type' style='text-align: center'><strong class='text-info'></strong></td>" +
+                    "<td data-title='商品数量' class='col-sm-2 t" + i + "-num' style='text-align: center'><label class='badge badge-info'></label></td>" +
                     "<td data-title='修改操作' class='col-sm-1 t" + i + "' style='text-align: center'>" +
                     "<button class='btn btn-warning' onclick='Update("+i+")'>修改</button></td>" +
                     "<td data-title='删除操作' class='col-sm-1 t" + i + "' style='text-align: center'>" +
@@ -45,9 +47,14 @@ function getData() {
 //初始化数据
 function inText(data) {
     for (var i=0;i<data.length;i++) {
-        // $(".t" + i + "-img").children("img").attr('alt', data[i].icon);
-        $(".t" + i + "-id").children("label").text(data[i].id);
-        $(".t" + i + "-type").children("strong").text(data[i].type);
+        $(".t" + i + "-id").children("label").text("#"+data[i].id);
+        $(".t" + i + "-num").children("label").text(data[i].num);
+        var type=data[i].type;
+        if (type=='暂无分类') {
+            type="<lable class='label label-danger'>"+type+"</lable>";
+            $('.t'+i).children("button").prop("disabled", true);
+        }
+        $(".t" + i + "-type").children("strong").html(type);
     }
 }
 //刷新数据
@@ -59,7 +66,18 @@ function Update(i) {
     if (person!=null) {
         if (person.length > 0) {
             if (person.length < 100) {
-                setDataType(goodsTypeData[i].id, person);
+                var b=true;
+                for (var n=0;n<goodsTypeData.length;n++){
+                    if (person==goodsTypeData[n].type){
+                        b=false;
+                        break;
+                    }
+                }
+                if (b){
+                    setDataType(goodsTypeData[i].id, person);
+                } else {
+                    alert("["+person+"]类型已存在，请勿重名");
+                }
             } else {
                 alert('商品类型长度限制100字符以内');
             }
@@ -70,7 +88,12 @@ function Update(i) {
 }
 
 function Del(i) {
-    var b = confirm("确定删除<"+goodsTypeData[i].type+">此商品类型？");
+    var b;
+    if (goodsTypeData[i].num>0){
+        b= confirm("注意：<"+goodsTypeData[i].type+">此类型的商品数量大于0，删除后这些商品的类型将默认为【暂无分类】,确定删除<"+goodsTypeData[i].type+">此商品类型？");
+    }else {
+        b= confirm("确定删除<"+goodsTypeData[i].type+">此商品类型？");
+    }
     if (b){
         delDataType(goodsTypeData[i].id);
     }

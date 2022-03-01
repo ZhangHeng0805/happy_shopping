@@ -42,10 +42,10 @@ function get_order() {
         }
     })
 }
-//根据商品类型查询本店商品数量（商品类型柱状图）
+//根据商品类型查询商品数量（商品类型柱状图）
 function data1() {
     $.ajax({
-            url:'/getGoodsNum_ByState',
+            url:'/getGoodsNum_ByType',
             method:'post',
             dataType:'json',
             success:function (data) {

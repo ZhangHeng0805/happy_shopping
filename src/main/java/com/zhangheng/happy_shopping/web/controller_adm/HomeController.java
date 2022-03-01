@@ -170,7 +170,7 @@ public class HomeController {
      * @return
      */
     @ResponseBody
-    @PostMapping("/getGoodsNum_ByState")
+    @PostMapping("/getGoodsNum_ByType")
     private List<goodsnumBygoodstype> getGoodsNum_ByState(){
         ArrayList<goodsnumBygoodstype> list = new ArrayList<>();
         List<goods_type> all = goodsTypeRepository.findAll();
@@ -180,6 +180,7 @@ public class HomeController {
                 goodsnumBygoodstype gn = new goodsnumBygoodstype();
                 gn.setType(type.getType());
                 gn.setNum(i);
+                gn.setId(type.getId());
                 list.add(gn);
             }
         }

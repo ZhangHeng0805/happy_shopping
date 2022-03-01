@@ -1,30 +1,3 @@
-# 工程简介
-> 之前的服务器[File-Management-Server](https://github.com/ZhangHeng0805/File-Management-Server)因为有太多的接口，太杂了，所以我把乐在购物系统单独分离出来了
-
-* 配置文件application.properties
-```properties
-# 应用服务 WEB 访问端口
-server.port=8081
-# 数据库连接地址
-spring.datasource.url=jdbc:mysql://localhost:3306/happy_shopping?serverTimezone=UTC&characterEncoding=utf-8
-# 数据库用户名&密码：
-spring.datasource.username=root
-spring.datasource.password=root
-
-
-# 管理员账号密码
-login-admin.account=13733430842
-login-admin.password=305666
-
-# 登录机会
-max_count=5
-# 错误等待时间(分)
-wait_time=15
-```
-
-# 数据库happy_shopping
-
-```sql
 /*
  Navicat Premium Data Transfer
 
@@ -310,7 +283,3 @@ end
 delimiter ;
 
 SET FOREIGN_KEY_CHECKS = 1;
-
-```
-
-

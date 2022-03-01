@@ -21,4 +21,18 @@ public interface OperaLogRepository extends JpaRepository<OperationLog,Integer> 
     @Query(value = "select * from operation_log where request = ?1 and type = ?2",nativeQuery = true)
     Optional<OperationLog> findByRequestAndType(String request, Integer type);
 
+    /**
+     * 根据操作类型查询
+     * @param type
+     * @return
+     */
+    @Query(value = "select * from operation_log where type = ?1",nativeQuery = true)
+    List<OperationLog> findAllByType(int type);
+
+    /**
+     * 更具时间降序查询
+     * @return
+     */
+    @Query(value = "select * from operation_log where type =?1 order by time desc",nativeQuery = true)
+    List<OperationLog> findAllByTypeOrderByTime(int type);
 }

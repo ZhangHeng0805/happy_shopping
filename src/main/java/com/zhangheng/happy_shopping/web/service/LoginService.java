@@ -4,6 +4,7 @@ import com.zhangheng.happy_shopping.utils.TimeUtil;
 import com.zhangheng.happy_shopping.web.entity.OperationLog;
 import com.zhangheng.happy_shopping.web.repository.OperaLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -15,9 +16,23 @@ public class LoginService {
     @Autowired
     private OperaLogRepository logRepository;
 
-    public static final int Max_Count=5;//最大重试次数
+    @Value("${max_count}")
+    private String max_count;
+    @Value("${wait_time}")
+    private String wait_time;
 
-    public static final int Wait_Time=5;//等待时间（分钟）
+    public static int Max_Count=5;//最大重试次数
+    public static int Wait_Time=5;//等待时间（分钟）
+
+    //读取配置文件中的设置
+    public void init() {
+        if (max_count!=null){
+            Max_Count=Integer.valueOf(max_count);
+        }
+        if (wait_time!=null){
+            Wait_Time=Integer.valueOf(wait_time);
+        }
+    }
 
     /**
      * 登录次数判断
@@ -25,6 +40,7 @@ public class LoginService {
      * @return
      */
     public boolean login_log(OperationLog log){
+        init();
         if (log.getRequest()!=null){
             //根据request和操作类型查询
             Optional<OperationLog> requestAndType = logRepository.findByRequestAndType(log.getRequest(), log.getType());
