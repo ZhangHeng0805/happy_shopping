@@ -19,7 +19,7 @@
             <!-- each file should be at most 100MB, keep 60 days worth of history, but at most 20GB -->
             <maxFileSize>3MB</maxFileSize>
             <maxHistory>30</maxHistory>
-            <totalSizeCap>2GB</totalSizeCap>
+            <totalSizeCap>5GB</totalSizeCap>
             <cleanHistoryOnStart>true</cleanHistoryOnStart>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
