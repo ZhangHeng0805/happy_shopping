@@ -57,7 +57,7 @@ public class CustomerController {
             //判断登录手机号格式是否正确
             if (PhoneNumUtil.isMobile(user.getPhone())){
                 //判断密码长度
-                if (user.getPassword().length()>=6&&user.getPassword().length()<=18){
+                if (user.getPassword().length()==32){
                     olog.setTel(user.getPhone());
                     boolean b = loginService.login_log(olog);
                     //根据请求request和操作类型查询操作记录

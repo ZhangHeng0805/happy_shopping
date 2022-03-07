@@ -19,6 +19,7 @@ $("#registForm").submit(function () {
                             if (password===password1){
                                 if (store_introduce.length<=150){
                                     if (img.length>0){
+                                        $("#password").val(zh_md5(password));
                                         return true;
                                     }else {
                                         alert("请选择店铺图片");

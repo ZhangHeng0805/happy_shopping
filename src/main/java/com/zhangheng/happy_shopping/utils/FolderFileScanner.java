@@ -12,7 +12,6 @@ public class FolderFileScanner {
     /**linkedList实现**/
     private static LinkedList<File> queueFiles = new LinkedList<File>();
 
-
     /**
      * TODO:递归扫描指定文件夹下面的指定文件
      * @return ArrayList<Object>

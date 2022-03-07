@@ -67,7 +67,10 @@ function getData() {
                     "<td data-title='营业额(元)' class='col-sm-1 t" + i + "-turnover' style='text-align: center'></td>" +
                     "<td data-title='注册时长(天)' class='col-sm-1 t" + i + "-time' style='text-align: center'></td>" +
                     "<td data-title='账号状态' class='col-sm-1 t" + i + "-state' style='text-align: center'><label class='label "+staClass+"'>"+staText+"</label></td>" +
-                    "<td data-title='操作' class='col-sm-1 t" + i + "' style='text-align: center'><button class='btn "+btnClass+"' onclick='"+cli+"'>"+btnText+"</button></td>" +
+                    "<td data-title='操作' class='col-sm-1 t" + i + "' style='text-align: center'>" +
+                    "<button class='btn "+btnClass+"' onclick='"+cli+"'>"+btnText+"</button><br>" +
+                    "<a onclick='reset_pwd("+i+")'>重置密码</a>" +
+                    "</td>" +
                 "</tr>";
 
             }
@@ -149,4 +152,35 @@ function setData(tel,state) {
             window.close();
         }
     })
+}
+function setDataPwd(tel) {
+    $.ajax({
+        url:'/reset_merchants_pwd',
+        method:'post',
+        data:{
+            tel:tel
+        },
+        dataType:'json',
+        success:function (data) {
+            alert(data.message);
+            if (data.code===200){
+            }
+        },
+        error:function (e) {
+            alert('账号密码重置错误：'+e);
+            window.location.href="/exit_adm";
+            window.close();
+        }
+    })
+}
+function reset_pwd(i) {
+    if (merData[i].state===0){
+        var tel = merData[i].tel;
+        var b = confirm("是否重置["+ tel+"]的账号密码为初始密码");
+        if (b){
+            setDataPwd(tel);
+        }
+    }else {
+        alert("对不起，该商家的账号状态为非正常,无法操作");
+    }
 }

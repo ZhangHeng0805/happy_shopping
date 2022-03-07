@@ -41,7 +41,7 @@ public class ConfigController {
             log.error("chatconfig错误：本地端口"+port+"查询为空");
         }
         String requst = CusAccessObjectUtil.getRequst(request);
-        log.info("获取聊天室配置的请求："+ requst);
+        log.info("获取聊天室配置"+chatConfig.toString()+"的请求："+ requst);
         return chatConfig;
     }
 }

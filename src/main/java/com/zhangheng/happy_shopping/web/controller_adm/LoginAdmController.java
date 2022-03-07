@@ -1,6 +1,7 @@
 package com.zhangheng.happy_shopping.web.controller_adm;
 
 import com.zhangheng.happy_shopping.utils.CusAccessObjectUtil;
+import com.zhangheng.happy_shopping.utils.EncryptUtil;
 import com.zhangheng.happy_shopping.utils.Message;
 import com.zhangheng.happy_shopping.utils.TimeUtil;
 import com.zhangheng.happy_shopping.web.controller_adm.bean.Login_admin;
@@ -70,7 +71,7 @@ public class LoginAdmController {
                 //验证账户
                 if (loginAdmin.getAccount().equals(login_admin.getAccount())) {
                     //验证密码
-                    if (loginAdmin.getPassword().equals(login_admin.getPassword())) {
+                    if (loginAdmin.getPassword().equals(EncryptUtil.getMyMd5(login_admin.getPassword()))) {
                         requestAndType.get().setCount(0);
                         requestAndType.get().setTime(TimeUtil.time(new Date()));
                         requestAndType.get().setInfo("管理员登录成功");

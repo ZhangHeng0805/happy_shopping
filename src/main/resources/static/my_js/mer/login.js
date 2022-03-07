@@ -5,6 +5,7 @@ $("#LoginFroms").submit(function () {
     if (phone.length===11){
         if (pwd.length>5) {
             if (pwd.length<19) {
+                $("#password").val(zh_md5(pwd));
                 return true;
             }else {
                 alert("密码长度过长");

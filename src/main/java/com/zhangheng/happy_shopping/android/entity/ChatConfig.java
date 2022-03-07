@@ -1,5 +1,7 @@
 package com.zhangheng.happy_shopping.android.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /*
@@ -7,6 +9,7 @@ import javax.persistence.*;
 * */
 @Entity
 @Table(name = "chatconfig")
+@Data
 public class ChatConfig {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

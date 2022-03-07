@@ -7,6 +7,7 @@ import com.zhangheng.happy_shopping.android.repository.StoreRepository;
 import com.zhangheng.happy_shopping.bean.VerificationCode;
 import com.zhangheng.happy_shopping.controller.FileLoadController;
 import com.zhangheng.happy_shopping.repository.CodeRepository;
+import com.zhangheng.happy_shopping.utils.EncryptUtil;
 import com.zhangheng.happy_shopping.utils.Message;
 import org.aspectj.apache.bcel.classfile.Code;
 import org.slf4j.Logger;
@@ -71,6 +72,7 @@ public class modifyAccountController {
                 sto.setStore_id(store.getStore_id());
                 sto.setBoss_name(store.getBoss_name());
                 sto.setStart_time(store.getStart_time());
+                sto.setTurnover(store.getTurnover());
                 //判断是否上传图片
                 if (image.isEmpty()){//没有上传
                     sto.setStore_image(store.getStore_image());
@@ -119,6 +121,14 @@ public class modifyAccountController {
         return "merchants/modifyAccount_mer";
     }
 
+    /**
+     * 修改密码
+     * @param old_pwd
+     * @param new_pwd
+     * @param code
+     * @param request
+     * @return
+     */
     @ResponseBody
     @PostMapping("/modify_password")
     private Message modify_password(String old_pwd,String new_pwd,VerificationCode code,HttpServletRequest request){

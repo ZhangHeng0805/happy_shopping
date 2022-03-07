@@ -42,8 +42,8 @@ function getData() {
                     "<td data-title='商品销量(件)' class='col-sm-1 t"+i+"-goods_sales' style='text-align: center'></td>" +
                     "<td data-title='库存数量(件)' class='col-sm-1 t"+i+"-goods_num' style='text-align: center'></td>" +
                     "<td data-title='商品单价(元)' class='col-sm-1 t"+i+"-goods_price' style='text-align: center'></td>" +
-                    "<td data-title='通过操作'  class='col-sm-1 t"+i+"' style='text-align: center'><label class='btn btn-success' onclick='Yes("+i+")'>通过</label></td>" +
-                    "<td data-title='封禁操作'  class='col-sm-1 t"+i+"' style='text-align: center'><label class='btn btn-danger' onclick='No("+i+")'>不通过</label></td>" +
+                    "<td data-title='通过操作'  class='col-sm-1 t"+i+"-OK' style='text-align: center'><button class='btn btn-success' onclick='Yes("+i+")'>通过</button></td>" +
+                    "<td data-title='封禁操作'  class='col-sm-1 t"+i+"' style='text-align: center'><button class='btn btn-danger' onclick='No("+i+")'>不通过</button></td>" +
                     "</tr>";
             }
             html += "</tbody></table></section>";
@@ -68,12 +68,17 @@ function inText(data){
         $(".t"+i+"-goods_name").children("span").text(data[i].goods_name);
         $(".t"+i+"-store_id").children("label").text(data[i].store_id);
         $(".t"+i+"-store_name").children("span").text(data[i].store_name);
-        $(".t"+i+"-goods_type").text(data[i].goods_type);
+        var type=data[i].goods_type.indexOf('暂无分类')<0?data[i].goods_type:"<lable class='label label-danger' title='请及时修改该商品的类型'>暂无分类</lable>";
+        $(".t" + i + "-goods_type").html(type);
         $(".t"+i+"-goods_introduction").text(data[i].goods_introduction);
         $(".t"+i+"-goods_sales").text(data[i].goods_sales);
         $(".t"+i+"-goods_num").text(data[i].goods_num);
         $(".t"+i+"-goods_price").text(data[i].goods_price);
-        $(".t"+i).attr("title",data[i].goods_name)
+        $(".t"+i).attr("title",data[i].goods_name);
+        if (data[i].goods_type=="暂无分类") {
+            $(".t"+i+"-OK").children("button").prop("disabled", true);
+            $(".t"+i+"-OK").prop("title", "商品类型暂未分类，无法通过审核！");
+        }
     }
 }
 //刷新数据

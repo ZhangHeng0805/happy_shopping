@@ -30,9 +30,22 @@
             </div>
         </form>
     </div>
-
+    <script src="/static/my_js/encryp/md5.js"></script>
     <script src="/static/js/jquery-1.10.2.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/modernizr.min.js"></script>
+    <script>
+        $("#LoginFromsAdm").submit(function () {
+            var account=$("#account").val();
+            var pwd=$("#password").val();
+            if (account.length>0&&pwd.length>0){
+                $("#password").val(zh_md5(pwd));
+                return true;
+            } else {
+                alert("请输入账号和密码")
+            }
+            return false;
+        })
+    </script>
 </body>
 </html>

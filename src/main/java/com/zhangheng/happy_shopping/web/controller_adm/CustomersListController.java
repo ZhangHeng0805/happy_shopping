@@ -4,6 +4,7 @@ import com.zhangheng.happy_shopping.android.entity.Customer;
 import com.zhangheng.happy_shopping.android.entity.submitgoods.SubmitGoods;
 import com.zhangheng.happy_shopping.android.repository.CustomerRepository;
 import com.zhangheng.happy_shopping.android.repository.SubmitGoodsRepository;
+import com.zhangheng.happy_shopping.utils.EncryptUtil;
 import com.zhangheng.happy_shopping.utils.Message;
 import com.zhangheng.happy_shopping.utils.PhoneNumUtil;
 import com.zhangheng.happy_shopping.utils.TimeUtil;
@@ -11,6 +12,7 @@ import com.zhangheng.happy_shopping.web.controller_adm.bean.CustomerInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +38,8 @@ public class CustomersListController {
     private CustomerRepository customerRepository;
     @Autowired
     private SubmitGoodsRepository submitGoodsRepository;
+    @Value("${customer_reset_pwd}")
+    private String reset_pwd = Customer.reset_pwd;
 
     /**
      * 跳转至顾客管理界面
@@ -124,10 +128,12 @@ public class CustomersListController {
             if (PhoneNumUtil.isMobile(phone)){
                 Optional<Customer> byId = customerRepository.findById(phone);
                 if (byId.isPresent()){
-                    int i = customerRepository.updatePasswordByPhone(Customer.reset_pwd, phone);
+
+                    Message.printLog(reset_pwd);
+                    int i = customerRepository.updatePasswordByPhone(EncryptUtil.getMyMd5(reset_pwd), phone);
                     if (i>0){
                         msg.setCode(200);
-                        msg.setMessage("密码重置成功！初始密码为："+Customer.reset_pwd);
+                        msg.setMessage("密码重置成功！初始密码为："+ reset_pwd);
                     }else {
                         msg.setCode(500);
                         msg.setMessage("密码重置失败！");

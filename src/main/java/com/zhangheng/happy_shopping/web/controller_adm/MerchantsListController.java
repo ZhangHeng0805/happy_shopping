@@ -1,15 +1,19 @@
 package com.zhangheng.happy_shopping.web.controller_adm;
 
+import com.zhangheng.happy_shopping.android.entity.Customer;
 import com.zhangheng.happy_shopping.android.entity.Merchants;
 import com.zhangheng.happy_shopping.android.entity.Store;
 import com.zhangheng.happy_shopping.android.repository.MerchantsRepository;
 import com.zhangheng.happy_shopping.android.repository.StoreRepository;
+import com.zhangheng.happy_shopping.utils.EncryptUtil;
 import com.zhangheng.happy_shopping.utils.Message;
+import com.zhangheng.happy_shopping.utils.PhoneNumUtil;
 import com.zhangheng.happy_shopping.utils.TimeUtil;
 import com.zhangheng.happy_shopping.web.controller_adm.bean.MerchantsInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +35,8 @@ public class MerchantsListController {
     private MerchantsRepository merchantsRepository;
     @Autowired
     private StoreRepository storeRepository;
+    @Value("${merchants_reset_pwd}")
+    private String reset_pwd = Merchants.reset_pwd;
 
     @GetMapping("/merchantsListPage")
     private String merchantsListPage(Model model){
@@ -91,6 +97,33 @@ public class MerchantsListController {
         }else {
             msg.setCode(500);
             msg.setMessage("表单信息提交为空！");
+        }
+        return msg;
+    }
+    @ResponseBody
+    @PostMapping("/reset_merchants_pwd")
+    private Message reset_customer_pwd(String tel){
+        Message msg = new Message();
+        msg.setTime(TimeUtil.time(new Date()));
+        if (PhoneNumUtil.isMobile(tel)){
+            Optional<Merchants> byId = merchantsRepository.findById(tel);
+            if (byId.isPresent()){
+                Message.printLog(reset_pwd);
+                int i = merchantsRepository.updatePasswordByPhonenum(EncryptUtil.getMyMd5(reset_pwd), tel);
+                if (i>0){
+                    msg.setCode(200);
+                    msg.setMessage("密码重置成功！初始密码为："+ reset_pwd);
+                }else {
+                    msg.setCode(500);
+                    msg.setMessage("密码重置失败！");
+                }
+            }else {
+                msg.setCode(500);
+                msg.setMessage("对不起！该账户不存在");
+            }
+        }else {
+            msg.setCode(500);
+            msg.setMessage("商家手机号格式错误！");
         }
         return msg;
     }

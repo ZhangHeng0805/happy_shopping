@@ -53,6 +53,7 @@ function inText(data) {
         if (type=='暂无分类') {
             type="<lable class='label label-danger'>"+type+"</lable>";
             $('.t'+i).children("button").prop("disabled", true);
+            $('.t'+i).parent("tr").prop("title","系统默认的商品类型，无法操作")
         }
         $(".t" + i + "-type").children("strong").html(type);
     }
@@ -74,7 +75,11 @@ function Update(i) {
                     }
                 }
                 if (b){
-                    setDataType(goodsTypeData[i].id, person);
+                    if (goodsTypeData[i].id!=0){
+                        setDataType(goodsTypeData[i].id, person);
+                    } else {
+                        alert("默认商品类型无法操作！");
+                    }
                 } else {
                     alert("["+person+"]类型已存在，请勿重名");
                 }
@@ -95,7 +100,11 @@ function Del(i) {
         b= confirm("确定删除<"+goodsTypeData[i].type+">此商品类型？");
     }
     if (b){
-        delDataType(goodsTypeData[i].id);
+        if (goodsTypeData[i].id!=0){
+            delDataType(goodsTypeData[i].id);
+        } else {
+            alert("默认商品类型无法操作！");
+        }
     }
 
 }

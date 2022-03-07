@@ -103,6 +103,10 @@ function inText(data) {
         $(".t" + i + "-goods_price").text('¥ '+data[i].goods_price);
         $(".t" + i + "-store_name").text(data[i].store_name);
         $(".t" + i + "-store_id").children("label").text(data[i].store_id);
+        if (data[i].goods_type=="暂无分类") {
+            $(".t"+i).children("button").prop("disabled", true);
+            $(".t"+i).prop("title", "商品类型暂未分类，无法通过审核！");
+        }
     }
 }
 //刷新数据

@@ -212,14 +212,15 @@
                             </div>
                         </div>
                     </form>
+                    <script src="/static/my_js/encryp/md5.js"></script>
                     <script>
                         function sub_pwd(new_pwd,old_pwd,id,code) {
                             $.ajax({
                                 url:'/modify_password',
                                 method:'post',
                                 data:{
-                                    new_pwd:new_pwd,
-                                    old_pwd:old_pwd,
+                                    new_pwd:zh_md5(new_pwd),
+                                    old_pwd:zh_md5(old_pwd),
                                     id:id,
                                     code:code
                                 },

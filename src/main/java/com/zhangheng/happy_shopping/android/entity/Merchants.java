@@ -1,6 +1,7 @@
 package com.zhangheng.happy_shopping.android.entity;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,6 +53,10 @@ public class Merchants {
         }
         return s;
     }
+
+    //重置的初始密码
+    @Value("${merchants_reset_pwd}")
+    public static String reset_pwd;
 
     public String getPhonenum() {
         return phonenum;
