@@ -104,6 +104,40 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
     List<Goods> findByGoods_typeAndState(String type,int state);
 
     /**
+     * 根据商品状态、名称模糊查询
+     * @param state
+     * @param name
+     * @return
+     */
+    @Query("select g from Goods g where g.state=?1 and g.goods_name like %?2%")
+    List<Goods> findByStateAndGoods_nameLike(int state,String name);
+    /**
+     * 根据商品类型、状态、名称模糊查询
+     * @param type
+     * @param state
+     * @param name
+     * @return
+     */
+    @Query("select g from Goods g where g.goods_type=?1 and g.state=?2 and g.goods_name like %?3%")
+    List<Goods> findByGoods_typeAndStateAndGoods_nameLike(String type,int state,String name);
+    /**
+     * 根据商品状态、店铺名模糊查询
+     * @param state
+     * @param name
+     * @return
+     */
+    @Query("select g from Goods g where g.state=?1 and g.store_name like %?2%")
+    List<Goods> findByStateAndStore_nameLike(int state,String name);
+    /**
+     * 根据商品类型、状态、店铺名称模糊查询
+     * @param type
+     * @param state
+     * @param name
+     * @return
+     */
+    @Query("select g from Goods g where g.goods_type=?1 and g.state=?2 and g.store_name like %?3%")
+    List<Goods> findByGoods_typeAndStateAndStore_nameLike(String type,int state,String name);
+    /**
      * 根据商品状态查询
      * @param state 商品状态
      * @return

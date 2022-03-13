@@ -1,5 +1,6 @@
 package com.zhangheng.happy_shopping;
 
+import com.zhangheng.bean.Message;
 import com.zhangheng.happy_shopping.android.entity.submitgoods.SubmitGoods;
 import com.zhangheng.happy_shopping.android.repository.GoodsRepository;
 import com.zhangheng.happy_shopping.android.repository.SubmitGoodsRepository;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +28,7 @@ class HappyShoppingApplicationTests {
     private SubmitGoodsRepository submitGoodsRepository;
     @Test
     void contextLoads() {
-        test4();
+        test5();
     }
     private void test(){
         String sql="select * from verification_code";
@@ -67,5 +69,8 @@ class HappyShoppingApplicationTests {
         String[] split = s.split(",");
         String type=split[0].split("/")[1].split(";")[0];
         System.out.println(type);
+    }
+    private void test5(){
+        Message.printLog(com.zhangheng.util.TimeUtil.toTime(new Date(), com.zhangheng.util.TimeUtil.cnDateFormat));
     }
 }

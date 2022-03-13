@@ -48,21 +48,39 @@ public class GoodsContorller {
 
 
     /**
-     * 根据类型查询所有商品
+     * 根据类型名称检索商品
      * @param GoodsType
      * @return
      */
     @PostMapping("allgoodslist")
     @ResponseBody
-    public List<Goods> getAllList(@Nullable @RequestParam String GoodsType, HttpServletRequest request){
+    public List<Goods> getAllList(@Nullable @RequestParam String GoodsType,@Nullable @RequestParam String Name, HttpServletRequest request){
         List<Goods> goods = new ArrayList<>();
 //        log.info("获取商品列表请求："+ CusAccessObjectUtil.getIpAddress(request)+"/"+CusAccessObjectUtil.getUser_Agent(request));
 //        log.info("查询商品类型："+GoodsType);
         if (GoodsType!=null) {
-            if (GoodsType.equals("全部")) {
-                goods = goodsRepository.findByState(0);
-            } else {
-                goods = goodsRepository.findByGoods_typeAndState(GoodsType,0);
+            if(Name==null||Name.replace(" ","").length()<=0) {
+                if (GoodsType.equals("全部")) {
+                    goods = goodsRepository.findByState(0);
+                } else {
+                    goods = goodsRepository.findByGoods_typeAndState(GoodsType, 0);
+                }
+            }else {
+                if (GoodsType.equals("全部")) {
+                    //根据商品名模糊查询
+                    goods = goodsRepository.findByStateAndGoods_nameLike(0,Name);
+                    if (goods.size()<=0){
+                        //根据店铺名模糊查询
+                        goods = goodsRepository.findByStateAndStore_nameLike(0,Name);
+                    }
+                } else {
+                    //根据商品类型和商品名模糊查询
+                    goods = goodsRepository.findByGoods_typeAndStateAndGoods_nameLike(GoodsType, 0,Name);
+                    if (goods.size()<=0){
+                        //根据商品类型和店铺名模糊查询
+                        goods = goodsRepository.findByGoods_typeAndStateAndStore_nameLike(GoodsType,0,Name);
+                    }
+                }
             }
         }
         return goods;
