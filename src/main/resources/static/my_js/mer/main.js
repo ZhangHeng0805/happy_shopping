@@ -73,28 +73,42 @@ function data3() {
 //查询近几天的订单数据
 function data4() {
     $.ajax({
-        url:'/findGoodnumBytimeAndtype?t='+Date.now(),
+        url:'/findGoodnumBytimeAndtype1?t='+Date.now(),
         method:'get',
         data:{
-            count_down:10
+            count_down:7
         },
         dataType:'json',
         success:function (data) {
             // console.log(data);
-            $("#days").text(data.length);
+            if (data.length>0){
+                $("#days").text('近'+data.length+'天的订单详情');
+            } else {
+                $("#days").text("暂无订单数据");
+                $(".huxian").hide();
+            }
             document.getElementById("huxian-data-js").innerHTML='';
-            Morris.Line({
-                element: 'huxian-data-js',
-                data: data,
-                xkey: 'time',
-                ykeys: ['sta0','sta1','sta2','sta3','sta4'],
-                labels: ['待处理','拒绝发货',"待收货","已收货","退货"],
-                lineColors:['#f4be00','#e300eb','#07ade1','#0aeb00','#ff0003'],
-                parseTime: false
-            });
-            var datum = data[data.length-1];//最新一天数据
-            var count=datum.sta0+datum.sta1+datum.sta2+datum.sta3+datum.sta4;
-            $("#count_order").text(count);
+            if (data.length>0){
+                Morris.Line({
+                    element: 'huxian-data-js',
+                    data: data,
+                    xkey: 'time',
+                    ykeys: ['sta0','sta1','sta2','sta3','sta4'],
+                    labels: ['待处理','拒绝发货',"待收货","已收货","退货"],
+                    lineColors:['#f4be00','#e300eb','#07ade1','#0aeb00','#ff0003'],
+                    parseTime: false
+                });
+            }
+            if (data.length>0){
+                var count=0;
+                for(var i=0;i<data.length;i++ ){
+                    var d=data[i];
+                    count+=d.sta0+d.sta1+d.sta2+d.sta3+d.sta4;
+                }
+                $("#count_order").text('总计：'+count+"件");
+            } else {
+                $("#count_order").text("暂时没有订单哦！");
+            }
         },
         error:function (e) {
             console.log(e);

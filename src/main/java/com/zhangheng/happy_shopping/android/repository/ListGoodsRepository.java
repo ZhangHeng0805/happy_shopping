@@ -21,7 +21,7 @@ public interface ListGoodsRepository extends JpaRepository<goods, Integer> {
      * @param store_id
      * @return
      */
-    @Query("select u from goods u where u.store_id = ?1")
+    @Query("select u from goods u where u.store_id = ?1 order by u.list_id desc")
     List<goods> findByStore_id(Integer store_id);
 
     /**

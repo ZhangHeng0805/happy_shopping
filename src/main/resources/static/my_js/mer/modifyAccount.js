@@ -14,6 +14,7 @@ if (pwd.length>=6){
                 if (store_introduce.length>=1&&store_introduce.length<=150) {
                     if (address.length>=2&&address.length<=30){
                         if (account.length>=1&&account.length<=18) {
+                            $(".submit").attr('disabled',"true");
                             $("#password").val(zh_md5(pwd));
                             return true;
                         }else {

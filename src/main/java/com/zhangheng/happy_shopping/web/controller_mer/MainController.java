@@ -16,9 +16,11 @@ import com.zhangheng.happy_shopping.web.controller_mer.data.main.goodsnumBytimeA
 import com.zhangheng.happy_shopping.web.controller_mer.data.main.listgoodsByState;
 import com.zhangheng.happy_shopping.web.entity.goods_type;
 import com.zhangheng.happy_shopping.web.repository.GoodsTypeRepository;
+import com.zhangheng.happy_shopping.web.service.MerMainService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +50,8 @@ public class MainController {
     private ListGoodsRepository listGoodsRepository;
     @Autowired
     private SubmitGoodsRepository submitGoodsRepository;
+    @Autowired
+    private MerMainService merMainService;
 
     /**
      * 跳转至商家主页
@@ -135,7 +139,7 @@ public class MainController {
     }
 
     /**
-     *  查询近几天的订单情况
+     *  查询近几天的订单情况(从当前时间开始的连续几天的数据)
      * @param count_down 天数
      * @param request
      * @return
@@ -191,6 +195,26 @@ public class MainController {
         }
         return list;
     }
+
+    /**
+     * 查询近几天的订单情况(从当前时间开始的连续几天的数据)
+     * @param count_down
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/findGoodnumBytimeAndtype1")
+    private List<goodsnumBytimeAndtype> findGoodnumBytimeAndtype1(@Nullable int count_down, HttpServletRequest request){
+        Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
+        List<goodsnumBytimeAndtype> list = new ArrayList<>();
+        int n=count_down>0?count_down:7;
+        if (n>0) {
+            List<goods> all = listGoodsRepository.findByStore_id(merchants.getStore_id());
+            list = merMainService.handle1(all, n);
+        }
+        return list;
+    }
+
 
     /**
      * 查询今日营业额

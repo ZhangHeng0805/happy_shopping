@@ -11,5 +11,5 @@ public class goodsnumBytimeAndtype {
     private int sta2=0;//待收货的商品数
     private int sta3=0;//已收货的商品数
     private int sta4=0;//退货商品数
-    private Double cont_price;//当日收益
+    private Double cont_price=0.0;//当日收益
 }

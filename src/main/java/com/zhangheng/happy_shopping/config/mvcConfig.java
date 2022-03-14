@@ -14,7 +14,7 @@ public class mvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         //商家拦截
         registry.addInterceptor(new MerLoginInterceptor())
-                .addPathPatterns("/main","/findGoodsNumByType","/findGoodsNumByOrderState",
+                .addPathPatterns("/main","/findGoodsNumByType","/findGoodsNumByOrderState","/findGoodnumBytimeAndtype1",
                         "/count_price","/findGoodnumBytimeAndtype","/un_goodsOrder","/Ok_Order","/No_Order","/findTodayTurnover"
                 ,"/OderListPage","/OrderGoodsByState"
                         ,"/addGoodsPage","/addGoods"

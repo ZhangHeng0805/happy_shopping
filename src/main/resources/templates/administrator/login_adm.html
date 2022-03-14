@@ -24,7 +24,7 @@
                 <input type="text" name="account" id="account" class="form-control" placeholder="请输入管理员账号" autofocus required>
                 <input type="password" name="password" id="password" class="form-control" placeholder="请输入管理员密码" required>
 
-                <button class="btn btn-lg btn-login btn-block" type="submit">
+                <button class="btn btn-lg btn-login btn-block submit" type="submit">
                     <i class="fa fa-check"></i>
                 </button>
             </div>
@@ -39,6 +39,7 @@
             var account=$("#account").val();
             var pwd=$("#password").val();
             if (account.length>0&&pwd.length>0){
+                $(".submit").attr('disabled',"true");
                 $("#password").val(zh_md5(pwd));
                 return true;
             } else {
