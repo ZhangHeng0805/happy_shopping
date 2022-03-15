@@ -1,26 +1,32 @@
-//根据商品类型查询本店商品数量
+//根据商品类型查询本店商品数量（柱状图）
 function data1() {
     $.ajax({
             url:'/findGoodsNumByType',
             method:'post',
             dataType:'json',
             success:function (data) {
-                document.getElementById("zhuzhuang-data-js").innerHTML='';
-                // console.log(data);
-                Morris.Bar({
-                    element: 'zhuzhuang-data-js',
-                    data: data,
-                    xkey: 'type',
-                    ykeys: ['num'],
-                    labels: ['商品数量'],
-                    barColors:['#6dc5a3']
-                });
-                var count=0;
-                for (var i=0;i<data.length;i++){
-                    count+=data[i].num;
+                var html='';
+                $("#zhuzhuang-data-js").html(html);
+                if (data.length>0){
+                    Morris.Bar({
+                        element: 'zhuzhuang-data-js',
+                        data: data,
+                        xkey: 'type',
+                        ykeys: ['num'],
+                        labels: ['商品数量'],
+                        barColors:['#6dc5a3']
+                    });
+                    var count=0;
+                    for (var i=0;i<data.length;i++){
+                        count+=data[i].num;
+                    }
+                    html='《店铺商品类型图》总数：<span class="badge badge-success">'+count+'</span>件';
+                    $("#zhuzhuang-data").html(html);
+                }else {
+                    html='本店暂无商品！请先添加商品';
+                    $("#zhuzhuang-data").html(html);
+                    $(".zhuzhuang").hide();
                 }
-                // console.log(count);
-                document.getElementById("zhuzhuang-data").innerHTML=count;
             },
             error:function (e) {
                 alert('data1错误：'+e);
@@ -29,7 +35,7 @@ function data1() {
         }
     )
 }
-//根据商品的订单状态查询本店订单商品数量
+//根据商品的订单状态查询本店订单商品数量(数据标签)
 function data2() {
     $.ajax({
         url:'/findGoodsNumByOrderState',
@@ -70,7 +76,7 @@ function data3() {
       }
   })
 }
-//查询近几天的订单数据
+//查询近几天的订单数据（弧线图）
 function data4() {
     $.ajax({
         url:'/findGoodnumBytimeAndtype1?t='+Date.now(),

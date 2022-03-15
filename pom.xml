@@ -75,6 +75,15 @@
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
         </dependency>
+
+        <!--导入本地jar包-->
+        <dependency>
+            <groupId>com.zhangheng</groupId>
+            <artifactId>zhangheng.utils</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ZH_Utils.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -90,6 +99,31 @@
     </dependencyManagement>
 
     <build>
+
+        <resources>
+            <!--引入外部jar-->
+            <resource>
+                <directory>lib</directory>
+                <targetPath>BOOT-INF/lib/</targetPath>
+                <includes>
+                    <include>**/*.jar</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory><!--java文件的路径-->
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+                <!-- <filtering>false</filtering>-->
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory><!--资源文件的路径-->
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+                <!-- <filtering>false</filtering>-->
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -107,6 +141,8 @@
                 <version>2.3.7.RELEASE</version>
                 <configuration>
                     <mainClass>com.zhangheng.happy_shopping.HappyShoppingApplication</mainClass>
+                    <!--引入外部-->
+                    <includeSystemScope>true</includeSystemScope>
                 </configuration>
                 <executions>
                     <execution>

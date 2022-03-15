@@ -1,6 +1,5 @@
 package com.zhangheng.happy_shopping.web.service;
 
-import com.zhangheng.happy_shopping.android.entity.submitgoods.SubmitGoods;
 import com.zhangheng.happy_shopping.android.entity.submitgoods.goods;
 import com.zhangheng.happy_shopping.web.controller_mer.data.main.goodsnumBytimeAndtype;
 import com.zhangheng.util.MathUtil;
