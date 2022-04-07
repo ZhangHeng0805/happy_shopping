@@ -9,17 +9,17 @@
         <meta name="description" content="">
         <meta name="author" content="ThemeBucket">
         <link rel="shortcut icon" href="#" type="image/png">
+        <link th:href="@{/static/css/load.css}" rel="stylesheet">
+        <link th:href="@{/static/css/bootstrap.min.css}"rel="stylesheet">
+        <link th:href="@{/static/css/style.css}"rel="stylesheet">
+        <link th:href="@{/static/css/style-responsive.css}" rel="stylesheet">
+        <link th:href="@{/static/css/bootstrap-reset.css}" rel="stylesheet">
         <!--icheck-->
         <link th:href="@{/static/js/iCheck/skins/minimal/minimal.css}" rel="stylesheet">
         <link th:href="@{/static/js/iCheck/skins/square/square.css}" rel="stylesheet">
         <link th:href="@{/static/js/iCheck/skins/square/red.css}" rel="stylesheet">
         <link th:href="@{/static/js/iCheck/skins/square/blue.css}" rel="stylesheet">
         <link th:href="@{/static/fonts/css/font-awesome.min.css}"rel="stylesheet">
-        <link th:href="@{/static/css/bootstrap.min.css}"rel="stylesheet">
-        <link th:href="@{/static/css/style.css}"rel="stylesheet">
-        <link th:href="@{/static/css/style-responsive.css}" rel="stylesheet">
-        <link th:href="@{/static/css/bootstrap-reset.css}" rel="stylesheet">
-
         <!--pickers css-->
         <link rel="stylesheet" type="text/css" href="/static/js/bootstrap-datepicker/css/datepicker-custom.css" />
         <link rel="stylesheet" type="text/css" href="/static/js/bootstrap-timepicker/css/timepicker.css" />
@@ -261,6 +261,10 @@
 <!--    <script src="/static/js/flot-chart/jquery.flot.stack.js"></script>-->
 <!--    <script src="/static/js/flot-chart/jquery.flot.time.js"></script>-->
 <!--    <script src="/static/js/flot.chart.init.js"></script>-->
+    <!--excel-->
+    <script src="/static/plug-in/excel/excel-gen.js"></script>
+    <script src="/static/plug-in/excel/FileSaver.js"></script>
+    <script src="/static/plug-in/excel/jszip.js"></script>
     <script>
         $(".up_down").click(function () {
             $("html,body").animate({

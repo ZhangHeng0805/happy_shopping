@@ -6,6 +6,7 @@ import com.zhangheng.happy_shopping.android.repository.GoodsRepository;
 import com.zhangheng.happy_shopping.android.repository.SubmitGoodsRepository;
 import com.zhangheng.happy_shopping.bean.VerificationCode;
 import com.zhangheng.happy_shopping.utils.TimeUtil;
+import com.zhangheng.log.printLog.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +72,6 @@ class HappyShoppingApplicationTests {
         System.out.println(type);
     }
     private void test5(){
-        Message.printLog(com.zhangheng.util.TimeUtil.toTime(new Date(), com.zhangheng.util.TimeUtil.cnDateFormat));
+        Log.Info("123");
     }
 }

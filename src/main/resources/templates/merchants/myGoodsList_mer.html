@@ -44,7 +44,9 @@
                             </span>
                         </div>
                         <div class="panel-body">
+                            <input type="hidden" id="store_name" th:value="${session.store.store_name}">
                             本店<span class="label label-info" id="type">全部</span>商品数：<span class="badge badge-success" id="type_num"></span>件
+                            <button id="btn_excel" class="btn btn-default" onclick="excel()">导出Excel</button>
                             <div class="adv-table editable-table goods_tbody">
                             </div>
                         </div>

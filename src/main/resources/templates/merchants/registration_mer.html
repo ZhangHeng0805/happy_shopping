@@ -9,8 +9,11 @@
 
     <title>乐在购物网_商户注册</title>
 
+
+    <link th:href="@{/static/css/load.css}" rel="stylesheet">
     <link th:href="@{/static/css/style.css}" rel="stylesheet">
     <link th:href="@{static/css/style-responsive.css}" rel="stylesheet">
+
     <link href="/static/js/iCheck/skins/minimal/minimal.css" rel="stylesheet">
     <link href="/static/js/iCheck/skins/minimal/blue.css" rel="stylesheet">
     <link href="/static/js/iCheck/skins/square/square.css" rel="stylesheet">
@@ -39,7 +42,7 @@
     </style>
 </head>
 
-<body class="login-body">
+<body class="login-body mer-regist loading">
 
 <div class="container">
 
@@ -192,5 +195,11 @@
 <script src="/static/my_js/img-cut.js"></script>
 <!--icheck -->
 <script src="/static/js/iCheck/jquery.icheck.js"></script>
+
+<script>
+    window.onload=function () {
+        document.body.classList.remove('loading');
+    }
+</script>
 </body>
 </html>

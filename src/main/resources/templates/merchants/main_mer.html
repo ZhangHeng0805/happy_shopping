@@ -8,7 +8,7 @@
     <link th:href="@{/static/css/clndr.css}" rel="stylesheet">
     <link th:include="common/common_mer :: #com_css">
 </head>
-<body class="sticky-header">
+<body class="sticky-header mer-main loading">
 <section>
     <!--左部标签栏-->
     <div th:replace="common/common_mer :: #com_leftmenu"></div>
@@ -250,9 +250,6 @@
 <script type="text/javascript" src="/static/js/data-tables/DT_bootstrap.js"></script>
 <script src="/static/js/editable-table.js"></script>
 <script>
-    jQuery(document).ready(function() {
-        ref();
-    });
     setInterval(function(){
         var date = new Date();
         var year = date.getFullYear();    //获取当前年份
@@ -271,6 +268,10 @@
         d.innerHTML=year+'年'+monthText+'月'+daText+'日'+' '+hoursText+':'+minutesText+':'+secondText+' 星期' + '日一二三四五六'.charAt(day);
         //d.value=date.toLocaleString()+' 星期' + '日一二三四五六'.charAt(day);
     },1000);
+    jQuery(document).ready(function() {
+        ref();
+        document.body.classList.remove('loading');
+    });
 </script>
 </body>
 </html>

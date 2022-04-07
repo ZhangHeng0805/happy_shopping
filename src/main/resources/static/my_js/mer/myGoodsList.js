@@ -2,6 +2,7 @@
 var typeState=0;
 var GoodsData;
 function data2(id) {
+    $("#btn_excel").hide();
     $.ajax({
         url:'/findGoodsByType',
         method:'post',
@@ -19,7 +20,7 @@ function data2(id) {
                 '<table class="table table-bordered table-striped table-condensed cf" id="editable-sample">' +
                 '<thead class="cf">' +
                 '<tr>' +
-                '<th style="text-align: center">图片</th>' +
+                '<th class="exclude_Excel" style="text-align: center">图片</th>' +
                 '<th style="text-align: center">商品id</th>' +
                 '<th style="text-align: center">商品名称</th>' +
                 '<th style="text-align: center">商品类型</th>' +
@@ -28,9 +29,9 @@ function data2(id) {
                 '<th style="text-align: center">库存数量(件)</th>' +
                 '<th style="text-align: center">商品单价(元)</th>' +
                 '<th style="text-align: center">商品状态</th>' +
-                '<th style="text-align: center">操作</th>' +
-                '<th style="text-align: center">删除操作</th>' +
-                '<th style="text-align: center">编辑操作</th>' +
+                '<th class="exclude_Excel" style="text-align: center">操作</th>' +
+                '<th class="exclude_Excel" style="text-align: center">删除操作</th>' +
+                '<th class="exclude_Excel" style="text-align: center">编辑操作</th>' +
                 '</tr>' +
                 '</thead>' +
                 '<tbody>';
@@ -71,7 +72,7 @@ function data2(id) {
                         break;
                 }
                 var b = "<tr>" +
-                    "<td data-title='图片' class='t"+i+"-img' style='text-align: center'><img style='height: 50px;' src='/fileload/show/"+data[i].goods_image+"' alt=''></td>" +
+                    "<td data-title='图片' class='t"+i+"-img exclude_Excel' style='text-align: center'><img style='height: 50px;' src='/fileload/show/"+data[i].goods_image+"' alt=''></td>" +
                     "<td data-title='商品id' class='col-sm-1 t"+i+"-id' style='text-align: center'><label class='badge badge-primary'></label></td>" +
                     "<td data-title='商品名称' class='col-sm-1 t"+i+"-name' style='text-align: center'><span><span></td>" +
                     "<td data-title='商品类型' class='col-sm-1 t"+i+"-type' style='text-align: center'></td>" +
@@ -80,9 +81,9 @@ function data2(id) {
                     "<td data-title='库存数量(件)' class='col-sm-1 t"+i+"-num' style='text-align: center'></td>" +
                     "<td data-title='商品单价(元)' class='col-sm-1 t"+i+"-price' style='text-align: center'></td>" +
                     "<td data-title='商品状态' title='只有[已上线]的商品可以上架商场' class='col-sm-1' style='text-align: center'><label class='label " + staClass + "'>" + staStr + "</label></td>" +
-                    "<td data-title='操作'  class='col-sm-1 t"+i+"' style='text-align: center'><label class='btn " + btnClass + "' onclick='"+fun+"'>" + btnStr + "</label></td>" +
-                    "<td data-title='删除操作'  class='col-sm-1 t"+i+"' style='text-align: center'><button class='btn btn-danger' onclick='del_goods("+data[i].id+",\""+data[i].goods_name+"\")'>删除商品</button></td>" +
-                    "<td data-title='编辑操作'  class='col-sm-1 t"+i+"' style='text-align: center'><button class='btn btn-primary' onclick='openmodel("+i+")'>编辑商品</button></td>" +
+                    "<td data-title='操作'  class='col-sm-1 t"+i+" exclude_Excel' style='text-align: center'><label class='btn " + btnClass + "' onclick='"+fun+"'>" + btnStr + "</label></td>" +
+                    "<td data-title='删除操作'  class='col-sm-1 t"+i+" exclude_Excel' style='text-align: center'><button class='btn btn-danger' onclick='del_goods("+data[i].id+",\""+data[i].goods_name+"\")'>删除商品</button></td>" +
+                    "<td data-title='编辑操作'  class='col-sm-1 t"+i+" exclude_Excel' style='text-align: center'><button class='btn btn-primary' onclick='openmodel("+i+")'>编辑商品</button></td>" +
                     "</tr>";
                 h+=b;
             }
@@ -112,6 +113,9 @@ function inText(data){
         $(".t"+i+"-num").text(data[i].goods_num);
         $(".t"+i+"-price").text(data[i].goods_price);
         $(".t"+i).attr("title",data[i].goods_name)
+    }
+    if (data.length>0) {
+        $("#btn_excel").show();
     }
 }
 $("#goods_type").change(function () {
@@ -309,4 +313,18 @@ function update_goods(goods_id,goods_name,goods_type,goods_introduction,image,
             window.location.href="/exit_mer";
         }
     })
+}
+//导出表格数据为Excel
+function excel() {
+    var store_name=$("#store_name").val();
+    var name=$("#type").text();
+    var excel = new ExcelGen({
+        "src_id": "editable-sample",
+        "show_header": true,
+        "auto_format": true,
+        "author":"乐在购物网_商家店铺:"+store_name,
+        "file_name": store_name+"["+name+"商品信息]_"+getTime()+".xlsx",
+        "exclude_selector": $(".exclude_Excel")
+    });
+    excel.generate();
 }

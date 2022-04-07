@@ -21,3 +21,19 @@ function set_select_checked(selectId, checkValue){
         }
     }
 }
+//获取时间戳
+function getTime() {
+    var date = new Date();
+    var year = date.getFullYear();    //获取当前年份
+    var mon = date.getMonth()+1;      //获取当前月份   js从0开始取
+    var da = date.getDate();          //获取当前日
+    var h = date.getHours();          //获取小时
+    var m = date.getMinutes();        //获取分钟
+    var s = date.getSeconds();        //获取秒
+    monthText = mon < 10 ? "0" + mon : mon;
+    daText = da < 10 ? "0" + da : da;
+    hoursText = h < 10 ? "0" + h : h;
+    minutesText = m < 10 ? "0" + m : m;
+    secondText = s < 10 ? "0" + s : s;
+    return year+monthText+daText+hoursText+minutesText+secondText;
+}

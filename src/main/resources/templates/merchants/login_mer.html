@@ -7,10 +7,12 @@
     <meta name="description" content="">
     <meta name="author" content="ThemeBucket">
     <link rel="shortcut icon" href="#" type="image/png">
+    <link href="/static/css/load.css" rel="stylesheet">
     <link href="/static/css/style.css" rel="stylesheet">
     <link href="/static/css/style-responsive.css" rel="stylesheet">
+
 </head>
-<body class="login-body">
+<body class="login-body mer-login loading">
 <div class="container">
     <form class="form-signin" id="LoginFroms" th:action="@{/login_merchants}" method="post" >
         <div class="form-signin-heading text-center">
@@ -80,5 +82,10 @@
 <script src="/static/js/modernizr.min.js"></script>
 <script src="/static/my_js/mer/login.js"></script>
 
+<script>
+    window.onload=function () {
+        document.body.classList.remove('loading');
+    }
+</script>
 </body>
 </html>

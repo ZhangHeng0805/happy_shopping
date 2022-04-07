@@ -7,7 +7,7 @@
     <!--dashboard calendar-->
     <link th:href="@{/static/css/clndr.css}" rel="stylesheet">
 </head>
-<body class="sticky-header">
+<body class="sticky-header mer-orderlist loading">
 <section>
     <!--左部标签栏-->
     <div th:replace="common/common_mer :: #com_leftmenu"></div>
@@ -61,35 +61,42 @@
                             </ul>
                         </header>
                         <div class="panel-body">
+                            <input type="hidden" id="store_name" th:value="${session.store.store_name}">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="t1">
                                     全部订单：<span class="badge badge-info" id="t1_title">0</span>件
+                                    <button class="btn btn-success" id="btn1" onclick="excel('全部订单')">将表格数据导出为Excel文件</button>
                                     <div class="adv-table editable-table goods_tbody_t1">
 
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="t2">
                                     未处理订单：<span class="badge badge-info" id="t2_title">0</span>件
+                                    <button class="btn btn-success" id="btn2" onclick="excel('未处理订单')">将表格数据导出为Excel文件</button>
                                     <div class="adv-table editable-table goods_tbody_t2">
                                     </div>
                                 </div>
                                 <div class="tab-pane " id="t3">
                                     待收货订单：<span class="badge badge-info" id="t3_title">0</span>件
+                                    <button class="btn btn-success" id="btn3" onclick="excel('待收货订单')">将表格数据导出为Excel文件</button>
                                     <div class="adv-table editable-table goods_tbody_t3">
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="t4">
                                     已收货订单：<span class="badge badge-info" id="t4_title">0</span>件
+                                    <button class="btn btn-success" id="btn4" onclick="excel('已收货订单')">将表格数据导出为Excel文件</button>
                                     <div class="adv-table editable-table goods_tbody_t4">
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="t5">
                                     退货订单：<span class="badge badge-info" id="t5_title">0</span>件
+                                    <button class="btn btn-success" id="btn5" onclick="excel('退货订单')">将表格数据导出为Excel文件</button>
                                     <div class="adv-table editable-table goods_tbody_t5">
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="t6">
                                     拒绝发货订单：<span class="badge badge-info" id="t6_title">0</span>件
+                                    <button class="btn btn-success" id="btn6" onclick="excel('拒绝发货订单')">将表格数据导出为Excel文件</button>
                                     <div class="adv-table editable-table goods_tbody_t6">
                                     </div>
                                 </div>
@@ -116,6 +123,7 @@
 <script>
     jQuery(document).ready(function() {
         data(1,-1);
+        document.body.classList.remove('loading');
     });
 </script>
 </body>
