@@ -127,6 +127,8 @@ $("#goods_type").change(function () {
 //刷新数据
 function ref() {
     data2(typeState);
+    getGoodsType();
+    document.body.classList.remove('loading');
 }
 
 function sta0(id,name) {
@@ -153,6 +155,7 @@ function sta3(i,name) {
         openmodel(i);
     }
 }
+//修改商品状态
 function sub(id,state) {
     // console.log("id:"+id+",state:"+state);
     $.ajax({
@@ -176,6 +179,7 @@ function sub(id,state) {
         }
     })
 }
+//删除商品
 function del_goods(id,name) {
     console.log(id);
     var b = confirm("确认删除此商品：<"+name+">？");
@@ -201,6 +205,7 @@ function del_goods(id,name) {
         })
     }
 }
+//获取商品类型
 function getGoodsType() {
     $.ajax({
         url:'/findGoodsType?t='+Date.now(),
@@ -260,7 +265,7 @@ function openmodel(i) {
     data_goods_num=GoodsData[i].goods_num;
     $("#updateGoods").modal('show');
 }
-
+//商品修改判断
 function sub_goods() {
     var goods_name = $("#model_goods_name").val();
     var goods_id = $("#model_goods_id").val();
@@ -287,6 +292,7 @@ function sub_goods() {
     }
 
 }
+//修改商品信息
 function update_goods(goods_id,goods_name,goods_type,goods_introduction,image,
                       goods_price,goods_num) {
     $.ajax({

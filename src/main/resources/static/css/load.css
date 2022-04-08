@@ -24,7 +24,9 @@
 .mer-orderlist {
     --color-link: #f2ff03;
 }
-
+.mer-myGoodList {
+    --color-link: #d2000a;
+}
 
 /* Page Loader */
 

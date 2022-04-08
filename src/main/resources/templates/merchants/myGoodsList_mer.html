@@ -22,7 +22,7 @@
         }
     </style>
 </head>
-<body class="sticky-header">
+<body class="sticky-header mer-myGoodList loading">
 <section>
     <!--左部标签栏-->
     <div th:replace="common/common_mer :: #com_leftmenu"></div>
@@ -182,10 +182,6 @@
 <script src="/static/plug-in/image-cut/js/jquery.photoClip.min.js"></script>
 <!--<script src="/static/my_js/input.js"></script>-->
 <script>
-    jQuery(document).ready(function() {
-        data2(typeState);
-        getGoodsType();
-    });
     $("#clipArea").photoClip({
         width: 200,
         height: 200,
@@ -207,6 +203,10 @@
             // console.log(dataURL);
             imgdata=dataURL;
         }
+    });
+    jQuery(document).ready(function() {
+        ref();
+
     });
 </script>
 </body>

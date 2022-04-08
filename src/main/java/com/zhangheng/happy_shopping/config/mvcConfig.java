@@ -29,7 +29,7 @@ public class mvcConfig implements WebMvcConfigurer {
                 ,"/goodsListPage","/getGoodsList","/set_goodsState"
                 ,"/goodsTypePage","/getGoodsTypeList","/update_goodsType","/del_goodsType","/add_goodsType"
                 ,"/storesListPage","/getstoresList"
-                ,"/sysConfigPage","/getChatConfig"
+                ,"/sysConfigPage","/getChatConfig","/set_ChatConfig","/add_ChatConfig"
                 ,"/sysLogPage","/getLogByType","/getPhoneInfoList");
     }
 }

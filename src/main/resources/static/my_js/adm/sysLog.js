@@ -90,7 +90,7 @@ function getAppData() {
                 '<th style="text-align: center">sdk版本</th>' +
                 '<th style="text-align: center">android版本</th>' +
                 '<th style="text-align: center">app型号</th>' +
-                '<th style="text-align: center">最近登录</th>' +
+                '<th style="text-align: center">最近访问</th>' +
                 '</tr>' +
                 '</thead>' +
                 '<tbody>';
@@ -104,7 +104,7 @@ function getAppData() {
                     "<td data-title='sdk版本' class='col-sm-1 p" + i + "-sdk' style='text-align: center' ><label class='badge badge-info'></label></td>" +
                     "<td data-title='android版本' class='col-sm-1 p" + i + "-release' style='text-align: center' ></td>" +
                     "<td data-title='app型号' class='col-sm-2 p" + i + "-app_version' style='text-align: center' ></td>" +
-                    "<td data-title='最近登录' class='col-sm-2 p" + i + "-last_time' style='text-align: center'></td>" +
+                    "<td data-title='最近访问' class='col-sm-2 p" + i + "-last_time' style='text-align: center'></td>" +
                     "</tr>";
             }
             html += "</tbody></table></section>";

@@ -21,11 +21,13 @@
                         <div class="panel-heading">
                             聊天服务配置
                             <span class="tools pull-right">
-                                <button class="btn btn-primary" onclick="ref()" title="点击刷新数据">刷新</button>
+                                <button class="btn btn-primary" onclick="ref()" title="点击刷新数据">&nbsp;刷新</button>
                                 <a href="javascript:;" class="fa fa-chevron-down"></a>
                             </span>
                         </div>
                         <div class="panel-body">
+                            <button class="btn btn-search" id="btn_new"><i class="fa fa-plus"></i>&nbsp;新增</button>
+                            <button class="btn btn-success" id="btn_excel"><i class="fa fa-download"></i>&nbsp;导出为Excel</button>
                             <div class="adv-table editable-table chat_tbody">
                             </div>
                         </div>
@@ -45,7 +47,7 @@
 <script src="/static/js/editable-table.js"></script>
 <script>
     jQuery(document).ready(function() {
-        getChatConfig();
+        ref();
     });
 </script>
 </body>
