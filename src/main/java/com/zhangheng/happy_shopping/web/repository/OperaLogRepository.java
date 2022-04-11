@@ -35,4 +35,7 @@ public interface OperaLogRepository extends JpaRepository<OperationLog,Integer> 
      */
     @Query(value = "select * from operation_log where type =?1 order by time desc",nativeQuery = true)
     List<OperationLog> findAllByTypeOrderByTime(int type);
+
+    @Query(value = "select o from OperationLog o where o.tel =?1 and o.type=?2 order by o.time desc")
+    List<OperationLog> findAllByTelAndType(String tel,int type);
 }

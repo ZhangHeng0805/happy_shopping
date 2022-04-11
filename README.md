@@ -12,14 +12,20 @@ spring.datasource.username=root
 spring.datasource.password=root
 
 
-# 管理员账号密码
+# 管理员账号
 login-admin.account=13733430842
+# 管理员密码
 login-admin.password=305666
 
-# 登录机会
+# 最大重试机会（登录，邮箱验证码）
 max_count=5
-# 错误等待时间(分)
-wait_time=15
+# 间隔等待时间（登录，邮箱验证码）
+wait_time=5
+
+# 顾客重置的初始密码
+customer_reset_pwd=123456
+# 商家重置的初始密码
+merchants_reset_pwd=666666
 ```
 
 # 数据库happy_shopping

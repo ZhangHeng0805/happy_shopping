@@ -1,11 +1,16 @@
 package com.zhangheng.happy_shopping;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.extra.mail.MailAccount;
+import cn.hutool.extra.mail.MailUtil;
+import com.zhangheng.bean.Const;
 import com.zhangheng.bean.Message;
 import com.zhangheng.happy_shopping.android.entity.submitgoods.SubmitGoods;
 import com.zhangheng.happy_shopping.android.repository.GoodsRepository;
 import com.zhangheng.happy_shopping.android.repository.SubmitGoodsRepository;
 import com.zhangheng.happy_shopping.bean.VerificationCode;
 import com.zhangheng.happy_shopping.utils.TimeUtil;
+import com.zhangheng.happy_shopping.web.service.EmailService;
 import com.zhangheng.log.printLog.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -29,7 +34,7 @@ class HappyShoppingApplicationTests {
     private SubmitGoodsRepository submitGoodsRepository;
     @Test
     void contextLoads() {
-        test5();
+        test6();
     }
     private void test(){
         String sql="select * from verification_code";
@@ -74,4 +79,9 @@ class HappyShoppingApplicationTests {
     private void test5(){
         Log.Info("123");
     }
+
+    private void test6(){
+
+    }
+
 }

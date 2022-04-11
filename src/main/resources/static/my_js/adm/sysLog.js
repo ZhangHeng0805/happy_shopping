@@ -28,7 +28,7 @@ function getLoginLog(type) {
                 '<thead class="cf">' +
                 '<tr>' +
                 '<th style="text-align: center">id</th>' +
-                '<th style="text-align: center">手机号</th>' +
+                '<th style="text-align: center">账号</th>' +
                 '<th style="text-align: center">访问信息</th>' +
                 '<th style="text-align: center">重复操作</th>' +
                 '<th style="text-align: center">操作时间</th>' +

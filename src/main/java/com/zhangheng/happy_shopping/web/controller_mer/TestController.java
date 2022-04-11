@@ -5,13 +5,12 @@ import com.zhangheng.happy_shopping.controller.FileLoadController;
 import com.zhangheng.happy_shopping.utils.FiletypeUtil;
 import com.zhangheng.happy_shopping.utils.Message;
 import com.zhangheng.happy_shopping.utils.TimeUtil;
+import com.zhangheng.happy_shopping.web.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -23,6 +22,8 @@ import java.util.Date;
 public class TestController {
 
 
+    @Autowired
+    private EmailService emailService;
     private Logger log= LoggerFactory.getLogger(getClass());
     @GetMapping("/")
     private String testPage(){
@@ -85,5 +86,9 @@ public class TestController {
             msg.setMessage("图片上传失败！");
         }
         return msg;
+    }
+    @RequestMapping("/email1")
+    private void sendcode1(){
+        emailService.merSendCode("zhangheng.0805@qq.com","305666");
     }
 }

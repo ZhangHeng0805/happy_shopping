@@ -10,6 +10,7 @@ import com.zhangheng.happy_shopping.utils.Message;
 import com.zhangheng.happy_shopping.utils.PhoneNumUtil;
 import com.zhangheng.happy_shopping.utils.TimeUtil;
 import com.zhangheng.happy_shopping.web.controller_adm.bean.MerchantsInfo;
+import com.zhangheng.happy_shopping.web.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ public class MerchantsListController {
     private Logger log= LoggerFactory.getLogger(getClass());
     @Autowired
     private MerchantsRepository merchantsRepository;
+    @Autowired
+    private EmailService emailService;
     @Autowired
     private StoreRepository storeRepository;
     @Value("${merchants_reset_pwd}")
@@ -76,6 +79,12 @@ public class MerchantsListController {
         return list;
     }
 
+    /**
+     * 修改商家账号状态
+     * @param tel
+     * @param state
+     * @return
+     */
     @ResponseBody
     @PostMapping("/set_merchantsState")
     private Message set_merchantsState(String tel,int state){
@@ -100,9 +109,15 @@ public class MerchantsListController {
         }
         return msg;
     }
+
+    /**
+     * 重置商家密码
+     * @param tel
+     * @return
+     */
     @ResponseBody
     @PostMapping("/reset_merchants_pwd")
-    private Message reset_customer_pwd(String tel){
+    private Message reset_merchants_pwd(String tel){
         Message msg = new Message();
         msg.setTime(TimeUtil.time(new Date()));
         if (PhoneNumUtil.isMobile(tel)){
@@ -113,6 +128,7 @@ public class MerchantsListController {
                 if (i>0){
                     msg.setCode(200);
                     msg.setMessage("密码重置成功！初始密码为："+ reset_pwd);
+                    emailService.merSendReset(byId.get().getEmail(),tel,"重置密码","您的商家账户的密码已被重置，重置的初始密码为："+reset_pwd);
                 }else {
                     msg.setCode(500);
                     msg.setMessage("密码重置失败！");

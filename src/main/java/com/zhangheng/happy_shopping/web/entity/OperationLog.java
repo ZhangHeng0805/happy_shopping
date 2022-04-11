@@ -13,7 +13,7 @@ public class OperationLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column
-    private String tel;//操作者的手机号
+    private String tel;//操作者的账号
     @Column
     private String time;//操作时间
     @Column
@@ -21,7 +21,7 @@ public class OperationLog {
     @Column
     private int count;//操作次数
     @Column
-    private int type;//操作类型(0商家登录;1管理员登录;2顾客登录)
+    private int type;//操作类型(0商家登录;1管理员登录;2顾客登录,3邮箱验证)
     @Column
     private String info;//操作信息
 

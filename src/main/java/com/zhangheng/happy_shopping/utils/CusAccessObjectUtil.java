@@ -72,7 +72,7 @@ public static String getUser_Agent(HttpServletRequest request){
     return ua;
 }
 public static String getRequst(HttpServletRequest request){
-        String s=getIpAddress(request)+" / "+getUser_Agent(request);
+        String s="["+getIpAddress(request)+"] / "+getUser_Agent(request);
         return s;
 }
 }

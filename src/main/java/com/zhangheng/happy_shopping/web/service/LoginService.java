@@ -1,8 +1,12 @@
 package com.zhangheng.happy_shopping.web.service;
 
+import cn.hutool.core.util.DesensitizedUtil;
+import com.zhangheng.happy_shopping.android.entity.Merchants;
+import com.zhangheng.happy_shopping.android.repository.MerchantsRepository;
 import com.zhangheng.happy_shopping.utils.TimeUtil;
 import com.zhangheng.happy_shopping.web.entity.OperationLog;
 import com.zhangheng.happy_shopping.web.repository.OperaLogRepository;
+import com.zhangheng.log.printLog.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,10 @@ public class LoginService {
 
     @Autowired
     private OperaLogRepository logRepository;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private MerchantsRepository merchantsRepository;
 
     @Value("${max_count}")
     private String max_count;
@@ -27,10 +35,16 @@ public class LoginService {
     //读取配置文件中的设置
     public void init() {
         if (max_count!=null){
-            Max_Count=Integer.valueOf(max_count);
+            Integer max_count = Integer.valueOf(this.max_count);
+            if (max_count>3) {
+                Max_Count= max_count;
+            }
         }
         if (wait_time!=null){
-            Wait_Time=Integer.valueOf(wait_time);
+            Integer wait_time = Integer.valueOf(this.wait_time);
+            if (wait_time>3) {
+                Wait_Time = wait_time;
+            }
         }
     }
 
@@ -54,7 +68,7 @@ public class LoginService {
                         return false;
                     }else {//时间间隔大于等待时间
                         //重置次数 放行
-                        log1.setCount(3);
+                        log1.setCount((int) (Max_Count*0.7));
                         log1.setTime(log.getTime());
                         log1.setTel(log.getTel());
                         log1.setInfo(log.getInfo());
@@ -67,6 +81,15 @@ public class LoginService {
                     log1.setTel(log.getTel());
                     log1.setInfo(log.getInfo());
                     logRepository.saveAndFlush(log1);
+                    //商家登录重试达到限制前时，发送邮箱警告
+                    if (log1.getType()==0) {
+                        if (log1.getCount()==Max_Count-1) {
+                            Optional<Merchants> byId = merchantsRepository.findById(log1.getTel());
+                            if (byId.isPresent()) {
+                                emailService.loginsendWarn(byId.get().getEmail(), log1.getRequest(), byId.get().getPhonenum());
+                            }
+                        }
+                    }
                 }
             }else {//没有操作记录
                 log.setCount(0);

@@ -13,7 +13,11 @@ import com.zhangheng.happy_shopping.utils.PhoneNumUtil;
 import com.zhangheng.happy_shopping.utils.TimeUtil;
 import com.zhangheng.happy_shopping.web.entity.OperationLog;
 import com.zhangheng.happy_shopping.web.repository.OperaLogRepository;
+import com.zhangheng.happy_shopping.web.service.EmailService;
 import com.zhangheng.happy_shopping.web.service.LoginService;
+import com.zhangheng.util.FormatUtil;
+import com.zhangheng.util.RandomrUtil;
+import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +51,8 @@ public class LoginController {
     private CodeRepository codeRepository;
     @Autowired
     private StoreRepository storeRepository;
+    @Autowired
+    private EmailService emailService;
 
     /**
      * 商家登录页跳转
@@ -267,10 +275,148 @@ public class LoginController {
         return "merchants/registration_mer";
     }
 
+    /**
+     * 退出登录，并清除商家的登录信息
+     * @param request
+     * @return
+     */
     @GetMapping("/exit_mer")
     private String exit_mer(HttpServletRequest request){
         request.getSession().removeAttribute("merchants");
         request.getSession().removeAttribute("store");
         return "redirect:/login_merchantsPage";
+    }
+
+    /**
+     * 获取邮箱验证码
+     * @param email
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/get_EmailCode")
+    private Message get_EmailCode(@Nullable String email,HttpServletRequest request){
+        Message msg = new Message();
+        if (email!=null&&email.trim().length()>0) {
+            if (FormatUtil.isEmail(email)) {
+                //生成随机6位验证码
+                String word = RandomrUtil.createPassWord(6, RandomrUtil.Number);
+                try {
+                    List<OperationLog> all = logRepository.findAllByTelAndType(email, 3);
+                    String req = CusAccessObjectUtil.getRequst(request);
+                    OperationLog log;
+                    //查找是否有记录
+                    if (all!=null&&all.size()>0){
+                       log = all.get(0);
+                        int difference = TimeUtil.minutesDifference(TimeUtil.time(new Date()), log.getTime());
+                        if (difference <LoginService.Wait_Time){
+                            msg.setCode(404);
+                            msg.setMessage("邮件已发送，请"+(LoginService.Wait_Time-difference)+"分钟后重试！");
+                       }else {
+                            if (log.getCount() < LoginService.Max_Count) {
+                                log.setCount(log.getCount() + 1);
+                                log.setInfo(word);
+                                log.setRequest(req);
+                                //发送验证码
+                                emailService.merSendCode(email,word);
+                                log.setTime(TimeUtil.time(new Date()));
+                                OperationLog operationLog = logRepository.saveAndFlush(log);
+                                if (operationLog != null && operationLog.getId() > 0) {
+                                    if (operationLog.getCount()==LoginService.Max_Count-1){
+                                        msg.setCode(200);
+                                        msg.setMessage("验证码已发出，验证码有效期" + LoginService.Wait_Time + "分钟，因为验证码发送频繁，所以还有最后一次机会！");
+                                    }else {
+                                        msg.setCode(200);
+                                        msg.setMessage("验证码已发出，请注意查收，验证码有效期" + LoginService.Wait_Time + "分钟");
+                                    }
+                                } else {
+                                    msg.setCode(500);
+                                    msg.setMessage("错误1：验证信息保存失败！请重试");
+                                }
+                            }else {
+                                msg.setCode(500);
+                                msg.setMessage("对不起，此邮箱请求验证码的次数过多，已被封禁，请切换其他邮箱。");
+                            }
+                        }
+                    }else {//没有记录
+                         log= new OperationLog();
+                         log.setTel(email);
+                         log.setRequest(req);
+                         log.setType(3);
+                         log.setInfo(word);
+                         log.setCount(0);
+                        //发送验证码
+                        emailService.merSendCode(email,word);
+                        log.setTime(TimeUtil.time(new Date()));
+                        OperationLog operationLog = logRepository.saveAndFlush(log);
+                        if (operationLog!=null&&operationLog.getId()>0){
+                            msg.setCode(200);
+                            msg.setMessage("验证码已发出，请注意查收，验证码有效期"+LoginService.Wait_Time+"分钟");
+                        }else {
+                            msg.setCode(500);
+                            msg.setMessage("错误2：验证信息保存失败！请重试");
+                        }
+                    }
+                }catch (Exception e){
+                    msg.setCode(500);
+                    msg.setMessage("错误："+e.getMessage());
+                }
+            }else {
+                msg.setCode(500);
+                msg.setMessage("邮箱格式错误");
+            }
+        }else {
+            msg.setCode(500);
+            msg.setMessage("邮箱地址不能为空");
+        }
+        return msg;
+    }
+
+
+    /**
+     * 验证邮箱验证码
+     * @param email
+     * @param code
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/ver_EmailCode")
+    private Message ver_EmailCode(@Nullable String email,@Nullable String code){
+        Message msg = new Message();
+        if (email!=null&&code!=null){
+            if (FormatUtil.isEmail(email)){
+                if (code.trim().length()>0){
+                    List<OperationLog> all = logRepository.findAllByTelAndType(email, 3);
+                    if (all!=null&&all.size()>0){
+                        int difference = TimeUtil.minutesDifference(TimeUtil.time(new Date()), all.get(0).getTime());
+                        if (difference<=LoginService.Wait_Time) {
+                            if (code.equals(all.get(0).getInfo())) {
+                                msg.setCode(200);
+                                msg.setMessage("验证成功");
+                            } else {
+                                msg.setCode(500);
+                                msg.setMessage("对不起，验证码错误");
+                            }
+                        }else {
+                            msg.setCode(500);
+                            msg.setMessage("对不起，验证码已过期，请重试");
+                        }
+                    }else {
+                        msg.setCode(500);
+                        msg.setMessage("对不起，没有验证信息，请先获取验证码");
+                    }
+                }else {
+                    msg.setCode(500);
+                    msg.setMessage("验证码不能为空");
+                }
+            }else {
+                msg.setCode(500);
+                msg.setMessage("邮箱格式错误");
+            }
+        }else {
+         msg.setCode(500);
+         msg.setMessage("邮箱或验证码不能为空");
+        }
+        return msg;
     }
 }

@@ -53,7 +53,7 @@ public class PhoneInfo {
         try {
 //应用更新查询:127.0.0.1 / (model:M2104K10AC) (sdk:30) (release:Android11) (Appversion:HappyShopping V2-2.23) (tel:[China Mobile]null) (ID:18fdc81fffa6884e)
             String[] split2 = requst.split(" / ");
-            String ip = split2[0];
+            String ip = split2[0].replace("[","").replace("]","");
             String Phone = split2[1];
             pi.setIp(ip);
 

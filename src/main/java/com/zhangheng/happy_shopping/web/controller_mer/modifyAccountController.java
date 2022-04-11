@@ -7,8 +7,10 @@ import com.zhangheng.happy_shopping.android.repository.StoreRepository;
 import com.zhangheng.happy_shopping.bean.VerificationCode;
 import com.zhangheng.happy_shopping.controller.FileLoadController;
 import com.zhangheng.happy_shopping.repository.CodeRepository;
+import com.zhangheng.happy_shopping.utils.CusAccessObjectUtil;
 import com.zhangheng.happy_shopping.utils.EncryptUtil;
 import com.zhangheng.happy_shopping.utils.Message;
+import com.zhangheng.happy_shopping.web.service.EmailService;
 import org.aspectj.apache.bcel.classfile.Code;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +37,8 @@ public class modifyAccountController {
     private StoreRepository storeRepository;
     @Autowired
     private CodeRepository codeRepository;
+    @Autowired
+    private EmailService emailService;
 
     /**
      * 跳转至账号设置界面
@@ -100,6 +104,7 @@ public class modifyAccountController {
                     request.getSession().setAttribute("store",store1);
                     msg.setCode(200);
                     msg.setMessage("账户："+merchants1.getAccount()+"，设置成功！");
+                    emailService.merSendnotice(merchants.getEmail(), CusAccessObjectUtil.getRequst(request),merchants1.getPhonenum(),"账户信息修改");
                 }catch (Exception e){
                     //判断照片是否更改
                     if (!sto.getStore_image().equals(store.getStore_image())){
@@ -145,6 +150,7 @@ public class modifyAccountController {
                                 if (i > 0) {
                                     msg.setCode(200);
                                     msg.setMessage("密码修改成功！请重新登录");
+                                    emailService.merSendnotice(merchants.getEmail(), CusAccessObjectUtil.getRequst(request),merchants.getPhonenum(),"账户密码修改");
                                 } else {
                                     msg.setCode(500);
                                     msg.setMessage("密码修改失败！");
