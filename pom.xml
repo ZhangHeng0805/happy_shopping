@@ -84,6 +84,11 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/ZH_Utils.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.1.7.Final</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

@@ -5,7 +5,7 @@
     <title>乐在购物管理员后台-系统日志</title>
     <link th:include="common/common_adm :: #com_css">
 </head>
-<body class="sticky-header">
+<body class="sticky-header adm-sysLog loading">
 <section>
     <!--左部标签栏-->
     <div th:replace="common/common_adm :: #com_leftmenu"></div>
@@ -71,6 +71,7 @@
 <script>
     jQuery(document).ready(function() {
         ref(sta);
+        document.body.classList.remove('loading');
     });
 </script>
 </body>

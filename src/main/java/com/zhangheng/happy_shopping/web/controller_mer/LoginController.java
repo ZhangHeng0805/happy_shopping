@@ -35,6 +35,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.zhangheng.happy_shopping.web.service.LoginService.Max_Count;
+
 /*
 * 商家登录注册控制器
 * */
@@ -125,8 +127,8 @@ public class LoginController {
                             }
                         } else {
                             msg.setCode(500);
-                            if (LoginService.Max_Count-requestAndType.get().getCount()>0) {
-                                msg.setMessage("密码错误,你还有" + (LoginService.Max_Count-requestAndType.get().getCount()) + "次机会");
+                            if (Max_Count-requestAndType.get().getCount()>0) {
+                                msg.setMessage("密码错误,你还有" + (Max_Count-requestAndType.get().getCount()) + "次机会");
                             }else {
                                 log.warn("商家登录频繁:"+requestAndType.get().getRequest());
                                 msg.setMessage("对不起,你没有登录机会了，请"+LoginService.Wait_Time+"分钟后在来");
@@ -134,8 +136,8 @@ public class LoginController {
                         }
                     } else {
                         msg.setCode(500);
-                        if (LoginService.Max_Count-requestAndType.get().getCount()>0) {
-                            msg.setMessage("该手机号未注册,你还有" + (LoginService.Max_Count-requestAndType.get().getCount()) + "次机会");
+                        if (Max_Count-requestAndType.get().getCount()>0) {
+                            msg.setMessage("该手机号未注册,你还有" + (Max_Count-requestAndType.get().getCount()) + "次机会");
                         }else {
                             msg.setMessage("对不起,你没有登录机会了,请"+LoginService.Wait_Time+"分钟后在来");
                         }
@@ -313,7 +315,7 @@ public class LoginController {
                             msg.setCode(404);
                             msg.setMessage("邮件已发送，请"+(LoginService.Wait_Time-difference)+"分钟后重试！");
                        }else {
-                            if (log.getCount() < LoginService.Max_Count) {
+                            if (log.getCount() < Max_Count) {
                                 log.setCount(log.getCount() + 1);
                                 log.setInfo(word);
                                 log.setRequest(req);
@@ -322,7 +324,7 @@ public class LoginController {
                                 log.setTime(TimeUtil.time(new Date()));
                                 OperationLog operationLog = logRepository.saveAndFlush(log);
                                 if (operationLog != null && operationLog.getId() > 0) {
-                                    if (operationLog.getCount()==LoginService.Max_Count-1){
+                                    if (operationLog.getCount()== Max_Count-1){
                                         msg.setCode(200);
                                         msg.setMessage("验证码已发出，验证码有效期" + LoginService.Wait_Time + "分钟，因为验证码发送频繁，所以还有最后一次机会！");
                                     }else {
@@ -388,11 +390,16 @@ public class LoginController {
                 if (code.trim().length()>0){
                     List<OperationLog> all = logRepository.findAllByTelAndType(email, 3);
                     if (all!=null&&all.size()>0){
-                        int difference = TimeUtil.minutesDifference(TimeUtil.time(new Date()), all.get(0).getTime());
+                        OperationLog operationLog = all.get(0);
+                        int difference = TimeUtil.minutesDifference(TimeUtil.time(new Date()), operationLog.getTime());
                         if (difference<=LoginService.Wait_Time) {
-                            if (code.equals(all.get(0).getInfo())) {
+                            if (code.equals(operationLog.getInfo())) {
                                 msg.setCode(200);
                                 msg.setMessage("验证成功");
+                                if(operationLog.getCount()>(int)LoginService.Max_Count*0.7){
+                                    operationLog.setCount(new Double(LoginService.Max_Count*0.7).intValue());
+                                    logRepository.saveAndFlush(operationLog);
+                                }
                             } else {
                                 msg.setCode(500);
                                 msg.setMessage("对不起，验证码错误");

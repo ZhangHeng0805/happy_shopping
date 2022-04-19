@@ -5,6 +5,7 @@ import com.zhangheng.happy_shopping.android.entity.Merchants;
 import com.zhangheng.happy_shopping.android.entity.Store;
 import com.zhangheng.happy_shopping.android.repository.MerchantsRepository;
 import com.zhangheng.happy_shopping.android.repository.StoreRepository;
+import com.zhangheng.happy_shopping.bean.Setting;
 import com.zhangheng.happy_shopping.utils.EncryptUtil;
 import com.zhangheng.happy_shopping.utils.Message;
 import com.zhangheng.happy_shopping.utils.PhoneNumUtil;
@@ -38,8 +39,8 @@ public class MerchantsListController {
     private EmailService emailService;
     @Autowired
     private StoreRepository storeRepository;
-    @Value("${merchants_reset_pwd}")
-    private String reset_pwd = Merchants.reset_pwd;
+    @Autowired
+    private Setting setting;
 
     @GetMapping("/merchantsListPage")
     private String merchantsListPage(Model model){
@@ -123,12 +124,12 @@ public class MerchantsListController {
         if (PhoneNumUtil.isMobile(tel)){
             Optional<Merchants> byId = merchantsRepository.findById(tel);
             if (byId.isPresent()){
-                Message.printLog(reset_pwd);
-                int i = merchantsRepository.updatePasswordByPhonenum(EncryptUtil.getMyMd5(reset_pwd), tel);
+//                Message.printLog(reset_pwd);
+                int i = merchantsRepository.updatePasswordByPhonenum(EncryptUtil.getMyMd5(setting.getMerchants_reset_pwd()), tel);
                 if (i>0){
                     msg.setCode(200);
-                    msg.setMessage("密码重置成功！初始密码为："+ reset_pwd);
-                    emailService.merSendReset(byId.get().getEmail(),tel,"重置密码","您的商家账户的密码已被重置，重置的初始密码为："+reset_pwd);
+                    msg.setMessage("密码重置成功！初始密码为："+ setting.getMerchants_reset_pwd());
+                    emailService.merSendReset(byId.get().getEmail(),tel,"重置密码","您的商家账户的密码已被重置，重置的初始密码为："+setting.getMerchants_reset_pwd());
                 }else {
                     msg.setCode(500);
                     msg.setMessage("密码重置失败！");

@@ -6,7 +6,7 @@
     <link th:include="common/common_adm :: #com_css">
 
 </head>
-<body class="sticky-header">
+<body class="sticky-header adm-handleGoods loading">
     <section>
         <!--左部标签栏-->
         <div th:replace="common/common_adm :: #com_leftmenu"></div>
@@ -50,6 +50,7 @@
     <script>
         jQuery(document).ready(function() {
             getData();
+            document.body.classList.remove('loading');
         });
     </script>
 </body>

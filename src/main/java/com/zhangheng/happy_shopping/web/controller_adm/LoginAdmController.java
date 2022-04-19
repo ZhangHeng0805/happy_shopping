@@ -7,10 +7,13 @@ import com.zhangheng.happy_shopping.utils.TimeUtil;
 import com.zhangheng.happy_shopping.web.controller_adm.bean.Login_admin;
 import com.zhangheng.happy_shopping.web.entity.OperationLog;
 import com.zhangheng.happy_shopping.web.repository.OperaLogRepository;
+import com.zhangheng.happy_shopping.web.service.EmailService;
 import com.zhangheng.happy_shopping.web.service.LoginService;
+import com.zhangheng.util.FormatUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +35,8 @@ public class LoginAdmController {
     private LoginService loginService;
     @Autowired
     private OperaLogRepository logRepository;
-
+    @Autowired
+    private EmailService emailService;
     /**
      * 跳转至管理员登录界面
      * @return
@@ -76,17 +80,24 @@ public class LoginAdmController {
                         requestAndType.get().setTime(TimeUtil.time(new Date()));
                         requestAndType.get().setInfo("管理员登录成功");
                         logRepository.saveAndFlush(requestAndType.get());
-                        //将登陆者的ip地址设置到管理员登录信息中
                         String ipAddress = CusAccessObjectUtil.getIpAddress(request);
+                        //当IP过长时，省略信息
                         if (ipAddress.length()>20){
                             StringBuilder stringBuilder=new StringBuilder(ipAddress);
                             stringBuilder.replace(new Double(ipAddress.length()*0.2).intValue(),new Double(ipAddress.length()*0.8).intValue(),"***");
                             ipAddress=stringBuilder.toString();
                         }
+                        //将登陆者的ip地址设置到管理员登录信息中
                         loginAdmin.setPassword(ipAddress);
                         request.getSession().setAttribute("admin",loginAdmin);
                         msg.setCode(200);
                         msg.setMessage("登录成功！");
+                        //发送邮件提醒
+                        if (login_admin.getEmail()!=null&& FormatUtil.isEmail(login_admin.getEmail())) {
+                            emailService.admSendNotice(login_admin.getEmail(),login_admin.getAccount(),"登录",CusAccessObjectUtil.getRequst(request));
+                        }else {
+                            log.warn("管理员账户邮箱错误！{}",login_admin.getEmail());
+                        }
                         return "redirect:/home";
                     } else {
                         msg.setCode(500);

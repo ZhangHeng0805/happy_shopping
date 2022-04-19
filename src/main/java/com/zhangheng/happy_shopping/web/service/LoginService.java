@@ -3,6 +3,7 @@ package com.zhangheng.happy_shopping.web.service;
 import cn.hutool.core.util.DesensitizedUtil;
 import com.zhangheng.happy_shopping.android.entity.Merchants;
 import com.zhangheng.happy_shopping.android.repository.MerchantsRepository;
+import com.zhangheng.happy_shopping.bean.Setting;
 import com.zhangheng.happy_shopping.utils.TimeUtil;
 import com.zhangheng.happy_shopping.web.entity.OperationLog;
 import com.zhangheng.happy_shopping.web.repository.OperaLogRepository;
@@ -23,27 +24,27 @@ public class LoginService {
     private EmailService emailService;
     @Autowired
     private MerchantsRepository merchantsRepository;
-
-    @Value("${max_count}")
-    private String max_count;
-    @Value("${wait_time}")
-    private String wait_time;
+    @Autowired
+    private Setting setting;
+//    @Value("${max_count}")
+//    private String max_count;
+//    @Value("${wait_time}")
+//    private String wait_time;
 
     public static int Max_Count=5;//最大重试次数
     public static int Wait_Time=5;//等待时间（分钟）
 
     //读取配置文件中的设置
     public void init() {
-        if (max_count!=null){
-            Integer max_count = Integer.valueOf(this.max_count);
-            if (max_count>3) {
-                Max_Count= max_count;
+        if (setting.getMax_count()>0){
+//            Integer max_count = Integer.valueOf(this.max_count);
+            if (setting.getMax_count()>3) {
+                Max_Count= setting.getMax_count();
             }
         }
-        if (wait_time!=null){
-            Integer wait_time = Integer.valueOf(this.wait_time);
-            if (wait_time>3) {
-                Wait_Time = wait_time;
+        if (setting.getWait_time()>0){
+            if (setting.getWait_time()>1) {
+                Wait_Time = setting.getWait_time();
             }
         }
     }

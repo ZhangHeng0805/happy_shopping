@@ -7,7 +7,7 @@
     <!--Morris Chart CSS -->
     <link rel="stylesheet" href="/static/js/morris-chart/morris.css">
 </head>
-<body class="sticky-header">
+<body class="sticky-header adm-home loading">
 <section>
     <!--左部标签栏-->
     <div th:replace="common/common_adm :: #com_leftmenu"></div>
@@ -146,6 +146,7 @@
         get_count();
         get_order();
         data1();
+        document.body.classList.remove('loading');
     });
 </script>
 </body>
