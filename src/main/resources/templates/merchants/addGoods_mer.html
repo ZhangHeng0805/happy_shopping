@@ -43,7 +43,7 @@
                         </div>
                         <div class="panel-body">
                             <div th:replace="common/common_mer :: #com_alert"></div>
-                            <form role="form" method="post" action="/addGoods" id="GoodsForm" enctype="multipart/form-data">
+                            <form role="form" id="GoodsForm">
                                 <!--商品名称-->
                                 <div class="col-md-10 form-group">
                                     <label for="goods_name" class="control-label"><strong>商品名称:</strong></label>
@@ -66,10 +66,10 @@
                                 <!--商品图片-->
                                 <div class="col-md-10 form-group">
                                     <label for="image" class="control-label"><strong>商品图片：</strong></label>
-                                    <div class="text-center" style="background-color: #d6d6d6;width: 200px;" >
-                                        <img id="show" style="width: 100px;height: 100px;margin: 5px; background-color: white" alt="" />
+                                    <div class="text-center" style="background-color: #d6d6d6;display: table;padding: 8px" data-toggle="modal" data-target="#img_cut">
+                                        <div id="show" style="text-align: center;width: 150px;height: 150px;background-color: white;background-repeat: no-repeat; background-position: center center; background-size: contain;" ></div>
+                                        <span class="btn btn-default" style="margin-top: 8px"><i class="fa fa-picture-o"></i> 选择图片</span>
                                     </div>
-                                    <span class="btn btn-default" data-toggle="modal" data-target="#img_cut"><i class="fa fa-picture-o"></i> 选择图片</span>
                                     <input id="image" type="hidden" name="image" />
                                 </div>
                                 <!-- 图片裁剪模态框（Modal） -->
@@ -96,8 +96,8 @@
                                                         <button class="btn btn-search btn-lg" id="clipBtn" onclick="return false;">截取图片</button>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div id="view"></div>
+                                                <div class="row text-center">
+                                                    <div id="view" style="background-repeat: no-repeat; background-position: center center; background-size: contain;"></div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -128,7 +128,8 @@
                                 </div>
                                 <!--表单提交-->
                                 <div class="col-md-10 form-group text-center">
-                                    <button class="btn btn-success btn-lg" type="submit"><i class="fa  fa-check-square-o"></i> 添加商品</button>
+                                    <button class="btn btn-success btn-lg submit" onclick="btn_submit();return false;"><i class="fa  fa-check-square-o"></i> 添加商品</button>
+                                    <button class="btn btn-default btn-lg" onclick="form_reset();return false;"><i class="fa  fa-refresh"></i> 重置</button>
                                 </div>
                             </form>
                         </div>
@@ -150,9 +151,10 @@
 <script type="text/javascript" src="/static/js/data-tables/DT_bootstrap.js"></script>
 <script src="/static/js/editable-table.js"></script>
 <!--图片裁剪-->
-<script src="/static/plug-in/image-cut/js/hammer.js"></script>
 <script src="/static/plug-in/image-cut/js/iscroll-zoom.js"></script>
-<script src="/static/plug-in/image-cut/js/jquery.photoClip.min.js"></script>
+<script src="/static/plug-in/image-cut/js/hammer.js"></script>
+<script src="/static/plug-in/image-cut/js/lrz.all.bundle.js"></script>
+<script src="/static/plug-in/image-cut/js/jquery.photoClip.js"></script>
 
 <script src="/static/my_js/input.js"></script>
 <script src="/static/my_js/img-cut.js"></script>

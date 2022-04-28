@@ -117,7 +117,7 @@ public class myGoodsListController {
     }
     @ResponseBody
     @PostMapping("/delete_Goods")
-    private Message delete_Goods(Integer id, HttpServletRequest request){
+    private Message delete_Goods(Integer id, HttpServletRequest request) throws Exception {
         Message msg = new Message();
         if (id!=0){
             Optional<Goods> byId = goodsRepository.findById(id);
@@ -126,7 +126,7 @@ public class myGoodsListController {
                 if (byId.get().getStore_id().equals(merchants.getStore_id())){
                     int i = goodsRepository.deleteByGoods_id(id);
                     if (i>0){
-                        new FileLoadController().deleteImg(byId.get().getGoods_image());
+                        new FileLoadController().deleteFile(byId.get().getGoods_image());
                         msg.setCode(200);
                         msg.setMessage("商品删除成功！");
                     }else {
@@ -149,7 +149,7 @@ public class myGoodsListController {
     }
     @ResponseBody
     @PostMapping("/update_goods")
-    private Message update_goods(Goods goods,String image,HttpServletRequest request){
+    private Message update_goods(Goods goods,String image,HttpServletRequest request) throws Exception {
         Message msg = new Message();
         String oldImg="";
         if (goods!=null && goods.getGoods_id()!=null){
@@ -167,7 +167,7 @@ public class myGoodsListController {
                     if (image.isEmpty()){
                         goods.setGoods_image(byId.get().getGoods_image());
                     }else {
-                        String s = new FileLoadController().base64ToImg(image, goods.getGoods_name(), "Goods_Images");
+                        String s = new FileLoadController().base64ToImg(image, goods.getGoods_name(), "Goods_Images/"+merchants.getStore_id());
                         if (s==null){
                             msg.setCode(500);
                             msg.setMessage("修改失败，商品图片保存失败！");
@@ -183,17 +183,16 @@ public class myGoodsListController {
                         msg.setMessage("修改成功!");
                         if (!goods.getGoods_image().equals(oldImg)){
                             //修改成功，删除旧图片
-                            new FileLoadController().deleteImg(oldImg);
+                            new FileLoadController().deleteFile(oldImg);
                         }
                     }catch (Exception e){
                         msg.setCode(500);
                         msg.setMessage("错误："+e.getMessage());
                         if (!goods.getGoods_image().equals(oldImg)){
                             //修改失败，删除新图片
-                            new FileLoadController().deleteImg(goods.getGoods_image());
+                            new FileLoadController().deleteFile(goods.getGoods_image());
                         }
                     }
-
                 }else {
                     msg.setCode(500);
                     msg.setMessage("修改失败！该商品不是你店铺商品，无法修改");

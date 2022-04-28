@@ -4,6 +4,7 @@ package com.zhangheng.happy_shopping.controller;
 import com.zhangheng.happy_shopping.android.entity.PhoneInfo;
 import com.zhangheng.happy_shopping.android.repository.PhoneInfoRepository;
 import com.zhangheng.happy_shopping.utils.*;
+import com.zhangheng.util.FolderFileScannerUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -11,8 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,11 +53,16 @@ public class FileLoadController {
             //图片小于2Mb
             if (img.getSize()<2080000) {
                 String filename = img.getOriginalFilename();
-                log.info("图片名：{}", filename);
-                log.info("图片大小：{}kb", img.getSize()/1024);
+                log.info("图片名：{}，图片大小：{}kb", filename, img.getSize()/1024);
                 filename = filename.replaceAll(" ", "");
                 //判断文件格式是否为图片
                 if (FiletypeUtil.getFileType(filename).equals("image")) {
+                    //去除文件名中的非法符号
+                    imgName=imgName.replace("\\","").replace("/","")
+                            .replace(":","").replace("*","")
+                            .replace("?","").replace("\"","")
+                            .replace("<","").replace(">","")
+                            .replace("|","");
                     //判断文件名长度
                     imgName=imgName.length()<8?imgName:imgName.substring(0,8);
                     //保存文件名
@@ -67,6 +75,12 @@ public class FileLoadController {
                         path = name;
                     } catch (IOException e) {
                         log.error(e.getMessage());
+                    }finally {
+                        try {
+                            img.getInputStream().close();
+                        } catch (IOException e) {
+                            log.error(e.getMessage());
+                        }
                     }
                 } else {
                     log.error("上传文件类型错误");
@@ -102,6 +116,12 @@ public class FileLoadController {
         BufferedOutputStream bos = null;
         java.io.FileOutputStream fos = null;
         try {
+            //去除文件名中的非法符号
+            fileName=fileName.replace("\\","").replace("/","")
+                    .replace(":","").replace("*","")
+                    .replace("?","").replace("\"","")
+                    .replace("<","").replace(">","")
+                    .replace("|","");
             String[] split = base64.split(",");
             String type="."+split[0].split("/")[1].split(";")[0];
             //判断文件名长度
@@ -117,8 +137,7 @@ public class FileLoadController {
             bos = new BufferedOutputStream(fos);
             bos.write(bytes);
             path = savePath+name+type;
-            log.info("图片名：{}", path);
-            log.info("图片大小：{}kb", Message.twoDecimalPlaces((double) file.length()/1024));
+            log.info("图片名：{}，图片大小：{}kb", path, Message.twoDecimalPlaces((double) file.length()/1024));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -141,45 +160,117 @@ public class FileLoadController {
     }
 
     /**
-     * 删除旧图片
-     * @param path 图片路径
+     * 删除文件
+     * 同时清空空文件夹
+     * @param path 文件路径
      * @return is 否删除成功
      */
-    public boolean deleteImg(String path){
-        boolean is=false;
-        File file = new File(baseDir+path);
+    public boolean deleteFile(String path) throws Exception {
+        path=baseDir+path;
+        File file = new File(path);
         if (file.exists()){
             boolean delete = file.delete();
             if (delete) {
-                log.info("旧图片删除成功："+path);
-                is=true;
+                log.info("文件删除成功："+path);
+                String[] split = path.split("/");
+                for (int i=split.length-2;i>=0;i--) {
+                    String dirPath="";
+                    for (int n=0;n<=i;n++) {
+                        dirPath+= split[n]+"/";
+                    }
+                    if (dirPath==""){
+                        dirPath=split[i];
+                    }
+                    //删除文件后判断文件夹内是否还有文件
+                    ArrayList<Object> list = FolderFileScannerUtil.scanFilesWithRecursion(dirPath);
+                    if (list.size() <= 0) {
+                        boolean b = deleteDir(dirPath);
+                        if (b) {
+                            log.info("空文件夹"+dirPath+"清除成功!");
+                        } else {
+                            log.info("空文件夹"+dirPath+"清除失败!");
+                        }
+                    } else {
+                        boolean flag = true;
+                        for (Object f : list) {
+                            if (new File(f.toString()).isFile()) {
+                                flag = false;
+                                break;
+                            }
+                        }
+                        if (flag) {
+                            boolean b = deleteDir(dirPath);
+                            if (b) {
+                                log.info("空文件夹"+dirPath+"清除成功!");
+                            } else {
+                                log.info("空文件夹"+dirPath+"清除失败!");
+                            }
+                        }
+                    }
+                }
+                return true;
             }else {
-                log.error("旧图片删除失败："+path);
+                log.error("文件删除失败："+path);
             }
         }else {
-            log.error("旧图片不存在："+path);
+            log.error("删除文件的不存在："+path);
         }
-        return is;
+        return false;
     }
-
+    /**
+     * 递归删除文件夹
+     * @param path 文件夹路径
+     * @return
+     */
+    private boolean deleteDir(String path){
+        File file = new File(path);
+        if (file.isDirectory()) {
+            try {
+                FileUtils.deleteDirectory(file);
+                return true;
+            } catch (IOException e) {
+                log.error(e.getMessage());
+            }
+        }else {
+            log.error("文件夹删除失败："+file.toString());
+        }
+        return false;
+    }
 
     /**
      * 文件下载请求
-     * @param name 文件名
-     * @param type 文件类型（父级文件夹名称）
      * @param request
      * @param response
      * @throws IOException
      */
-    @GetMapping("show/{type}/{name:.+}")
-    public void show(@PathVariable("name") String name,
-                     @PathVariable("type") String type, HttpServletRequest request,
+    @RequestMapping(value = "show/{moduleBaseName}/**")
+    public void show(@PathVariable("moduleBaseName") String moduleBaseName,
+                     HttpServletRequest request,
                      HttpServletResponse response) throws IOException {
-        String user_agent = CusAccessObjectUtil.getUser_Agent(request);
-        String ipAddress = CusAccessObjectUtil.getIpAddress(request);
+        request.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+//        String user_agent = CusAccessObjectUtil.getUser_Agent(request);
+//        String ipAddress = CusAccessObjectUtil.getIpAddress(request);
 //        log.info("下载请求头："+user_agent);
 //        log.info("下载IP："+ipAddress);
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        final String pathq =
+                request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE).toString();
+        final String bestMatchingPattern =
+                request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString();
+        String arguments = new AntPathMatcher().extractPathWithinPattern(bestMatchingPattern,pathq);
+        String moduleName;
+        if(null!= arguments&&!arguments.isEmpty()){
+            moduleName = moduleBaseName +'/'+ arguments;
+        } else {
+            moduleName = moduleBaseName;
+        }
+//        log.info(moduleName);
+        String type="";
+        String name="";
+        if (moduleName.lastIndexOf("/")>0) {
+            type = moduleName.substring(0,moduleName.lastIndexOf("/") );
+            name = moduleName.substring(moduleName.lastIndexOf("/")+1);
+        }
         File file = new File(baseDir + type+"/"+name);
         FileInputStream input = null;
         try {
@@ -205,6 +296,7 @@ public class FileLoadController {
                 log.error(e.getMessage());
 //                response.sendError(500,e.getMessage());
             }
+            response.getOutputStream().close();
         }
     }
 

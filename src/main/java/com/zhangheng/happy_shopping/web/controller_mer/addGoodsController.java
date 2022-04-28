@@ -67,20 +67,21 @@ public class addGoodsController {
      * @param request
      * @return
      */
+    @ResponseBody
     @PostMapping("addGoods")
-    private String addGoods(Goods goods, String image, Model model, HttpServletRequest request){
+    private Message addGoods(Goods goods, String image, Model model, HttpServletRequest request) throws Exception {
         Message msg = new Message();
         if (goods!=null && goods.getGoods_name()!=null){
             if (!image.isEmpty()){
                 Optional<Goods> byGoods_nameAndGoods_introduction = goodsRepository.findByGoods_nameAndGoods_introduction(goods.getGoods_name(), goods.getGoods_introduction());
                 if (!byGoods_nameAndGoods_introduction.isPresent()) {
-                    String s = new FileLoadController().base64ToImg(image, goods.getGoods_name(), "Goods_Images");
+                    Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
+                    String s = new FileLoadController().base64ToImg(image, goods.getGoods_name(), "Goods_Images/"+merchants.getStore_id());
                     if (s != null) {
                         try {
                             goods.setGoods_image(s);//保存图片路径
                             goods.setGoods_sales(0);//销量为0
                             goods.setState(2);//商品审核中
-                            Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
                             goods.setStore_name(merchants.getStore_name());//设置店名
                             goods.setStore_id(merchants.getStore_id());//设置店铺id
                             goods.setTime(TimeUtil.time(new Date()));//设置时间
@@ -92,10 +93,10 @@ public class addGoodsController {
                             }else {
                                 msg.setCode(500);
                                 msg.setMessage("商品信息添加失败！");
-                                new FileLoadController().deleteImg(s); //删除图片
+                                new FileLoadController().deleteFile(s); //删除图片
                             }
                         } catch (Exception e) {
-                            new FileLoadController().deleteImg(s); //删除图片
+                            new FileLoadController().deleteFile(s); //删除图片
                             log.error(e.getMessage());
                             msg.setCode(500);
                             msg.setMessage("错误：" + e.getMessage());
@@ -106,7 +107,7 @@ public class addGoodsController {
                     }
                 }else {
                     msg.setCode(500);
-                    msg.setMessage("该商品已存在，请勿重复提交");
+                    msg.setMessage("该商品已存在，请勿重复添加商品");
                 }
 
             }else {
@@ -117,8 +118,9 @@ public class addGoodsController {
             msg.setCode(500);
             msg.setMessage("表单提交为空");
         }
-        model.addAttribute("msg",msg);
-        model.addAttribute("active", 2);
-        return "merchants/addGoods_mer";
+//        model.addAttribute("msg",msg);
+//        model.addAttribute("active", 2);
+//        return "merchants/addGoods_mer";
+        return msg;
     }
 }

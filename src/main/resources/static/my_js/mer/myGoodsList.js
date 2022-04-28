@@ -257,7 +257,8 @@ function openmodel(i) {
     $("#model_goods_name").val(GoodsData[i].goods_name);
     set_select_checked('model_goods_type',GoodsData[i].goods_type);
     $("#model_goods_introduction").text(GoodsData[i].goods_introduction);
-    $("#show").attr("src","/fileload/show/"+GoodsData[i].goods_image);
+    $("#model_goods_old-img").val("/fileload/show/"+GoodsData[i].goods_image);
+    document.getElementById("show").style.backgroundImage='url("'+"/fileload/show/"+GoodsData[i].goods_image+'")';
     $("#model_goods_price").val(GoodsData[i].goods_price);
     $("#model_goods_num").val(GoodsData[i].goods_num);
     $("#model_goods_num").attr('min',GoodsData[i].goods_num);

@@ -54,10 +54,12 @@
         <div class="login-wrap">
             <div th:replace="common/common_mer :: #com_alert"></div>
             <p>请在下面输入您的个人详细信息</p>
-            <label for="name" class="line">本人姓名：</label>
-            <input type="text" autofocus maxlength="15" name="name" id="name" placeholder="本人姓名" class="form-control" required>
-            <label for="gender" class="line">性别：</label>
             <div class="form-group">
+                <label for="name" class="line">本人姓名：</label>
+                <input type="text" autofocus maxlength="15" name="name" id="name" placeholder="本人姓名" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="gender" class="line">性别：</label>
                 <div class="square-blue single-row">
                     <div class="radios" id="gender">
                         <label for="radio-01" class="col-lg-6 col-sm-6">
@@ -71,7 +73,6 @@
                     </div>
                 </div>
             </div>
-
             <label for="email" class="line">Email邮箱：</label>
             <input type="text" id="email" name="email" placeholder="Email邮箱" title="点击设置邮箱" onclick="ver_email()" class="form-control" required readonly>
             <label for="phonenum" class="line">电话号码：</label>
@@ -93,14 +94,11 @@
 
             <div class="form-group">
                 <label for="image" class="line">商铺图片：</label>
-                    <div class="fileupload-new thumbnail" style="background-color: #d6d6d6" >
-                        <img id="show" style="width: 100px;height: 100px;background-color: white" alt="" />
-                    </div>
-                <span class="btn btn-default" data-toggle="modal" data-target="#img_cut"><i class="fa fa-picture-o"></i> 选择图片</span>
+                <div class="text-center" style="background-color: #d6d6d6;display: table;padding: 8px" data-toggle="modal" data-target="#img_cut">
+                    <div id="show" style="width: 150px;height: 150px;background-color: white;background-repeat: no-repeat; background-position: center center; background-size: contain;"></div>
+                    <span class="btn btn-default" style="margin-top: 8px"><i class="fa fa-picture-o"></i> 选择图片</span>
+                </div>
                 <input id="image" type="hidden" name="image" />
-<!--                <br>-->
-<!--                    <span class="label label-danger ">注意!</span>-->
-<!--                    <span>请选择商铺的图片(大小2Mb以内)</span>-->
             </div>
             <!-- 图片裁剪模态框（Modal） -->
             <div class="modal fade" id="img_cut" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -123,11 +121,11 @@
                                     <input type="file" id="file">
                                 </div>
                                 <div class="col-md-3">
-                                    <button class="btn btn-search btn-lg" id="clipBtn" onclick="return false;">截取图片</button>
+                                    <button class="btn btn-search btn-lg" id="clipBtn" onsubmit="return false;" onclick="return false;">截取图片</button>
                                 </div>
                             </div>
                             <div class="row">
-                                <div id="view"></div>
+                                <div id="view" style="background-repeat: no-repeat; background-position: center center; background-size: contain;"></div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -225,20 +223,20 @@
 <!--file upload-->
 <script type="text/javascript" th:src="@{/static/js/bootstrap-fileupload.min.js}"></script>
 <!--图片裁剪-->
-<script src="/static/plug-in/image-cut/js/hammer.js"></script>
 <script src="/static/plug-in/image-cut/js/iscroll-zoom.js"></script>
-<script src="/static/plug-in/image-cut/js/jquery.photoClip.min.js"></script>
+<script src="/static/plug-in/image-cut/js/hammer.js"></script>
+<script src="/static/plug-in/image-cut/js/lrz.all.bundle.js"></script>
+<script src="/static/plug-in/image-cut/js/jquery.photoClip.js"></script>
 <!--自定义js-->
-<script src="/static/my_js/mer/registration.js"></script>
-<script src="/static/my_js/input.js"></script>
 <script src="/static/my_js/img-cut.js"></script>
+<script src="/static/my_js/input.js"></script>
+<script src="/static/my_js/mer/registration.js"></script>
 <!--icheck -->
-<script src="/static/js/iCheck/jquery.icheck.js"></script>
-
+<!--<script src="/static/js/iCheck/jquery.icheck.js"></script>-->
 <script>
-    window.onload=function () {
-        document.body.classList.remove('loading');
-    }
+
+    document.body.classList.remove('loading');
+
 </script>
 </body>
 </html>

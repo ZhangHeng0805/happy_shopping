@@ -53,14 +53,15 @@
                         <h4 class="modal-title">忘记密码 ?</h4>
                     </div>
                     <div class="modal-body">
-                        <br>点击下方的邮箱，向我发送账号的信息</br>
-                        注意：发送的账号信息需要有以下<br>
-                        1.用户名<br>
-                        2.登录网址（就是该页面的网址）<br>
-                        3.手机号码<br>
-                        如果信息验证正确，则会以邮件的形式将密码发送给你<br>
-                        </p>
-                        <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=wriqo6ylqqespezy_vL3grOz7KGtrw" style="text-decoration:none;"><img src="http://rescdn.qqmail.com/zh_CN/htmledition/images/function/qm_open/ico_mailme_22.png"/></a>
+                        <div>点击下方的邮箱，向管理发送验证信息</div>
+                        <div>注意：发送的验证信息需要有以下</div>
+                        <div class="text-danger"><strong>1.账户注册手机号（账号）</strong></div>
+                        <div class="text-danger"><strong>2.账户绑定的邮箱</strong></div>
+                        <div class="text-warning "><strong>3.登录网址（就是本页面的网址）</strong></div>
+                        <div>如果信息验证正确，管理员则会将重置的密码以邮件的形式发送给账户绑定的邮箱</div>
+                        <hr>
+                        <p th:utext="${admin_email}"></p>
+<!--                        <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=wriqo6ylqqespezy_vL3grOz7KGtrw" style="text-decoration:none;"><img src="http://rescdn.qqmail.com/zh_CN/htmledition/images/function/qm_open/ico_mailme_22.png"/></a>-->
                     </div>
                     <div class="modal-footer">
                         <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>

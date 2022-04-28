@@ -60,7 +60,7 @@ public class modifyAccountController {
      * @return
      */
     @PostMapping("/modify_account")
-    private String modify_account(Merchants mer, Store sto, String image,HttpServletRequest request, Model model){
+    private String modify_account(Merchants mer, Store sto, String image,HttpServletRequest request, Model model) throws Exception {
         Message msg = new Message();
         if (mer!=null && sto!=null){
             Merchants merchants = (Merchants) request.getSession().getAttribute("merchants");
@@ -98,7 +98,7 @@ public class modifyAccountController {
                     //判断照片是否更改
                     if (!sto.getStore_image().equals(store.getStore_image())){
                         //删除旧店铺图片
-                        new FileLoadController().deleteImg(store.getStore_image());
+                        new FileLoadController().deleteFile(store.getStore_image());
                     }
                     request.getSession().setAttribute("merchants",merchants1);
                     request.getSession().setAttribute("store",store1);
@@ -109,7 +109,7 @@ public class modifyAccountController {
                     //判断照片是否更改
                     if (!sto.getStore_image().equals(store.getStore_image())){
                         //异常删除新店铺图片
-                        new FileLoadController().deleteImg(sto.getStore_image());
+                        new FileLoadController().deleteFile(sto.getStore_image());
                     }
                     msg.setCode(500);
                     msg.setMessage("错误："+e.getMessage());

@@ -94,10 +94,11 @@
                     <div class="form-group">
                         <label for="image" class="col-lg-2 col-sm-2 control-label">商品图片:</label>
                         <div class="col-lg-10">
-                            <div class="text-center" style="background-color: #d6d6d6;width: 200px;" >
-                                <img id="show" style="width: 100px;height: 100px;margin: 5px; background-color: white" alt="" />
+                            <input id="model_goods_old-img" type="hidden" >
+                            <div class="text-center" style="background-color: #d6d6d6;display: table;padding: 8px" data-toggle="modal" data-target="#img_cut">
+                                <div id="show" style="text-align: center;width: 150px;height: 150px;background-color: white;background-repeat: no-repeat; background-position: center center; background-size: contain;background-image: url("")" ></div>
+                                <span class="btn btn-default" style="margin-top: 8px"><i class="fa fa-picture-o"></i> 选择图片</span>
                             </div>
-                            <span class="btn btn-default" data-toggle="modal" data-target="#img_cut"><i class="fa fa-picture-o"></i> 选择图片</span>
                             <input id="image" type="hidden" />
                             <p  class="help-block"></p>
                         </div>
@@ -157,7 +158,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="view"></div>
+                    <div id="view" style="background-repeat: no-repeat; background-position: center center; background-size: contain;"></div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -177,33 +178,14 @@
 <script type="text/javascript" src="/static/js/data-tables/DT_bootstrap.js"></script>
 <script src="/static/js/editable-table.js"></script>
 <!--图片裁剪-->
-<script src="/static/plug-in/image-cut/js/hammer.js"></script>
 <script src="/static/plug-in/image-cut/js/iscroll-zoom.js"></script>
-<script src="/static/plug-in/image-cut/js/jquery.photoClip.min.js"></script>
+<script src="/static/plug-in/image-cut/js/hammer.js"></script>
+<script src="/static/plug-in/image-cut/js/lrz.all.bundle.js"></script>
+<script src="/static/plug-in/image-cut/js/jquery.photoClip.js"></script>
+
+<script src="/static/my_js/img-cut.js"></script>
 <!--<script src="/static/my_js/input.js"></script>-->
 <script>
-    $("#clipArea").photoClip({
-        width: 200,
-        height: 200,
-        file: "#file",
-        view: "#view",
-        ok: "#clipBtn",
-        outputType: "png",
-        strictSize: true,
-        loadStart: function(file) {
-            console.log("照片读取中");
-        },
-        loadComplete: function(src) {
-            console.log("照片读取完成!");
-        },
-        loadError: function(event) {
-            console.log("错误："+event);
-        },
-        clipFinish: function(dataURL) {
-            // console.log(dataURL);
-            imgdata=dataURL;
-        }
-    });
     jQuery(document).ready(function() {
         ref();
 

@@ -11,6 +11,7 @@ import com.zhangheng.happy_shopping.utils.CusAccessObjectUtil;
 import com.zhangheng.happy_shopping.utils.Message;
 import com.zhangheng.happy_shopping.utils.PhoneNumUtil;
 import com.zhangheng.happy_shopping.utils.TimeUtil;
+import com.zhangheng.happy_shopping.web.controller_adm.bean.Login_admin;
 import com.zhangheng.happy_shopping.web.entity.OperationLog;
 import com.zhangheng.happy_shopping.web.repository.OperaLogRepository;
 import com.zhangheng.happy_shopping.web.service.EmailService;
@@ -55,7 +56,8 @@ public class LoginController {
     private StoreRepository storeRepository;
     @Autowired
     private EmailService emailService;
-
+    @Autowired
+    private Login_admin login_admin;
     /**
      * 商家登录页跳转
      * @param model
@@ -68,6 +70,13 @@ public class LoginController {
         msg.setCode(100);
         msg.setMessage("请登录，注意错误机会只有5次");
         log.info("商家登录页："+ CusAccessObjectUtil.getRequst(request));
+        String email_html="";
+        if (login_admin.getEmail()!=null&& FormatUtil.isEmail(login_admin.getEmail())){
+            email_html="管理邮箱：<a href=\"mailto:"+login_admin.getEmail()+"\"><strong>"+login_admin.getEmail()+"</strong></a>";
+        }else {
+            email_html="<a target=\"_blank\" href=\"http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=wriqo6ylqqespezy_vL3grOz7KGtrw\" style=\"text-decoration:none;\"><img src=\"http://rescdn.qqmail.com/zh_CN/htmledition/images/function/qm_open/ico_mailme_02.png\"/></a>";
+        }
+        model.addAttribute("admin_email",email_html);
 //        model.addAttribute("msg",msg);
         return "merchants/login_mer";
     }
@@ -189,7 +198,7 @@ public class LoginController {
      * @return
      */
     @PostMapping("/regist_merchants")
-    private String regist_merchants(@Nullable Merchants mer, Model model,@Nullable String image,@Nullable VerificationCode code,HttpServletRequest request){
+    private String regist_merchants(@Nullable Merchants mer, Model model,@Nullable String image,@Nullable VerificationCode code,HttpServletRequest request) throws Exception {
         Message msg = new Message();
         //判断验证码是否为空
         if (code.getCode()!=null&&code.getId()!=null) {
@@ -231,12 +240,12 @@ public class LoginController {
                                         } else {
                                             msg.setCode(500);
                                             msg.setMessage("商铺信息保存失败");
-                                            fileLoadController.deleteImg(s);
+                                            fileLoadController.deleteFile(s);
                                         }
                                     }catch (Exception e){
                                         msg.setMessage("错误："+e.getMessage());
                                         msg.setCode(500);
-                                        fileLoadController.deleteImg(s);
+                                        fileLoadController.deleteFile(s);
                                     }
 
                                 } else {
@@ -396,10 +405,8 @@ public class LoginController {
                             if (code.equals(operationLog.getInfo())) {
                                 msg.setCode(200);
                                 msg.setMessage("验证成功");
-                                if(operationLog.getCount()>(int)LoginService.Max_Count*0.7){
-                                    operationLog.setCount(new Double(LoginService.Max_Count*0.7).intValue());
-                                    logRepository.saveAndFlush(operationLog);
-                                }
+                                operationLog.setCount(0);//重置次数
+                                logRepository.saveAndFlush(operationLog);
                             } else {
                                 msg.setCode(500);
                                 msg.setMessage("对不起，验证码错误");
