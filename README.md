@@ -1,5 +1,9 @@
 # 工程简介
 > 之前的服务器[File-Management-Server](https://github.com/ZhangHeng0805/File-Management-Server)因为有太多的接口，太杂了，所以我把乐在购物系统单独分离出来了
+# 系统架构图
+![系统架构图](https://user-images.githubusercontent.com/74289276/163973512-3d7da8d8-c00c-4a30-96ce-23152a955e03.jpg)
+
+
 
 * 配置文件application.properties
 ```properties
@@ -31,7 +35,9 @@ setting.merchants_reset_pwd=666666
 ```
 
 # 数据库happy_shopping
-
+## 数据库设计图
+![数据库设计](https://user-images.githubusercontent.com/74289276/163973618-04ca6f51-6c38-402f-a4e4-bebb5a5ad0ed.jpg)
+## 数据库建表SQL
 ```sql
 /*
   Navicat Premium Data Transfer
