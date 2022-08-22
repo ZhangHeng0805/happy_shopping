@@ -3,7 +3,6 @@ var pc;
 window.onload=function () {
     pc = new PhotoClip('#clipArea');
     pc.size(200, 200);
-    pc.outputType('png');
     $('#clipBtn').hide();
     $("#view").hide();
 };

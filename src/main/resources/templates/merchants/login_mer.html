@@ -29,6 +29,7 @@
 
             <div class="registration">
                 没有账号，
+<!--                <a class="" data-toggle="modal" href="#zhuce">-->
                 <a class="" th:href="@{/regist_merchantsPage}">
                     去注册
                 </a>
@@ -43,37 +44,124 @@
             </label>
 
         </div>
-
-        <!-- Modal -->
-        <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">忘记密码 ?</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div>点击下方的邮箱，向管理发送验证信息</div>
-                        <div>注意：发送的验证信息需要有以下</div>
-                        <div class="text-danger"><strong>1.账户注册手机号（账号）</strong></div>
-                        <div class="text-danger"><strong>2.账户绑定的邮箱</strong></div>
-                        <div class="text-warning "><strong>3.登录网址（就是本页面的网址）</strong></div>
-                        <div>如果信息验证正确，管理员则会将重置的密码以邮件的形式发送给账户绑定的邮箱</div>
-                        <hr>
-                        <p th:utext="${admin_email}"></p>
-<!--                        <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=wriqo6ylqqespezy_vL3grOz7KGtrw" style="text-decoration:none;"><img src="http://rescdn.qqmail.com/zh_CN/htmledition/images/function/qm_open/ico_mailme_22.png"/></a>-->
-                    </div>
-                    <div class="modal-footer">
-                        <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
-<!--                        <button class="btn btn-primary" type="button">Submit</button>-->
-                    </div>
+    </form>
+    <!-- 忘记密码弹窗Modal -->
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">忘记密码 ?</h4>
+                </div>
+                <div class="modal-body">
+                    <div>点击下方的邮箱，向管理发送验证信息</div>
+                    <div>注意：发送的验证信息需要有以下</div>
+                    <div class="text-danger"><strong>1.账户注册手机号（账号）</strong></div>
+                    <div class="text-danger"><strong>2.账户绑定的邮箱</strong></div>
+                    <div class="text-warning "><strong>3.登录网址（就是本页面的网址）</strong></div>
+                    <div>如果信息验证正确，管理员则会将重置的密码以邮件的形式发送给账户绑定的邮箱</div>
+                    <hr>
+                    <p th:utext="${admin_email}"></p>
+                    <!--                        <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=wriqo6ylqqespezy_vL3grOz7KGtrw" style="text-decoration:none;"><img src="http://rescdn.qqmail.com/zh_CN/htmledition/images/function/qm_open/ico_mailme_22.png"/></a>-->
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+                    <!--                        <button class="btn btn-primary" type="button">Submit</button>-->
                 </div>
             </div>
         </div>
-        <!-- modal -->
+    </div>
+    <!-- modal -->
 
-    </form>
+    <!-- 注册Modal -->
+    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="zhuce" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">用户注册</h4>
+                </div>
 
+                <div class="modal-body " style="padding: 8px">
+                    <div class="form-horizontal">
+                        <p><strong class="text-info">请在下面输入您的个人详细信息</strong></p>
+                        <!--姓名-->
+                        <div>
+                            <label for="name" class="line"><strong>本人姓名：</strong></label>
+                            <input type="text" autofocus maxlength="15" name="name" id="name" placeholder="本人姓名" class="form-control" required>
+                        </div>
+                        <!--性别-->
+                        <div>
+                            <label for="gender" class="line"><strong>性别：</strong></label>
+                            <div class="square-blue single-row">
+                                <div class="radios" id="gender">
+                                    <label for="radio-01" class="col-lg-6 col-sm-6">
+                                        <input type="radio" name="gender" checked="" value="男" id="radio-01" >
+                                        <label>男性</label>
+                                    </label>
+                                    <label for="radio-02" class="col-lg-6 col-sm-6">
+                                        <input type="radio" name="gender" value="女" id="radio-02" >
+                                        <label>女性</label>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="email" class="line"><strong>Email邮箱：</strong></label>
+                            <input type="text" id="email" name="email" placeholder="点击设置Email邮箱" title="点击设置邮箱" onclick="ver_email()" class="form-control" required readonly>
+                            <!-- 设置邮箱Modal -->
+                            <div class="modal fade" id="email_model" role="dialog" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" >
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title">设置邮箱</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form class="form-horizontal" role="form">
+                                                <div class="form-group">
+                                                    <label class="col-md-2 control-label">邮箱:</label>
+                                                    <div class="col-md-7">
+                                                        <input type="email" name="my_email" class="form-control" id="my_email" placeholder="请输入邮箱" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-lg-2 control-label">验证码:</label>
+                                                    <div class="col-lg-4">
+                                                        <input type="text" class="form-control" id="email_code" placeholder="请输入邮箱验证码" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-2 control-label"></label>
+                                                    <div class="col-md-7">
+                                                        <input type="button" class="btn btn-search get_code" value="获取验证码">
+                                                        <input type="button" class="btn btn-info ver_code" hidden value="验证邮箱">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <script src="/static/my_js/encryp/md5.js"></script>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+                                            <button class="btn btn-primary" onclick="ver_EmailCoed()">确定</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- modal -->
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-default" type="button">取消</button>
+                    <!--                        <button class="btn btn-primary" type="button">Submit</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- modal -->
 </div>
 <!-- Placed js at the end of the document so the pages load faster -->
 <script src="/static/my_js/encryp/md5.js"></script>

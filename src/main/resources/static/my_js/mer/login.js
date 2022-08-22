@@ -25,7 +25,7 @@ $("#phonenum").keyup(function () {
     this.style.letterSpacing="1px";
     if (this.value.length!=11){
         this.style.color="rgba(166,0,9,0.93)";
-    }else {
+    }else{
         this.style.color = "rgba(0,146,26,0.91)";
     }
 });
@@ -43,7 +43,7 @@ $("#password").keyup(function () {
     this.value=this.value.replace(/[^\w\.\/]/ig,'');
     this.style.fontWeight="Bold";
     this.style.letterSpacing="1px";
-    if (this.value.length<6 || this.value.length>18){
+    if (this.value.length<6 || this.value.length>18&&this.value.length!=32){
         this.style.color="rgba(166,0,9,0.93)";
     }else {
         this.style.color="rgba(0,146,26,0.91)";
@@ -53,7 +53,7 @@ $("#password").change(function () {
     this.value=this.value.replace(/[^\w\.\/]/ig,'');
     this.style.fontWeight="Bold";
     this.style.letterSpacing="1px";
-    if (this.value.length<6 || this.value.length>18){
+    if (this.value.length<6 || this.value.length>18&&this.value.length!=32){
         this.style.color="rgba(166,0,9,0.93)";
     }else {
         this.style.color="rgba(0,146,26,0.91)";

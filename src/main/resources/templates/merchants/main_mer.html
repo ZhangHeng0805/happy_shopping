@@ -24,10 +24,10 @@
                 </div>
                 <div class="col-sm-9">
                     <div class="row" style="margin: 5px" >
-                        <label class="label label-info" style="font-size: 14px;" th:text="${session.store.store_name}"></label>
+                        <label class="label label-info" style="font-size: 14px;" th:text="${session.store.store_name.length()<15?session.store.store_name:session.store.store_name.substring(0,15)+'...'}" th:title="${session.store.store_name}"></label>
                     </div>
                     <div class="row" style="margin: 5px">
-                        <label class="label label-success" style="font-size: 14px;" th:text="${session.store.store_introduce}"></label>
+                        <label class="label label-success" style="font-size: 14px;" th:text="${session.store.store_introduce.length()<25?session.store.store_introduce:session.store.store_introduce.substring(0,25)+'...'}" th:title="${session.store.store_introduce}"></label>
                     </div>
                 </div>
             </div>

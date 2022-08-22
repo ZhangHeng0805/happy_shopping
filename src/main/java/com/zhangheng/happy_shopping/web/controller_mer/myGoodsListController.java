@@ -29,12 +29,23 @@ public class myGoodsListController {
     @Autowired
     private GoodsRepository goodsRepository;
 
+    /**
+     * 跳转至页面
+     * @param model
+     * @return
+     */
     @GetMapping("/myGoodsListpage")
     private String myGoodsListpage(Model model){
         model.addAttribute("active",3);
         return "merchants/myGoodsList_mer";
     }
 
+    /**
+     * 查询商品
+     * @param id
+     * @param request
+     * @return
+     */
     @ResponseBody
     @PostMapping("/findGoodsByType")
     private List<GoodByGoodType> findGoodsByType(Integer id,HttpServletRequest request){

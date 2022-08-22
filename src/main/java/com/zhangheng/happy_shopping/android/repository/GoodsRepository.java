@@ -66,7 +66,7 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
      * @param store_id
      * @return
      */
-    @Query(value = "select * from goods where store_id = ?1",nativeQuery = true)
+    @Query(value = "select * from goods where store_id = ?1 order by goods_id desc",nativeQuery = true)
     List<Goods> findByStore_id(Integer store_id);
 
 
@@ -76,7 +76,7 @@ public interface GoodsRepository extends JpaRepository<Goods, Integer> {
      * @param type
      * @return
      */
-    @Query(value = "select * from goods where store_id = ?1 and goods_type = ?2",nativeQuery = true)
+    @Query(value = "select * from goods where store_id = ?1 and goods_type = ?2 order by goods_id desc",nativeQuery = true)
     List<Goods> findByStore_idAndGoods_type(Integer store_id,String type);
 
     /**

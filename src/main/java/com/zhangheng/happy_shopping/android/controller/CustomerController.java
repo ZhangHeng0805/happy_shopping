@@ -487,7 +487,8 @@ public class CustomerController {
         if (location!=null) {
             Gson gson = new Gson();
             ShareLocation shareLocation = gson.fromJson(location, ShareLocation.class);
-            if (PhoneNumUtil.isMobile(shareLocation.getPhone())) {
+//            if (PhoneNumUtil.isMobile(shareLocation.getPhone())) {
+            if (true) {
                 Optional<Customer> byId = customerRepository.findById(shareLocation.getPhone());
                 if (byId.isPresent()) {
 //                    log.info("位置共享：" + shareLocation);

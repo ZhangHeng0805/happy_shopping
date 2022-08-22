@@ -271,7 +271,7 @@ function sub_goods() {
     var goods_name = $("#model_goods_name").val();
     var goods_id = $("#model_goods_id").val();
     var goods_type = $("#model_goods_type option:selected").val();
-    var goods_introduction = $("#model_goods_introduction").text();
+    var goods_introduction = $("#model_goods_introduction").val();
     var image = $("#image").val();
     var goods_price = $("#model_goods_price").val();
     var goods_num = $("#model_goods_num").val();
@@ -279,6 +279,7 @@ function sub_goods() {
         if (goods_introduction.length<=50){
             if (goods_num>=data_goods_num){
                 var b = confirm("确定提交商品修改？（修改的商品需要等待审核才能上线）");
+                console.log(goods_introduction);
                 if (b){
                     update_goods(goods_id,goods_name,goods_type,goods_introduction,image, goods_price,goods_num);
                 }
