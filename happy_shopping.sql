@@ -283,3 +283,28 @@ end
 delimiter ;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+-- ----------------------------
+-- Records of verification_code
+-- ----------------------------
+INSERT INTO `verification_code` VALUES ('3742', '691837');
+INSERT INTO `verification_code` VALUES ('3215', '789511');
+INSERT INTO `verification_code` VALUES ('3942', '592167');
+INSERT INTO `verification_code` VALUES ('1692', '773661');
+INSERT INTO `verification_code` VALUES ('9511', '469922');
+INSERT INTO `verification_code` VALUES ('1239', '687682');
+INSERT INTO `verification_code` VALUES ('9623', '789631');
+INSERT INTO `verification_code` VALUES ('8899', '123545');
+INSERT INTO `verification_code` VALUES ('2634', '489622');
+INSERT INTO `verification_code` VALUES ('1236', '773610');
+INSERT INTO `verification_code` VALUES ('2456', '692178');
+INSERT INTO `verification_code` VALUES ('2134', '110916');
+INSERT INTO `verification_code` VALUES ('2236', '091613');
+INSERT INTO `verification_code` VALUES ('1368', '132116');
+INSERT INTO `verification_code` VALUES ('2399', '092115');
+INSERT INTO `verification_code` VALUES ('2526', '161609');
+INSERT INTO `verification_code` VALUES ('0742', '171121');
+INSERT INTO `verification_code` VALUES ('0616', '170916');
+INSERT INTO `verification_code` VALUES ('3052', '674209');
+INSERT INTO `verification_code` VALUES ('2890', '717756');
